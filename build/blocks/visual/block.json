@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/visual",
+  "version": "0.1.0",
+  "title": "Visual",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "A visual block",
+  "attributes": {
+    "blockId": {
+      "type": "string",
+      "default": ""
+    },
+    "media": {
+      "type": "object",
+      "default": {
+        "id": 0,
+        "sizes": {},
+        "url": "https://www.block-bite.com/placeholder.jpg",
+        "alt": "",
+        "type": "",
+        "width": 0,
+        "height": 0
+      }
+    },
+    "imageProps": {
+      "type": "object",
+      "default": {
+        "imageFit": "contain",
+        "imagePosition": "center",
+        "aspectRatio": "square",
+        "imageEffect": "",
+        "imageFilter": "",
+        "imageScale": ""
+      }
+    },
+    "imageClass": {
+      "type": "string",
+      "default": ""
+    },
+    "isBanner": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "supports": {
+    "html": false,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": false
+    }
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js"
+}

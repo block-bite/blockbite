@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/counter",
+  "version": "0.1.0",
+  "title": "Counter",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "Counter block",
+  "attributes": {
+    "counterStart": {
+      "type": "string",
+      "default": "0"
+    },
+    "counterEnd": {
+      "type": "string",
+      "default": "0"
+    },
+    "counterCurrency": {
+      "type": "string",
+      "default": "0"
+    },
+    "counterDecimals": {
+      "type": "string",
+      "default": "0"
+    },
+    "counterAppend": {
+      "type": "string",
+      "default": ""
+    },
+    "flex": {
+      "type": "array",
+      "default": []
+    },
+    "flexClass": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    },
+    "typography": {
+      "fontSize": true
+    },
+    "align": true
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js"
+}

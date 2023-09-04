@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/group",
+  "version": "0.1.0",
+  "title": "Group",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "A advanced group block",
+  "attributes": {
+    "media": {
+      "type": "object",
+      "default": {
+        "id": 0,
+        "sizes": {},
+        "url": "https://placehold.co/200x200/000000/FFFFFF/png",
+        "alt": "",
+        "type": "",
+        "width": 0,
+        "height": 0
+      }
+    },
+    "imageProps": {
+      "type": "object",
+      "default": {
+        "imageFit": "cover",
+        "imagePosition": "center",
+        "aspectRatio": "landscape",
+        "imageEffect": ""
+      }
+    },
+    "imageClass": {
+      "type": "string",
+      "default": ""
+    },
+    "flexStyle": {
+      "type": "array",
+      "default": []
+    },
+    "flexClass": {
+      "type": "string",
+      "default": ""
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "linkRel": {
+      "type": "string",
+      "default": "Title"
+    },
+    "linkTarget": {
+      "type": "string",
+      "default": "_self"
+    }
+  },
+  "supports": {
+    "html": false,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js"
+}

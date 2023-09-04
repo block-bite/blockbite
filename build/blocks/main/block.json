@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/main",
+  "version": "0.1.0",
+  "title": "Main",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "Only used within templates as a <main> wrapper",
+  "supports": {
+    "html": false,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    }
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js"
+}
