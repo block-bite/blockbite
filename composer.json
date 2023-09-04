@@ -1,7 +1,7 @@
 {
   "name": "blockbite/blockbite",
   "type": "wordpress-plugin",
-  "description": "BLOC",
+  "description": "Blockbite Plugin",
   "license": "GPL-2.0-or-later",
   "homepage": "https://block-bite.com",
   "support": {
@@ -16,9 +16,6 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
-  },
-  "extra": {
-    "wordpress-install-dir": "wordpress"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -53,5 +50,5 @@
     ],
     "format": "phpcbf"
   },
-  "version": "1.0.7"
+  "version": "1.0.8"
 }
