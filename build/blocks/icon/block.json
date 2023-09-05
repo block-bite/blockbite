@@ -15,6 +15,18 @@
     "svgSize": {
       "type": "number",
       "default": 1
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "linkRel": {
+      "type": "string",
+      "default": "Title"
+    },
+    "linkTarget": {
+      "type": "string",
+      "default": "_self"
     }
   },
   "supports": {

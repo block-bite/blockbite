@@ -25,6 +25,9 @@ class Editor extends Controller
 
         // minify css
         $css = self::minify($content);
+        // make sure one meta key exists
+        delete_post_meta($post_id, 'blockbitecss');
+        //update
         update_post_meta($post_id, 'blockbitecss', addslashes($css));
     }
 
@@ -32,10 +35,12 @@ class Editor extends Controller
     {
         $references = $request->get_param('references');
         $post_id = $request->get_param('post_id');
+        delete_post_meta($post_id, 'blockbiterefs');
         update_post_meta($post_id, 'blockbiterefs', $references);
     }
 
-
+    
+    
     // get icons
     public function get_icons()
     {

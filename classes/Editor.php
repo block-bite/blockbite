@@ -51,7 +51,7 @@ class Editor
             register_block_type(BLOCKBITE_PLUGIN_DIR . 'build/blocks/' . $block);
         }
     }
-    public function registerBlockCategory()
+    public function registerBlockCategory($categories)
     {
         $custom_block = array(
             'slug'  => 'blockbite',

@@ -39,7 +39,7 @@
     height: 100%;
     width: 100%;
 }
-/* Grid */
+/* grid */
 .wp-block-blockbite-grid{
     width: 100%;
 }
@@ -50,6 +50,13 @@
 .wp-block-blockbite-section .section--content{
     position: relative;
     z-index: 10;
+}
+.section-wrap{
+    margin: 0rem;
+}
+/* make relative for tile link */
+.wp-element-icon{
+    position: relative;
 }
 /* make sure groups are relative for tile links */
 .wp-block-group{

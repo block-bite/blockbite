@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name:       Blockbite
- * Description:       PLUGIN_DESCRIPTION
+ * Description:       test
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com

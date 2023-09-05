@@ -4642,6 +4642,10 @@ video {
    width:100%!important;
    max-width: 100%!important;
 }
+.section-wrap{
+   width:100%!important;
+   max-width: 100%!important;
+}
 @media (min-width: 768px) and (max-width: 1139px) {
   .md\:container {
     width: 100%;
@@ -16827,3 +16831,4 @@ video {
     filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
   }
 }
+

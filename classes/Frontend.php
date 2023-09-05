@@ -13,12 +13,13 @@ class Frontend
      * @var string
      */
     protected $name = '';
-
+    protected $prefix_class = '';
     protected $css_url = '';
 
     public function __construct()
     {
         $this->css_url = plugins_url('build/blockbite-frontend.css', BLOCKBITE_MAIN_FILE);
+        $this->prefix_class = 'blockbite ';
     }
 
 
@@ -38,33 +39,84 @@ class Frontend
     public function blockbite_css()
     {
 
-       
-        $blockbite_meta_keys = self::blockbite_meta_keys();
+        $blockbite_css_metakeys = $this->blockbite_css_metakeys();
         $css = '';
 
-         // Get Tailwind CSS from each post and compile
-        foreach($blockbite_meta_keys as $id){
+        // add blockbite_template_css
+        $blockbite_template_css = $this->blockbite_template_css();
+
+        // prioritize wp_template_part css first (header and footer)
+        foreach ((array) $blockbite_template_css as $key => $value) {
+            $css .= $value->blockbitecss_value;
+            // add bite prefix classes
+            $this->prefix_class .= 'bite-' . $value->post_id . ' ';
+        }
+        // then add reusable blocks and page css
+        foreach ($blockbite_css_metakeys as $id) {
             $css .= get_post_meta($id, 'blockbitecss', true);
+            // don't add prefix class here, this will be prefixed within the section block
+            // $this->prefix_class .= 'bite-' . $id . ' ';
         }
         // Output the compiled CSS within <style> tags
         if (!empty($css)) {
             echo '<style>' . $css . '</style>';
         }
-       
     }
 
+
+    static function blockbite_template_css()
+    {
+        global $wpdb; // WordPress database access object
+
+        // Define the table names and prefixes
+        $postmeta_table = $wpdb->prefix . 'postmeta';
+
+        // Define the query
+        $query = "
+            SELECT a.post_id, a.meta_key AS origin_key, a.meta_value AS origin_value, b.meta_key AS blockbitecss_key, b.meta_value AS blockbitecss_value
+            FROM $postmeta_table AS a
+            JOIN $postmeta_table AS b ON a.post_id = b.post_id
+            WHERE a.meta_key = 'origin' AND a.meta_value = 'theme'
+            AND b.meta_key = 'blockbitecss';
+        ";
+
+        // Run the query
+        $results = $wpdb->get_results($query);
+        return $results;
+    }
+
+
     // get all meta keys to query
-    private static function blockbite_meta_keys(){
+    private static function blockbite_css_metakeys()
+    {
         $meta_id  = [];
+
         $post_id = get_the_ID();
-        $refs=  get_post_meta($post_id, 'blockbiterefs', true);
-        if(is_array($refs)){
-            foreach($refs as $ref){
+        // priority first, then refs
+        $meta_id[] = $post_id;
+        $refs =  get_post_meta($post_id, 'blockbiterefs', true);
+        if (is_array($refs)) {
+            foreach ($refs as $ref) {
                 $meta_id[] = $ref;
             }
         }
-        $meta_id[] = $post_id;
+
         return $meta_id;
+    }
+
+    function blockbite_body_class($classes)
+    {
+        // Get the current page's ID
+        $page_id = get_the_ID();
+        // priority first, then page css
+        $classes[] = $this->prefix_class;
+      
+        // Add a class to the body based on the page's ID
+        if ($page_id) {
+            $classes[] = 'bite-' . $page_id;
+        }
+
+        return $classes;
     }
 
 
@@ -119,6 +171,6 @@ class Frontend
 
     public function registerAssetsBackend()
     {
-       add_editor_style($this->css_url);
+        add_editor_style($this->css_url);
     }
 }
