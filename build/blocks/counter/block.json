@@ -28,7 +28,7 @@
       "type": "string",
       "default": ""
     },
-    "flex": {
+    "flexStyle": {
       "type": "array",
       "default": []
     },

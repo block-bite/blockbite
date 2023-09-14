@@ -20,22 +20,17 @@
         "height": 0
       }
     },
-    "imageProps": {
-      "type": "object",
-      "default": {
-        "imageFit": "cover",
-        "imagePosition": "center",
-        "aspectRatio": "landscape",
-        "imageEffect": ""
-      }
+    "biteImage": {
+      "type": "array",
+      "default": []
+    },
+    "imageStyle": {
+      "type": "array",
+      "default": []
     },
     "imageClass": {
       "type": "string",
       "default": ""
-    },
-    "hasContainer": {
-      "type": "boolean",
-      "default": true
     },
     "flexStyle": {
       "type": "array",
@@ -44,10 +39,6 @@
     "flexClass": {
       "type": "string",
       "default": ""
-    },
-    "hasOverflowHidden": {
-      "type": "boolean",
-      "default": true
     },
     "pageId": {
       "type": "number",

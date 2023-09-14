@@ -44,27 +44,32 @@ class Editor extends Controller
     // get icons
     public function get_icons()
     {
-        $icons = scandir($this->icon_dir);
 
-        $safe_icons = [];
+        // check if BLOCKBITE_ICON_DIR is directory
+        if (!is_dir(BLOCKBITE_ICON_DIR)) {
+            return new WP_Error('icon_dir_not_found', 'Icon directory not found', array('status' => 404));
+        } else {
+            $icons = scandir(BLOCKBITE_ICON_DIR);
 
-        if (is_array($icons)) {
-            // check if $icons have a safe svg extension and push to $safe_icon
-            foreach ($icons as $key => $icon) {
-                if (strpos($icon, '.svg') !== false) {
-                    // strip extension
-                    $icon = str_replace('.svg', '', $icon);
-                    // push only filename without /svg
-                    $safe_icons[] = $icon;
+            $safe_icons = [];
+    
+            if (is_array($icons)) {
+                // check if $icons have a safe svg extension and push to $safe_icon
+                foreach ($icons as $key => $icon) {
+                    if (strpos($icon, '.svg') !== false) {
+                        // strip extension
+                        $icon = str_replace('.svg', '', $icon);
+                        // push only filename without /svg
+                        $safe_icons[] = $icon;
+                    }
                 }
             }
+            return [
+                'icon_url' => BLOCKBITE_ICON_URI,
+                'icons' => $safe_icons
+            ];
         }
 
-
-        return [
-            'icon_url' => $this->icon_uri,
-            'icons' => $safe_icons
-        ];
     }
 
 
@@ -115,6 +120,8 @@ class Editor extends Controller
             'wp_navigation',
             'wp_navigation_menu',
             'wp_navigation_menu_item',
+            'wp_template',
+            'wp_block'
         ];
 
         foreach ($unset_post_types as $key => $post_type) {

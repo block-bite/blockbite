@@ -328,3 +328,28 @@
     height: 100%;
     width: 100%;
 }
+.blockbite--designpanel{
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    padding: 0.5rem;
+}
+/* tab */
+.blockbite--tablist{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.blockbite--tablist li{
+    cursor: pointer;
+    user-select: none;
+    border-radius: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+    padding: 0.5rem;
+}
+.blockbite--tablist li.active{
+    --tw-bg-opacity: 1;
+    background-color: rgb(148 163 184 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}

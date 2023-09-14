@@ -24,16 +24,9 @@
         "height": 0
       }
     },
-    "imageProps": {
-      "type": "object",
-      "default": {
-        "imageFit": "contain",
-        "imagePosition": "center",
-        "aspectRatio": "square",
-        "imageEffect": "",
-        "imageFilter": "",
-        "imageScale": ""
-      }
+    "imageStyle": {
+      "type": "array",
+      "default": []
     },
     "imageClass": {
       "type": "string",
