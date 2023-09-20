@@ -47,14 +47,12 @@
   },
   "supports": {
     "html": false,
+    "anchor": true,
     "color": {
       "gradients": true,
       "link": true,
       "background": true,
       "text": true
-    },
-    "dimensions": {
-      "minHeight": true
     },
     "spacing": {
       "margin": true,
