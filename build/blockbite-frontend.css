@@ -25,7 +25,9 @@
 .overflow-hidden{
     overflow: hidden;
 }
-/* align center */
+/* 
+@config tailwind-frontend.config.js;
+*/
 /* default offset for animation */
 :root{
     --an-ani-x: 0;

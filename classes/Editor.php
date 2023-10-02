@@ -112,8 +112,7 @@ class Editor
             'blockbiteEditor',
             [
                 'apiUrl'   => rest_url('blockbite/v1'),
-                'blocks' => $this->blocks,
-
+                'blocks' => $this->blocks
             ]
         );
     }

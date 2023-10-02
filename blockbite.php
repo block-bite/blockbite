@@ -4,7 +4,7 @@
  * Description:       Tailwind Designer
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.16
+ * Version: 1.0.17
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
@@ -19,6 +19,7 @@ use Blockbite\Blockbite\Frontend;
 use Blockbite\Blockbite\Library;
 use Blockbite\Blockbite\Plugin;
 use Blockbite\Blockbite\Tailwind;
+use Blockbite\Blockbite\Settings;
 
 /**
  * Shortcut constant to the path of this file.
@@ -50,7 +51,8 @@ $plugin = new Blockbite\Blockbite\Plugin(
 	new Blockbite\Blockbite\Editor(),
 	new Blockbite\Blockbite\Frontend(),
 	new Blockbite\Blockbite\Library(),
-	new Blockbite\Blockbite\Tailwind()
+	new Blockbite\Blockbite\Tailwind(),
+	new Blockbite\Blockbite\Settings()
 );
 
 add_action('plugins_loaded', function () use ($plugin) {

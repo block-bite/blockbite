@@ -44,7 +44,6 @@ class Editor extends Controller
     // get icons
     public function get_icons()
     {
-
         // check if BLOCKBITE_ICON_DIR is directory
         if (!is_dir(BLOCKBITE_ICON_DIR)) {
             return new WP_Error('icon_dir_not_found', 'Icon directory not found', array('status' => 404));
@@ -165,4 +164,18 @@ class Editor extends Controller
         }
         return $where;
     }
+
+    // create safelist
+    public function update_safelist($request)
+    {
+        $list = $request->get_param('list');
+        // create json file with list in plugin dir
+        $file = fopen(BLOCKBITE_PLUGIN_DIR . '/tailwind/safelist.json', 'w');
+        fwrite($file, json_encode($list));
+        fclose($file);
+
+    }
+
+  
+
 }

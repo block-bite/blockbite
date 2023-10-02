@@ -37,6 +37,7 @@ class tailwind
             $version      = $asset_file['version'];
         }
 
+      
         // register tailwind script
         wp_register_script(
             'blockbite-tailwind',
@@ -48,8 +49,8 @@ class tailwind
         wp_enqueue_script('blockbite-tailwind');
 
        
-        $url = plugins_url('build/blockbite-tailwind.css', BLOCKBITE_MAIN_FILE);
-        add_editor_style([$url]);
+        add_editor_style(plugins_url('build/blockbite-tailwind.css', BLOCKBITE_MAIN_FILE));
+
        
         // pas data to react plugin
         wp_localize_script(

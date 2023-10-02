@@ -43,6 +43,10 @@
     "pageId": {
       "type": "number",
       "default": null
+    },
+    "anchor": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {

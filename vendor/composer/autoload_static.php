@@ -36,6 +36,8 @@ class ComposerStaticInitf9ca18c6df2ea058a4b9198d82940e59
         'Blockbite\\Blockbite\\Rest\\Controllers\\Editor' => __DIR__ . '/../..' . '/classes/Rest/Controllers/Editor.php',
         'Blockbite\\Blockbite\\Rest\\Controllers\\Library' => __DIR__ . '/../..' . '/classes/Rest/Controllers/Library.php',
         'Blockbite\\Blockbite\\Rest\\Controllers\\Settings' => __DIR__ . '/../..' . '/classes/Rest/Controllers/Settings.php',
+        'Blockbite\\Blockbite\\Settings' => __DIR__ . '/../..' . '/classes/Settings.php',
+        'Blockbite\\Blockbite\\SettingsPage' => __DIR__ . '/../..' . '/classes/SettingsPage.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

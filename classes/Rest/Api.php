@@ -50,6 +50,7 @@ class Api
      *
      * @uses "rest_api_init" action
      * @see https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
+     * wp-json/blockbite/v1/
      * @return void
      */
     public function registerRoutes()
@@ -79,11 +80,11 @@ class Api
         ]);
 
         $editorController = new EditorController($this->plugin);
-       
+
 
         // save the styles
         register_rest_route($this->namespace, '/editor/styles', [
-             [
+            [
                 'methods' => 'POST',
                 'callback' => [$editorController, 'update_styles'],
                 'permission_callback' => [$editorController, 'authorize'],
@@ -102,6 +103,22 @@ class Api
             ],
         ]);
 
+
+        // save the styles
+        register_rest_route($this->namespace, '/editor/safelist', [
+            [
+                'methods' => 'POST',
+                'callback' => [$editorController, 'update_safelist'],
+                'permission_callback' => [$editorController, 'authorize'],
+                'args' => [
+                    'list' => [
+                        'required' => true
+                    ]
+                ]
+            ],
+        ]);
+
+
         // save the references
         register_rest_route($this->namespace, '/editor/references', [
             [
@@ -112,7 +129,7 @@ class Api
                     'references' => [
                         'required' => true,
                         // callback to sanitize the input should be here
-                         'type' => 'array',
+                        'type' => 'array',
                     ],
                     'post_id' => [
                         'required' => true,
@@ -160,10 +177,5 @@ class Api
             'callback' => [$editorController, 'pick_link'],
             'permission_callback' => [$editorController, 'authorize'],
         ));
-
-
-
-
-
     }
 }

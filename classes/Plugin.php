@@ -65,18 +65,26 @@ class Plugin
      */
     protected $tailwind;
 
+    /**
+     * Settings instance
+     *
+     * @since 0.0.1
+     *
+     * @var Settings
+     */
+    protected $settings;
 
 
 
 
-    public function __construct(Editor $editor, Frontend $frontend, Library $library, Tailwind $tailwind)
+
+    public function __construct(Editor $editor, Frontend $frontend, Library $library, Tailwind $tailwind, Settings $settings)
     {
         $this->editor = $editor;
         $this->frontend = $frontend;
         $this->library = $library;
         $this->tailwind = $tailwind;
-        
-      
+        $this->settings = $settings;
     }
 
     /**
@@ -115,6 +123,18 @@ class Plugin
     }
 
 
+    /**
+     * Get Settings
+     *
+     * @since 0.0.1
+     *
+     * @return Settings
+     */
+    public function getSettings() {
+        return $this->settings;
+    }
+
+    
     /**
      * Get API
      *

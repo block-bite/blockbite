@@ -33,6 +33,11 @@ class Hooks {
 	 */
 	protected $tailwind;
 
+	/**
+	 * @var SettingsPage
+	 */
+	protected $settingsPage;
+
 
 
 	public function __construct( Plugin $plugin ) {
@@ -41,6 +46,7 @@ class Hooks {
 		$this->frontend = new Frontend($plugin);
 		$this->library = new Library($plugin);
 		$this->tailwind = new Tailwind($plugin);
+		$this->settingsPage = new SettingsPage($plugin);
 	}
 
 	/**
@@ -60,6 +66,8 @@ class Hooks {
 		
 		add_action('wp_head', [$this->frontend, 'blockbite_css']);
 		add_filter('body_class', [$this->frontend, 'blockbite_body_class']);
+		add_action( 'admin_enqueue_scripts', [$this->settingsPage, 'registerAssets']);
+		add_action( 'admin_menu', [$this->settingsPage, 'addPage' ]);
 	}
 
 	/**
@@ -74,6 +82,8 @@ class Hooks {
 		remove_action( 'admin_init', [$this->frontend, 'registerAssetsBackend']);
 		remove_action( 'admin_init', [$this->library, 'registerAssets']	);
 		remove_action( 'admin_init', [$this->tailwind, 'registerAssets']	);
+		add_action( 'admin_enqueue_scripts', [$this->settingsPage, 'registerAssets']);
+		remove_action( 'admin_menu', [$this->settingsPage, 'addPage' ]);
 	}
 
 }

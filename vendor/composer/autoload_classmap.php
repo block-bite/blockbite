@@ -16,5 +16,7 @@ return array(
     'Blockbite\\Blockbite\\Rest\\Controllers\\Editor' => $baseDir . '/classes/Rest/Controllers/Editor.php',
     'Blockbite\\Blockbite\\Rest\\Controllers\\Library' => $baseDir . '/classes/Rest/Controllers/Library.php',
     'Blockbite\\Blockbite\\Rest\\Controllers\\Settings' => $baseDir . '/classes/Rest/Controllers/Settings.php',
+    'Blockbite\\Blockbite\\Settings' => $baseDir . '/classes/Settings.php',
+    'Blockbite\\Blockbite\\SettingsPage' => $baseDir . '/classes/SettingsPage.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );
