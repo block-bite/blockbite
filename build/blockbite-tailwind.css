@@ -446,6 +446,18 @@ video {
     max-width: 1536px;
   }
 }
+.container-fluid {
+  width: 99vw;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 1536px) {
+  .container-fluid {
+    max-width: 1536px;
+  }
+}
 .visible {
   visibility: visible;
 }
@@ -9680,6 +9692,18 @@ video {
       max-width: 1536px;
     }
   }
+  .md\:container-fluid {
+    width: 99vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 1536px) {
+    .md\:container-fluid {
+      max-width: 1536px;
+    }
+  }
 }
 @media (min-width: 1140px) {
   .xl\:container {
@@ -9718,6 +9742,18 @@ video {
       max-width: 1536px;
     }
   }
+  .xl\:container-fluid {
+    width: 99vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 1536px) {
+    .xl\:container-fluid {
+      max-width: 1536px;
+    }
+  }
 }
 @media (max-width: 767px) {
   .xs\:container {
@@ -9753,6 +9789,18 @@ video {
   }
   @media (min-width: 1536px) {
     .xs\:container {
+      max-width: 1536px;
+    }
+  }
+  .xs\:container-fluid {
+    width: 99vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 1536px) {
+    .xs\:container-fluid {
       max-width: 1536px;
     }
   }

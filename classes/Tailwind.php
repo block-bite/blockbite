@@ -48,8 +48,8 @@ class tailwind
 
         wp_enqueue_script('blockbite-tailwind');
 
-       
-        add_editor_style(plugins_url('build/blockbite-tailwind.css', BLOCKBITE_MAIN_FILE));
+        $tailwind = plugins_url('build/blockbite-tailwind.css?v='.$version, BLOCKBITE_MAIN_FILE);
+        add_editor_style($tailwind);
 
        
         // pas data to react plugin

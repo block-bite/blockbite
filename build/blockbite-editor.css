@@ -32,6 +32,10 @@
 .blockbite--tabsmain li.active{
     font-weight: 700;  
 }
+.blockbite--icon svg{
+    min-height: 1.5rem;
+    min-width: 1.5rem;  
+}
 .blockbite--tab{
     margin: 0.125rem;
     cursor: pointer;
@@ -67,6 +71,7 @@
 .blockbite--tabsmall.active{
     --tw-bg-opacity: 1;
     background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    fill: #fff;
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));  
 }

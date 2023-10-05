@@ -4,7 +4,7 @@
  * Description:       Tailwind Designer
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.17
+ * Version: 1.0.18
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
