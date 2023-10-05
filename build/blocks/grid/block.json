@@ -38,10 +38,15 @@
         "tablet": 0,
         "desktop": 0
       }
+    },
+    "anchor": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {
     "html": false,
+    "anchor": true,
     "color": {
       "gradients": true,
       "link": true,

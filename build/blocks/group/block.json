@@ -47,10 +47,15 @@
     "linkTarget": {
       "type": "string",
       "default": "_self"
+    },
+    "anchor": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {
     "html": false,
+    "anchor": true,
     "color": {
       "gradients": true,
       "link": true,
