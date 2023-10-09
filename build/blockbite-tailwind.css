@@ -447,7 +447,7 @@ video {
   }
 }
 .container-fluid {
-  width: 99vw;
+  max-width: 99vw;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem;
@@ -9693,7 +9693,7 @@ video {
     }
   }
   .md\:container-fluid {
-    width: 99vw;
+    max-width: 99vw;
     margin-left: auto;
     margin-right: auto;
     padding-left: 1rem;
@@ -9743,7 +9743,7 @@ video {
     }
   }
   .xl\:container-fluid {
-    width: 99vw;
+    max-width: 99vw;
     margin-left: auto;
     margin-right: auto;
     padding-left: 1rem;
@@ -9793,7 +9793,7 @@ video {
     }
   }
   .xs\:container-fluid {
-    width: 99vw;
+    max-width: 99vw;
     margin-left: auto;
     margin-right: auto;
     padding-left: 1rem;
