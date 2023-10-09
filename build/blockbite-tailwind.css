@@ -6073,6 +6073,9 @@ video {
 .items-center {
   align-items: center;
 }
+.items-stretch {
+  align-items: stretch;
+}
 .justify-start {
   justify-content: flex-start;
 }
@@ -6084,6 +6087,9 @@ video {
 }
 .justify-between {
   justify-content: space-between;
+}
+.justify-stretch {
+  justify-content: stretch;
 }
 .gap-0 {
   gap: 0rem;
@@ -15492,6 +15498,9 @@ video {
   .md\:items-center {
     align-items: center;
   }
+  .md\:items-stretch {
+    align-items: stretch;
+  }
   .md\:justify-start {
     justify-content: flex-start;
   }
@@ -15503,6 +15512,9 @@ video {
   }
   .md\:justify-between {
     justify-content: space-between;
+  }
+  .md\:justify-stretch {
+    justify-content: stretch;
   }
   .md\:gap-0 {
     gap: 0rem;
@@ -24750,6 +24762,9 @@ video {
   .xl\:items-center {
     align-items: center;
   }
+  .xl\:items-stretch {
+    align-items: stretch;
+  }
   .xl\:justify-start {
     justify-content: flex-start;
   }
@@ -24761,6 +24776,9 @@ video {
   }
   .xl\:justify-between {
     justify-content: space-between;
+  }
+  .xl\:justify-stretch {
+    justify-content: stretch;
   }
   .xl\:gap-0 {
     gap: 0rem;
@@ -34008,6 +34026,9 @@ video {
   .xs\:items-center {
     align-items: center;
   }
+  .xs\:items-stretch {
+    align-items: stretch;
+  }
   .xs\:justify-start {
     justify-content: flex-start;
   }
@@ -34019,6 +34040,9 @@ video {
   }
   .xs\:justify-between {
     justify-content: space-between;
+  }
+  .xs\:justify-stretch {
+    justify-content: stretch;
   }
   .xs\:gap-0 {
     gap: 0rem;
