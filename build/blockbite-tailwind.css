@@ -7003,6 +7003,84 @@ video {
 .gap-y-clamp-9 {
   row-gap: clamp(16px, 1vw, 32px);
 }
+.divide-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(2px * var(--tw-divide-x-reverse));
+  border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+}
+.divide-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(4px * var(--tw-divide-x-reverse));
+  border-left-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
+}
+.divide-x-8 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(8px * var(--tw-divide-x-reverse));
+  border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
+}
+.divide-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
+}
+.divide-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
+}
+.divide-y-8 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(8px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(8px * var(--tw-divide-y-reverse));
+}
+.divide-solid > :not([hidden]) ~ :not([hidden]) {
+  border-style: solid;
+}
+.divide-dashed > :not([hidden]) ~ :not([hidden]) {
+  border-style: dashed;
+}
+.divide-dotted > :not([hidden]) ~ :not([hidden]) {
+  border-style: dotted;
+}
+.divide-double > :not([hidden]) ~ :not([hidden]) {
+  border-style: double;
+}
+.divide-none > :not([hidden]) ~ :not([hidden]) {
+  border-style: none;
+}
+.divide-black > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--black);
+}
+.divide-primary > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary);
+}
+.divide-primary-dark > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary-dark);
+}
+.divide-primary-light > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary-light);
+}
+.divide-secondary > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary);
+}
+.divide-secondary-dark > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary-dark);
+}
+.divide-secondary-light > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary-light);
+}
+.divide-tertiary > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary);
+}
+.divide-tertiary-dark > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary-dark);
+}
+.divide-tertiary-light > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--primary-light);
+}
+.divide-white > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--wp--preset--color--white);
+}
 .self-start {
   align-self: flex-start;
 }
@@ -16344,6 +16422,84 @@ video {
   .md\:gap-y-clamp-9 {
     row-gap: clamp(16px, 1vw, 32px);
   }
+  .md\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(2px * var(--tw-divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .md\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(4px * var(--tw-divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .md\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(8px * var(--tw-divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .md\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
+  }
+  .md\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
+  }
+  .md\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(8px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(8px * var(--tw-divide-y-reverse));
+  }
+  .md\:divide-solid > :not([hidden]) ~ :not([hidden]) {
+    border-style: solid;
+  }
+  .md\:divide-dashed > :not([hidden]) ~ :not([hidden]) {
+    border-style: dashed;
+  }
+  .md\:divide-dotted > :not([hidden]) ~ :not([hidden]) {
+    border-style: dotted;
+  }
+  .md\:divide-double > :not([hidden]) ~ :not([hidden]) {
+    border-style: double;
+  }
+  .md\:divide-none > :not([hidden]) ~ :not([hidden]) {
+    border-style: none;
+  }
+  .md\:divide-black > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--black);
+  }
+  .md\:divide-primary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .md\:divide-primary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .md\:divide-primary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .md\:divide-secondary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .md\:divide-secondary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .md\:divide-secondary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .md\:divide-tertiary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .md\:divide-tertiary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .md\:divide-tertiary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .md\:divide-white > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--white);
+  }
   .md\:self-start {
     align-self: flex-start;
   }
@@ -25524,6 +25680,84 @@ video {
   .xl\:gap-y-clamp-9 {
     row-gap: clamp(16px, 1vw, 32px);
   }
+  .xl\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(2px * var(--tw-divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .xl\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(4px * var(--tw-divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .xl\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(8px * var(--tw-divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .xl\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
+  }
+  .xl\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
+  }
+  .xl\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(8px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(8px * var(--tw-divide-y-reverse));
+  }
+  .xl\:divide-solid > :not([hidden]) ~ :not([hidden]) {
+    border-style: solid;
+  }
+  .xl\:divide-dashed > :not([hidden]) ~ :not([hidden]) {
+    border-style: dashed;
+  }
+  .xl\:divide-dotted > :not([hidden]) ~ :not([hidden]) {
+    border-style: dotted;
+  }
+  .xl\:divide-double > :not([hidden]) ~ :not([hidden]) {
+    border-style: double;
+  }
+  .xl\:divide-none > :not([hidden]) ~ :not([hidden]) {
+    border-style: none;
+  }
+  .xl\:divide-black > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--black);
+  }
+  .xl\:divide-primary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .xl\:divide-primary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .xl\:divide-primary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .xl\:divide-secondary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .xl\:divide-secondary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .xl\:divide-secondary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .xl\:divide-tertiary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .xl\:divide-tertiary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .xl\:divide-tertiary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .xl\:divide-white > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--white);
+  }
   .xl\:self-start {
     align-self: flex-start;
   }
@@ -34703,6 +34937,84 @@ video {
   }
   .xs\:gap-y-clamp-9 {
     row-gap: clamp(16px, 1vw, 32px);
+  }
+  .xs\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(2px * var(--tw-divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .xs\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(4px * var(--tw-divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .xs\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(8px * var(--tw-divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
+  }
+  .xs\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(2px * var(--tw-divide-y-reverse));
+  }
+  .xs\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
+  }
+  .xs\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(8px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(8px * var(--tw-divide-y-reverse));
+  }
+  .xs\:divide-solid > :not([hidden]) ~ :not([hidden]) {
+    border-style: solid;
+  }
+  .xs\:divide-dashed > :not([hidden]) ~ :not([hidden]) {
+    border-style: dashed;
+  }
+  .xs\:divide-dotted > :not([hidden]) ~ :not([hidden]) {
+    border-style: dotted;
+  }
+  .xs\:divide-double > :not([hidden]) ~ :not([hidden]) {
+    border-style: double;
+  }
+  .xs\:divide-none > :not([hidden]) ~ :not([hidden]) {
+    border-style: none;
+  }
+  .xs\:divide-black > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--black);
+  }
+  .xs\:divide-primary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .xs\:divide-primary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .xs\:divide-primary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .xs\:divide-secondary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .xs\:divide-secondary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .xs\:divide-secondary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .xs\:divide-tertiary > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary);
+  }
+  .xs\:divide-tertiary-dark > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-dark);
+  }
+  .xs\:divide-tertiary-light > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--primary-light);
+  }
+  .xs\:divide-white > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--wp--preset--color--white);
   }
   .xs\:self-start {
     align-self: flex-start;
