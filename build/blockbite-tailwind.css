@@ -458,6 +458,19 @@ video {
     max-width: 1536px;
   }
 }
+.container-half {
+  width: 100%;
+}
+@media (min-width: 1536px) {
+  .container-half {
+    width: calc(1536px / 2);
+  }
+}
+@media (min-width: [object Object]) {
+  .container-half {
+    width: calc([object Object] / 2);
+  }
+}
 .visible {
   visibility: visible;
 }
@@ -9905,6 +9918,19 @@ video {
       max-width: 1536px;
     }
   }
+  .md\:container-half {
+    width: 100%;
+  }
+  @media (min-width: 1536px) {
+    .md\:container-half {
+      width: calc(1536px / 2);
+    }
+  }
+  @media (min-width: [object Object]) {
+    .md\:container-half {
+      width: calc([object Object] / 2);
+    }
+  }
 }
 @media (min-width: 1140px) {
   .xl\:container {
@@ -9955,6 +9981,19 @@ video {
       max-width: 1536px;
     }
   }
+  .xl\:container-half {
+    width: 100%;
+  }
+  @media (min-width: 1536px) {
+    .xl\:container-half {
+      width: calc(1536px / 2);
+    }
+  }
+  @media (min-width: [object Object]) {
+    .xl\:container-half {
+      width: calc([object Object] / 2);
+    }
+  }
 }
 @media (max-width: 767px) {
   .xs\:container {
@@ -10003,6 +10042,19 @@ video {
   @media (min-width: 1536px) {
     .xs\:container-fluid {
       max-width: 1536px;
+    }
+  }
+  .xs\:container-half {
+    width: 100%;
+  }
+  @media (min-width: 1536px) {
+    .xs\:container-half {
+      width: calc(1536px / 2);
+    }
+  }
+  @media (min-width: [object Object]) {
+    .xs\:container-half {
+      width: calc([object Object] / 2);
     }
   }
 }
