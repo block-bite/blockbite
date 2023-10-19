@@ -54,8 +54,7 @@ class Frontend
         // then add reusable blocks and page css
         foreach ($blockbite_css_metakeys as $id) {
             $css .= get_post_meta($id, 'blockbitecss', true);
-            // don't add prefix class here, this will be prefixed within the section block
-            // $this->prefix_class .= 'bite-' . $id . ' ';
+            $this->prefix_class .= 'bite-' . $id . ' ';
         }
         // Output the compiled CSS within <style> tags
         if (!empty($css)) {
@@ -80,8 +79,12 @@ class Frontend
             AND b.meta_key = 'blockbitecss';
         ";
 
+        // 49 54
+
         // Run the query
         $results = $wpdb->get_results($query);
+
+        
         return $results;
     }
 
@@ -104,6 +107,7 @@ class Frontend
         return $meta_id;
     }
 
+ 
     function blockbite_body_class($classes)
     {
         // Get the current page's ID
@@ -113,11 +117,12 @@ class Frontend
       
         // Add a class to the body based on the page's ID
         if ($page_id) {
-            $classes[] = 'bite-' . $page_id;
+           $classes[] = 'bite-' . $page_id;
         }
 
         return $classes;
     }
+
 
 
     public function registerAssetsFrontend()
