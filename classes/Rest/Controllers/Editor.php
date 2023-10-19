@@ -1,11 +1,26 @@
 <?php
 
 namespace Blockbite\Blockbite\Rest\Controllers;
-
+// use WP_Error
+use WP_Error;
 
 class Editor extends Controller
 {
 
+    // icon directory
+    private $icon_dir;
+    // icon uri
+    private $icon_uri;
+
+    public function __construct()
+    {
+        // if not from settings
+        // TODO
+
+
+        $this->icon_dir = get_template_directory().'/'.BLOCKBITE_ICON_DIR;
+        $this->icon_uri = get_template_directory_uri().'/'.BLOCKBITE_ICON_URI;
+    }
 
     // function to minify CSS file
     public static function minify($input)
@@ -39,19 +54,23 @@ class Editor extends Controller
         update_post_meta($post_id, 'blockbiterefs', $references);
     }
 
-    
-    
+
+
     // get icons
     public function get_icons()
     {
         // check if BLOCKBITE_ICON_DIR is directory
-        if (!is_dir(BLOCKBITE_ICON_DIR)) {
-            return new WP_Error('icon_dir_not_found', 'Icon directory not found', array('status' => 404));
-        } else {
-            $icons = scandir(BLOCKBITE_ICON_DIR);
 
+
+
+        if (!is_dir($this->icon_dir)) {
+            return [
+                'error' => 'Icon directory not found'. $this->icon_dir
+            ];
+        } else {
+            $icons = scandir($this->icon_dir);
             $safe_icons = [];
-    
+
             if (is_array($icons)) {
                 // check if $icons have a safe svg extension and push to $safe_icon
                 foreach ($icons as $key => $icon) {
@@ -64,11 +83,11 @@ class Editor extends Controller
                 }
             }
             return [
-                'icon_url' => BLOCKBITE_ICON_URI,
-                'icons' => $safe_icons
+                'icon_url' => $this->icon_uri,
+                'icons' => $safe_icons,
+                'dir'=> $this->icon_dir
             ];
         }
-
     }
 
 
@@ -173,9 +192,5 @@ class Editor extends Controller
         $file = fopen(BLOCKBITE_PLUGIN_DIR . '/tailwind/safelist.json', 'w');
         fwrite($file, json_encode($list));
         fclose($file);
-
     }
-
-  
-
 }

@@ -4,7 +4,7 @@
  * Description:       Tailwind Designer Dev
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.28
+ * Version: 1.0.29
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
@@ -36,11 +36,8 @@ define( 'BLOCKBITE_PLUGIN_VERSION', '1.0.7' );
 define( 'BLOCKBITE_MAIN_FILE', __FILE__ );
 
 // theme dir / icons should be refactoredd from settings
-define( 'BLOCKBITE_ICON_DIR', get_template_directory_uri() . '/resources/svg/' );
-
-// define icon uri
-define( 'BLOCKBITE_ICON_URI', plugin_dir_url( __FILE__ ) . 'resources/svg/' );
-
+define( 'BLOCKBITE_ICON_DIR', 'resources/svg/' );
+define( 'BLOCKBITE_ICON_URI', 'resources/svg/' );
  // include autoloader from composer
 require_once __DIR__ . '/vendor/autoload.php';
 

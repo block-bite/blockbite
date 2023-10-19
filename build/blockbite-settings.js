@@ -1,1 +1,1 @@
-!function(){"use strict";var e=window.React,t=window.wp.element;const n=document.getElementById("blockbite-settings");(0,t.createRoot)(n).render((0,e.createElement)((()=>hello),null))}();
+!function(){"use strict";var e=window.React,t=window.wp.element;const n=document.getElementById("blockbite-settings");(0,t.createRoot)(n).render((0,e.createElement)((()=>(0,e.createElement)(e.Fragment,null,"hello")),null))}();

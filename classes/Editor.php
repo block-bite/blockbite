@@ -26,11 +26,13 @@ class Editor
             'advanced-button',
             'counter',
             'grid',
+            'icon',
             'heading',
-            'icon'
+            'repeater',
+            'repeater-nav',
+            'repeater-content'
         ];
     }
-
 
 
     /**

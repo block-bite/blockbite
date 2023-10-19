@@ -80,15 +80,33 @@ a.tile::after{
     content: var(--tw-content);
 }
 /* blockbite GRID BLOCK */
-/* we create grid-- like classes because otherwise it would be overwritten fromout inline */
-/*
-.scrollslide--mobile.grid-cols-2  > *{
-    @apply w-1/2;
+/* helper for theme use */
+.scrollslide > *{
+    position: relative;
+    display: flex;
+    scroll-snap-type: x var(--tw-scroll-snap-strictness);
+    --tw-scroll-snap-strictness: mandatory;
+    scroll-snap-align: start;
+    overflow-x: scroll;
 }
-.scrollslide--mobile.grid-cols-1 > *{
-    @apply w-full;
+.scrollslide  > * > *{
+    flex-shrink: 0;
+    scroll-snap-align: start;
 }
-*/
+/* repeater */
+.repeater--tabs .repeater--content{
+    position: relative;
+    display: flex;
+    scroll-snap-type: x var(--tw-scroll-snap-strictness);
+    --tw-scroll-snap-strictness: mandatory;
+    scroll-snap-align: start;
+    overflow-x: scroll;
+}
+.repeater--tabs .repeater--content > *{
+    width: 100%;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
 @media (max-width: 767px){
     .grid--mobile{
         display: grid;
@@ -240,14 +258,6 @@ a.tile::after{
 .scroll-smooth{
     scroll-behavior: smooth;
 }
-/* blockbite ADVANCED BUTTON */
-.wp-block-blockbite-advanced-button{
-	font-size: var(--wp--preset--font-size--normal);
-}
-.wp-block-blockbite-advanced-button svg{
-        width:var(--wp--preset--spacing--2);
-        height:var(--wp--preset--spacing--2);
-    }
 /* create .animate- wildcard classes */
 #main [class*="animate-"]{
     animation-play-state: paused;
