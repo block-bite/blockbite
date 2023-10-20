@@ -146,7 +146,7 @@ class Api
         register_rest_route($this->namespace, '/library/block', [
             [
                 'methods' => 'GET',
-                'callback' => [$libraryController, 'getBlocks'],
+                'callback' => [$libraryController, 'get_blocks'],
                 'permission_callback' => [],
             ]
         ]);
@@ -154,19 +154,19 @@ class Api
         register_rest_route($this->namespace, '/library/block/(?P<id>\d+)', [
             [
                 'methods' => 'GET',
-                'callback' => [$libraryController, 'getBlockById'],
+                'callback' => [$libraryController, 'get_block'],
                 'permission_callback' => [],
             ]
         ]);
 
         // get icons
-        register_rest_route('blockbite/v1', '/get-icons', array(
+        register_rest_route($this->namespace, '/get-icons', array(
             'methods' => 'GET',
             'callback' => [$editorController, 'get_icons'],
             'permission_callback' => [$editorController, 'authorize'],
         ));
         // regster rest route for icon filename like icon.svg
-        register_rest_route('blockbite/v1', '/pick-icon/(?P<icon>\S+)', array(
+        register_rest_route($this->namespace, '/pick-icon/(?P<icon>\S+)', array(
             'methods' => 'GET',
             'callback' => [$editorController, 'pick_icon'],
             'permission_callback' => [$editorController, 'authorize']
