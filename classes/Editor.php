@@ -72,7 +72,7 @@ class Editor
     {
 
 
-        $dependencies = [];
+        $dependencies = ['wp-edit-site', 'wp-plugins','wp-element'];
         $version      = BLOCKBITE_PLUGIN_VERSION;
 
 

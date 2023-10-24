@@ -8,6 +8,10 @@
   "icon": "flag",
   "description": "Advanced Button with SVG Icon",
   "attributes": {
+    "biteId": {
+      "type": "string",
+      "default": ""
+    },
     "linkUrl": {
       "type": "string",
       "default": ""
@@ -31,6 +35,10 @@
     "buttonIndex": {
       "type": "number",
       "default": 0
+    },
+    "biteRef": {
+      "type": "number",
+      "default": null
     }
   },
   "supports": {

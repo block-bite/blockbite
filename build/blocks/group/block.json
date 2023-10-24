@@ -20,6 +20,10 @@
         "height": 0
       }
     },
+    "biteId": {
+      "type": "string",
+      "default": ""
+    },
     "imageStyle": {
       "type": "array",
       "default": []
@@ -51,6 +55,10 @@
     "anchor": {
       "type": "string",
       "default": ""
+    },
+    "biteRef": {
+      "type": "number",
+      "default": null
     }
   },
   "supports": {
