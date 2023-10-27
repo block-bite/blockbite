@@ -118,7 +118,6 @@ class Editor extends Controller
         $post_types = get_post_types();
 
         $unset_post_types = [
-            'attachment',
             'revision',
             'nav_menu_item',
             'custom_css',
