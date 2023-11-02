@@ -69,6 +69,10 @@
 .wp-block-group{
     position: relative;
 }
+.wp-block-group .group--content{
+    position: relative;
+    z-index: 10;
+}
 a.tile::after{
     position: absolute;
     top: 0rem;
@@ -262,5 +266,6 @@ a.tile::after{
 #main [class*="animate-"]{
     animation-play-state: paused;
 }
-
-
+.responsive-video{
+    width: 100%;
+}

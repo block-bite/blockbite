@@ -79,12 +79,9 @@ class Frontend
             AND b.meta_key = 'blockbitecss';
         ";
 
-        // 49 54
 
         // Run the query
-        $results = $wpdb->get_results($query);
-
-        
+        $results = $wpdb->get_results($query);       
         return $results;
     }
 
@@ -93,9 +90,7 @@ class Frontend
     private static function blockbite_css_metakeys()
     {
         $meta_id  = [];
-
         $post_id = get_the_ID();
-        // priority first, then refs
         $meta_id[] = $post_id;
         $refs =  get_post_meta($post_id, 'blockbiterefs', true);
         if (is_array($refs)) {
@@ -106,23 +101,6 @@ class Frontend
 
         return $meta_id;
     }
-
- 
-    function blockbite_body_class($classes)
-    {
-        // Get the current page's ID
-        $page_id = get_the_ID();
-        // priority first, then page css
-        $classes[] = $this->prefix_class;
-      
-        // Add a class to the body based on the page's ID
-        if ($page_id) {
-           $classes[] = 'bite-' . $page_id;
-        }
-
-        return $classes;
-    }
-
 
 
     public function registerAssetsFrontend()

@@ -628,5 +628,11 @@
     text-transform: uppercase;
     line-height: .75rem;  
 }
-
+.blockbite-bite-id{
+    margin-bottom: 1rem;
+    display: block;
+    padding: 1rem;
+    --tw-text-opacity: 1;
+    color: rgb(55 65 81 / var(--tw-text-opacity));  
+}
 
