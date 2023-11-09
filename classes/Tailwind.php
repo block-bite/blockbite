@@ -46,8 +46,8 @@ class tailwind
             $version,
         );
 
+        // add tailwind to editor
         wp_enqueue_script('blockbite-tailwind');
-
         $tailwind = plugins_url('build/blockbite-tailwind.css?v='.$version, BLOCKBITE_MAIN_FILE);
         add_editor_style($tailwind);
 
