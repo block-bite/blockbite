@@ -13,13 +13,11 @@ class Frontend
      * @var string
      */
     protected $name = '';
-    protected $prefix_class = '';
     protected $css_url = '';
 
     public function __construct()
     {
         $this->css_url = plugins_url('build/blockbite-frontend.css', BLOCKBITE_MAIN_FILE);
-        $this->prefix_class = 'blockbite ';
     }
 
 
@@ -39,30 +37,50 @@ class Frontend
     public function blockbite_css()
     {
 
-        $blockbite_css_metakeys = $this->blockbite_css_metakeys();
+        // post id based css
         $css = '';
+        $post_id = get_the_ID();
+        // Check if the cached CSS exists
+        /*
+        $cached_css = get_transient('blockbite_css_cache_' . $post_id);
+        if ($cached_css !== false) {
+            echo '<style>' . $cached_css . '</style>';
+            return;
+        }
+        */
 
+        // get metakeys
+        $blockbite_css_metakeys = $this->blockbite_css_metakeys($post_id);
         // add blockbite_template_css
         $blockbite_template_css = $this->blockbite_template_css();
-
         // prioritize wp_template_part css first (header and footer)
         foreach ((array) $blockbite_template_css as $key => $value) {
             $css .= $value->blockbitecss_value;
-            // add bite prefix classes
-            $this->prefix_class .= 'bite-' . $value->post_id . ' ';
         }
         // then add reusable blocks and page css
         foreach ($blockbite_css_metakeys as $id) {
             $css .= get_post_meta($id, 'blockbitecss', true);
-            $this->prefix_class .= 'bite-' . $id . ' ';
         }
         // Output the compiled CSS within <style> tags
+        
         if (!empty($css)) {
+            // $css = self::uniqueCss($css);
+            // Cache the CSS for future use
+            // set_transient('blockbite_css_cache_' . $post_id, $css, 0);
             echo '<style>' . $css . '</style>';
         }
     }
 
+    // create unique css
+    static function uniqueCss($input)
+    {
 
+        $regex = '/(\.[a-zA-Z0-9_-]+\s*{[^}]*})(?=.*\1)/s';
+        $cleaned_css = preg_replace($regex, '', $input);
+        return $cleaned_css;
+    }
+
+    // template css for o.a header and footer
     static function blockbite_template_css()
     {
         global $wpdb; // WordPress database access object
@@ -81,25 +99,34 @@ class Frontend
 
 
         // Run the query
-        $results = $wpdb->get_results($query);       
+        $results = $wpdb->get_results($query);
         return $results;
     }
 
-
-    // get all meta keys to query
-    private static function blockbite_css_metakeys()
+    // get refs / reusable block css / recursive (if a reusable block has a reusable block inside it)
+    private static function blockbite_css_metakeys($post_id, &$processed_ids = [])
     {
-        $meta_id  = [];
-        $post_id = get_the_ID();
-        $meta_id[] = $post_id;
-        $refs =  get_post_meta($post_id, 'blockbiterefs', true);
-        if (is_array($refs)) {
+        // Check if the post ID has already been processed
+        if (in_array($post_id, $processed_ids)) {
+            return [];
+        }
+
+        // Add the current post ID to the list of processed IDs
+        $processed_ids[] = $post_id;
+        $meta_ids = [$post_id];
+        $refs = get_post_meta($post_id, 'blockbiterefs', true);
+
+        if (is_array($refs) && !empty($refs)) {
             foreach ($refs as $ref) {
-                $meta_id[] = $ref;
+                // Check if the reference post ID is valid
+                if (is_numeric($ref) && $ref > 0) {
+                    // Recursive call
+                    $meta_ids = array_merge($meta_ids, self::blockbite_css_metakeys($ref, $processed_ids));
+                }
             }
         }
 
-        return $meta_id;
+        return $meta_ids;
     }
 
 

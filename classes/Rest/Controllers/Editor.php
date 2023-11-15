@@ -18,8 +18,8 @@ class Editor extends Controller
         // TODO
 
 
-        $this->icon_dir = get_template_directory().'/'.BLOCKBITE_ICON_DIR;
-        $this->icon_uri = get_template_directory_uri().'/'.BLOCKBITE_ICON_URI;
+        $this->icon_dir = get_template_directory() . '/' . BLOCKBITE_ICON_DIR;
+        $this->icon_uri = get_template_directory_uri() . '/' . BLOCKBITE_ICON_URI;
     }
 
     // function to minify CSS file
@@ -37,7 +37,21 @@ class Editor extends Controller
     {
         $content = $request->get_param('css');
         $post_id = $request->get_param('post_id');
+        // $resetAllTransients = $request->get_param('templateType');
 
+        // only reset this page id's transient
+        /*
+        if (!$resetAllTransients) {
+            delete_transient('blockbite_css_cache_' . $post_id);
+        } else {
+            // reset all transients where this block in occures
+            $post_ids = $this->get_transient_keys_with_prefix();
+            if(pos)
+            foreach ( get_transient_keys_with_prefix( $prefix ) as $key ) {
+                delete_transient( $key );
+            }
+        }
+        */
         // minify css
         $css = self::minify($content);
         // make sure one meta key exists
@@ -45,6 +59,27 @@ class Editor extends Controller
         //update
         update_post_meta($post_id, 'blockbitecss', addslashes($css));
     }
+
+    /*
+    function get_transient_keys_with_prefix($prefix)
+    {
+        global $wpdb;
+
+        $prefix = $wpdb->esc_like('blockbite_css_cache_' . $prefix);
+        $sql    = "SELECT `option_name` FROM $wpdb->options WHERE `option_name` LIKE '%s'";
+        $keys   = $wpdb->get_results($wpdb->prepare($sql, $prefix . '%'), ARRAY_A);
+
+        if (is_wp_error($keys)) {
+            return [];
+        }
+
+        return array_map(function ($key) {
+            // Remove '_transient_' from the option name.
+            return ltrim($key['option_name'], 'blockbite_css_cache_');
+        }, $keys);
+    }
+    */
+
 
     public function update_references($request)
     {
@@ -65,7 +100,7 @@ class Editor extends Controller
 
         if (!is_dir($this->icon_dir)) {
             return [
-                'error' => 'Icon directory not found'. $this->icon_dir
+                'error' => 'Icon directory not found' . $this->icon_dir
             ];
         } else {
             $icons = scandir($this->icon_dir);
@@ -85,7 +120,7 @@ class Editor extends Controller
             return [
                 'icon_url' => $this->icon_uri,
                 'icons' => $safe_icons,
-                'dir'=> $this->icon_dir
+                'dir' => $this->icon_dir
             ];
         }
     }

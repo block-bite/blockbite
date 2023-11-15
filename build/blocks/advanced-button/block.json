@@ -8,10 +8,6 @@
   "icon": "flag",
   "description": "Advanced Button with SVG Icon",
   "attributes": {
-    "biteId": {
-      "type": "string",
-      "default": ""
-    },
     "linkUrl": {
       "type": "string",
       "default": ""

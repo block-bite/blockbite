@@ -20,10 +20,6 @@
         "height": 0
       }
     },
-    "biteId": {
-      "type": "string",
-      "default": ""
-    },
     "imageStyle": {
       "type": "array",
       "default": []
