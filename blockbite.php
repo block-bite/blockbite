@@ -5,7 +5,7 @@
  * Description:       Tailwind Designer Dev [1]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.51
+ * Version: 1.0.52
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
@@ -26,11 +26,11 @@ use Blockbite\Blockbite\Settings;
 
 
 if (!defined('BLOCKBITE_PLUGIN_URL')) {
-    define('BLOCKBITE_PLUGIN_URL', plugin_dir_url(__FILE__));
+	define('BLOCKBITE_PLUGIN_URL', plugin_dir_url(__FILE__));
 }
 
 if (!defined('BLOCKBITE_PLUGIN_VERSION')) {
-    define('BLOCKBITE_PLUGIN_VERSION', '1.0.33');
+	define('BLOCKBITE_PLUGIN_VERSION', '1.0.52');
 }
 
 define('BLOCKBITE_MAIN_FILE', __FILE__);

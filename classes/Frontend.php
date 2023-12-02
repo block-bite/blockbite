@@ -62,12 +62,14 @@ class Frontend
             $css .= get_post_meta($id, 'blockbitecss', true);
         }
         // Output the compiled CSS within <style> tags
-        
+
         if (!empty($css)) {
-            // $css = self::uniqueCss($css);
+            // $cleanCsss = self::uniqueCss($css);
             // Cache the CSS for future use
             // set_transient('blockbite_css_cache_' . $post_id, $css, 0);
-            echo '<style>' . $css . '</style>';
+            $sortedCss = self::sortCss($css);
+            $cleanCss = self::uniqueCss($sortedCss);
+            echo '<style>' . $cleanCss . '</style>';
         }
     }
 
@@ -75,9 +77,25 @@ class Frontend
     static function uniqueCss($input)
     {
 
-        $regex = '/(\.[a-zA-Z0-9_-]+\s*{[^}]*})(?=.*\1)/s';
-        $cleaned_css = preg_replace($regex, '', $input);
-        return $cleaned_css;
+        // $regex = '/(\.[a-zA-Z0-9_-]+\s*{[^}]*})(?=.*\1)/s';
+        // $cleaned_css = preg_replace($regex, '', $input);
+        $pattern = '/(\.[a-zA-Z0-9-]+\s*\{[^}]+\})(?=.*\1)/';
+        $uniqueString = preg_replace($pattern, '', $input);
+
+        return $uniqueString;
+    }
+
+    static function sortCss($input)
+    {
+        // Extract media queries using regular expressions
+        preg_match_all('/@media\s+\(.*?\)\s*{.*?}\s*}/s', $input, $matches);
+        $mediaQueries = implode("\n", $matches[0]);
+        // Remove media queries from the original CSS
+        $cssWithoutMediaQueries = preg_replace('/@media\s+\(.*?\)\s*{.*?}\s*}/s', '', $input);
+        // Add media queries back at the end of the new string
+        $newCss = $cssWithoutMediaQueries . "\n\n" . $mediaQueries;
+
+        return $newCss;
     }
 
     // template css for o.a header and footer
