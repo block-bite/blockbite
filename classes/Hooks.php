@@ -63,9 +63,7 @@ class Hooks {
 		add_action( 'admin_init', [$this->frontend, 'registerAssetsBackend']);
 		add_action( 'admin_init', [$this->library, 'registerAssets']);
 		add_action( 'admin_init', [$this->tailwind, 'registerAssets'], 10);
-		
 		add_action('wp_head', [$this->frontend, 'blockbite_css']);
-		add_filter('body_class', [$this->frontend, 'blockbite_body_class']);
 		add_action( 'admin_enqueue_scripts', [$this->settingsPage, 'registerAssets']);
 		add_action( 'admin_menu', [$this->settingsPage, 'addPage' ]);
 	}

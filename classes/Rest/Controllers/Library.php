@@ -10,7 +10,7 @@ class Library extends Controller
 
   
 
-    public static function  get( $request ) {
+    public static function  get_block( $request ) {
 
         $id = $request->get_param('id');
         $block = get_post( $id );

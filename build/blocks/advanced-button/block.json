@@ -24,9 +24,21 @@
       "type": "boolean",
       "default": false
     },
-    "svgCode": {
+    "linkTextCustom": {
+      "type": "boolean",
+      "default": false
+    },
+    "buttonType": {
       "type": "string",
-      "default": ""
+      "default": "a"
+    },
+    "buttonIndex": {
+      "type": "number",
+      "default": 0
+    },
+    "biteRef": {
+      "type": "number",
+      "default": null
     }
   },
   "supports": {
@@ -40,13 +52,13 @@
     "dimensions": {
       "minHeight": true
     },
+    "justify": true,
     "spacing": {
       "margin": true,
-      "padding": true,
-      "blockGap": true
+      "padding": true
     },
     "typography": {
-      "fontSize": true
+      "fontSize": false
     },
     "align": true
   },

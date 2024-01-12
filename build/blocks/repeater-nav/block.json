@@ -1,32 +1,24 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
-  "name": "blockbite/heading",
+  "name": "blockbite/repeater-nav",
   "version": "0.1.0",
-  "title": "Heading",
+  "title": "Repeater Navigation",
   "category": "blockbite",
   "icon": "flag",
-  "description": "heading block",
+  "description": "repeater nav block",
   "attributes": {
-    "content": {
-      "type": "string",
-      "default": "Heading"
+    "flexStyle": {
+      "type": "array",
+      "default": []
     },
-    "contentString": {
-      "type": "boolean",
-      "default": false
-    },
-    "textAlign": {
-      "type": "string",
-      "default": "text-left"
-    },
-    "textAlignDesktop": {
+    "flexClass": {
       "type": "string",
       "default": ""
     },
-    "contentTag": {
-      "type": "string",
-      "default": "p"
+    "repeaterItems": {
+      "type": "array",
+      "default": []
     }
   },
   "supports": {
@@ -52,11 +44,7 @@
       "blockGap": true
     },
     "typography": {
-      "fontSize": true,
-      "lineHeight": true,
-      "letterSpacing": true,
-      "textTransform": true,
-      "fontFamily": true
+      "fontSize": true
     },
     "align": true
   },

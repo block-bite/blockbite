@@ -26,11 +26,13 @@ class Editor
             'advanced-button',
             'counter',
             'grid',
+            'icon',
             'heading',
-            'icon'
+            'repeater',
+            'repeater-nav',
+            'repeater-content'
         ];
     }
-
 
 
     /**
@@ -70,7 +72,7 @@ class Editor
     {
 
 
-        $dependencies = [];
+        $dependencies = ['wp-edit-site', 'wp-plugins','wp-element'];
         $version      = BLOCKBITE_PLUGIN_VERSION;
 
 

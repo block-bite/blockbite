@@ -51,6 +51,10 @@
     "anchor": {
       "type": "string",
       "default": ""
+    },
+    "biteRef": {
+      "type": "number",
+      "default": null
     }
   },
   "supports": {

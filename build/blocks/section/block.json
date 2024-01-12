@@ -20,6 +20,10 @@
         "height": 0
       }
     },
+    "biteId": {
+      "type": "string",
+      "default": ""
+    },
     "biteImage": {
       "type": "array",
       "default": []
@@ -39,10 +43,6 @@
     "flexClass": {
       "type": "string",
       "default": ""
-    },
-    "pageId": {
-      "type": "number",
-      "default": null
     },
     "anchor": {
       "type": "string",
