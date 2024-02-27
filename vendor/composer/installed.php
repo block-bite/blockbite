@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'blockbite/blockbite',
-        'pretty_version' => '1.0.57',
-        'version' => '1.0.57.0',
-        'reference' => NULL,
+        'pretty_version' => '1.0.59',
+        'version' => '1.0.59.0',
+        'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'blockbite/blockbite' => array(
-            'pretty_version' => '1.0.57',
-            'version' => '1.0.57.0',
-            'reference' => NULL,
+            'pretty_version' => '1.0.59',
+            'version' => '1.0.59.0',
+            'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
