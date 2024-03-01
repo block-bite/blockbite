@@ -172,10 +172,25 @@ class Api
             'permission_callback' => [$editorController, 'authorize']
         ));
         // pick a link
-        register_rest_route('blockbite/v1', '/get-links/(?P<keyword>\S+)', array(
+        register_rest_route($this->namespace, '/get-links/(?P<keyword>\S+)', array(
             'methods' => 'GET',
             'callback' => [$editorController, 'pick_link'],
             'permission_callback' => [$editorController, 'authorize'],
         ));
+
+         // pick a link
+         register_rest_route($this->namespace, '/generate-style', array(
+            'methods' => 'POST',
+            'callback' => [$editorController, 'generate_style'],
+             'args' => [
+                'stylePath' => [
+                    'required' => true,
+                    'type' => 'string',
+                ],
+            ]
+        ));
+
+      
+       
     }
 }

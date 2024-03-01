@@ -227,4 +227,13 @@ class Editor extends Controller
         fwrite($file, json_encode($list));
         fclose($file);
     }
+
+    public function generate_style($request){
+        $style_path = $request['stylePath'];
+        wp_enqueue_style('custom-editor-style', $style_path, array(), '1.0', 'all');
+
+        return true;
+    }
+ 
+  
 }
