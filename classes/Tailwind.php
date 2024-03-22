@@ -18,7 +18,6 @@ class tailwind
 
     public function __construct()
     {
-       
     }
 
 
@@ -37,7 +36,7 @@ class tailwind
             $version      = $asset_file['version'];
         }
 
-      
+
         // register tailwind script
         wp_register_script(
             'blockbite-tailwind',
@@ -46,19 +45,38 @@ class tailwind
             $version,
         );
 
-        // add tailwind to editor
-        wp_enqueue_script('blockbite-tailwind');
-        $tailwind = plugins_url('build/blockbite-tailwind.css?v='.$version, BLOCKBITE_MAIN_FILE);
-        add_editor_style($tailwind);
+        // register editor style
+        wp_register_style(
+            'blockbite-tailwind',
+            plugins_url('build/blockbite-tailwind.css', BLOCKBITE_MAIN_FILE),
+            [],
+            $version,
+        );
+    
 
-       
+         // https://cdn.tailwindcss.com cnd script
+         wp_register_script(
+            'tailwind-cdn',
+            'https://cdn.tailwindcss.com',
+            $version,
+            $version
+        );
+
+
+
+        if (is_admin()) {
+            wp_enqueue_script('blockbite-tailwind');
+            wp_enqueue_style('blockbite-tailwind');
+            wp_enqueue_script('tailwind-cdn');
+        }
+
+
+
         // pas data to react plugin
         wp_localize_script(
             'blockbite-tailwind',
             'blockbiteTailwind',
-            [
-                
-            ]
+            []
         );
     }
 }

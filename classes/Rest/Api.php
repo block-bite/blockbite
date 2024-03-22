@@ -89,17 +89,22 @@ class Api
                 'callback' => [$editorController, 'update_styles'],
                 'permission_callback' => [$editorController, 'authorize'],
                 'args' => [
-                    'css' => [
+                    'blockbite_css' => [
                         'required' => true,
                         'sanitize_callback' => 'sanitize_text_field',
                         'type' => 'string',
                     ],
-                    'post_id' => [
+                    'blockbite_tailwind' => [
                         'required' => true,
                         'sanitize_callback' => 'sanitize_text_field',
                         'type' => 'string',
                     ],
                 ]
+            ],
+            [
+                'methods' => 'GET',
+                'callback' => [$editorController, 'get_styles'],
+                'permission_callback' => [$editorController, 'authorize']
             ],
         ]);
 

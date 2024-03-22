@@ -35,60 +35,70 @@ class Editor extends Controller
 
     public function update_styles($request)
     {
-        $content = $request->get_param('css');
-        $post_id = $request->get_param('post_id');
-        // $resetAllTransients = $request->get_param('templateType');
+        $content_css = $request->get_param('blockbite_css');
+        $content_tailwind = $request->get_param('blockbite_tailwind');
 
-        // only reset this page id's transient
-        /*
-        if (!$resetAllTransients) {
-            delete_transient('blockbite_css_cache_' . $post_id);
-        } else {
-            // reset all transients where this block in occures
-            $post_ids = $this->get_transient_keys_with_prefix();
-            if(pos)
-            foreach ( get_transient_keys_with_prefix( $prefix ) as $key ) {
-                delete_transient( $key );
-            }
+
+        // save into database
+        if (self::checkTableExists()) {
+            self::updateOrCreateRecord([
+                'id' => 1,
+                'handle' => 'global',
+                'css' => self::minify($content_css),
+                'tailwind' => $content_tailwind
+            ]);
         }
-        */
-        // minify css
-        $css = self::minify($content);
-        // make sure one meta key exists
-        delete_post_meta($post_id, 'blockbitecss');
-        //update
-        update_post_meta($post_id, 'blockbitecss', addslashes($css));
-    }
+     }
 
-    /*
-    function get_transient_keys_with_prefix($prefix)
+    public function checkTableExists()
     {
         global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
 
-        $prefix = $wpdb->esc_like('blockbite_css_cache_' . $prefix);
-        $sql    = "SELECT `option_name` FROM $wpdb->options WHERE `option_name` LIKE '%s'";
-        $keys   = $wpdb->get_results($wpdb->prepare($sql, $prefix . '%'), ARRAY_A);
+        $query = "SHOW TABLES LIKE %s";
+        $result = $wpdb->get_var($wpdb->prepare($query, $table_name));
 
-        if (is_wp_error($keys)) {
-            return [];
+        if ($result == $table_name) {
+            // Table exists
+            return true;
+        } else {
+            // Table does not exist
+            return false;
+        }
+    }
+
+    public function updateOrCreateRecord($data)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+
+        $wpdb->replace($table_name, $data);
+    }
+
+
+    public function get_styles($request)
+    {
+        // get styles from database
+        global $wpdb;
+        if (self::checkTableExists()) {
+            $id = 1;
+            $handle = 'global';
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'blockbite';
+            $query = $wpdb->prepare("SELECT * FROM $table_name WHERE id = %d AND handle = %s", $id, $handle);
+            $record = $wpdb->get_row($query);
+            $tailwind = $record->tailwind;
+            $css = $record->css;
+        } else {
+            $tailwind = '';
+            $css = '';
         }
 
-        return array_map(function ($key) {
-            // Remove '_transient_' from the option name.
-            return ltrim($key['option_name'], 'blockbite_css_cache_');
-        }, $keys);
+        return [
+            'tailwind' => $tailwind,
+            'css' => $css
+        ];
     }
-    */
-
-
-    public function update_references($request)
-    {
-        $references = $request->get_param('references');
-        $post_id = $request->get_param('post_id');
-        delete_post_meta($post_id, 'blockbiterefs');
-        update_post_meta($post_id, 'blockbiterefs', $references);
-    }
-
 
 
     // get icons
@@ -228,12 +238,11 @@ class Editor extends Controller
         fclose($file);
     }
 
-    public function generate_style($request){
+    public function generate_style($request)
+    {
         $style_path = $request['stylePath'];
         wp_enqueue_style('custom-editor-style', $style_path, array(), '1.0', 'all');
 
         return true;
     }
- 
-  
 }

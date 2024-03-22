@@ -2,10 +2,10 @@
 
 /**
  * Plugin Name:       Blockbite
- * Description:       Tailwind Designer Dev [1]
+ * Description:       Tailwind Designer [dev]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.64
+ * Version: 1.0.73
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
@@ -55,3 +55,6 @@ $plugin = new Blockbite\Blockbite\Plugin(
 add_action('plugins_loaded', function () use ($plugin) {
 	$plugin->init();
 });
+
+
+register_activation_hook( BLOCKBITE_MAIN_FILE, [$plugin, 'createTable']);

@@ -14,6 +14,7 @@ class Editor
      */
     protected $name = '';
     protected $blocks = [];
+    protected $blocknamespaces = [];
 
 
     public function __construct()
@@ -32,7 +33,11 @@ class Editor
             'repeater-nav',
             'repeater-content'
         ];
+
+        $this->blocknamespaces;
     }
+
+
 
 
     /**
@@ -48,9 +53,10 @@ class Editor
 
     public function initBlocks()
     {
-
         foreach ((array) $this->blocks as $block) {
             register_block_type(BLOCKBITE_PLUGIN_DIR . 'build/blocks/' . $block);
+            // 
+            array_push($this->blocknamespaces, 'blockbite/' . $block);
         }
     }
     public function registerBlockCategory($categories)
@@ -72,7 +78,7 @@ class Editor
     {
 
 
-        $dependencies = ['wp-edit-site', 'wp-plugins','wp-element'];
+        $dependencies = ['wp-edit-site', 'wp-plugins', 'wp-element'];
         $version      = BLOCKBITE_PLUGIN_VERSION;
 
 
@@ -100,11 +106,16 @@ class Editor
             $version
         );
 
+
+       
+
         // only load in backend
         if (is_admin()) {
             wp_enqueue_script('blockbite-editor');
+            
             wp_enqueue_style('blockbite-editor-style');
         }
+
 
 
 
@@ -114,7 +125,9 @@ class Editor
             'blockbiteEditor',
             [
                 'apiUrl'   => rest_url('blockbite/v1'),
-                'blocks' => $this->blocks
+                'api' => 'blockbite/v1',
+                'blocks' => $this->blocks,
+                'blocknamespaces' => $this->blocknamespaces
             ]
         );
     }

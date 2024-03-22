@@ -52,9 +52,11 @@
       "type": "string",
       "default": ""
     },
-    "biteRef": {
-      "type": "number",
-      "default": null
+    "metadata": {
+      "type": "object",
+      "default": {
+        "name": "Test"
+      }
     }
   },
   "supports": {
@@ -72,7 +74,8 @@
     "spacing": {
       "margin": true,
       "padding": true
-    }
+    },
+    "renaming": true
   },
   "textdomain": "blockbite",
   "editorScript": "file:./index.js"

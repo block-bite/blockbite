@@ -47,6 +47,12 @@
     "anchor": {
       "type": "string",
       "default": ""
+    },
+    "metadata": {
+      "type": "object",
+      "default": {
+        "name": "Test"
+      }
     }
   },
   "supports": {
@@ -62,7 +68,8 @@
       "margin": true,
       "padding": true,
       "blockGap": true
-    }
+    },
+    "renaming": true
   },
   "textdomain": "blockbite",
   "editorScript": "file:./index.js"

@@ -106,6 +106,10 @@ class Plugin
         }
         $this->hooks = new Hooks($this);
         $this->hooks->addHooks();
+
+        // create table
+		
+		
         
     }
 
@@ -122,6 +126,27 @@ class Plugin
         load_plugin_textdomain('blockbite');
     }
 
+
+    public function createTable(){
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            handle VARCHAR(500) NOT NULL,
+            category INT(11),
+            title VARCHAR(500),
+            css TEXT NOT NULL,
+            tailwind TEXT NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
+    
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+        
+    }
+    
 
     /**
      * Get Settings
