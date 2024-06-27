@@ -1,23 +1,40 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
-  "name": "blockbite/grid",
+  "name": "blockbite/canvas",
   "version": "0.1.0",
-  "title": "Grid",
+  "title": "Canvas",
   "category": "blockbite",
   "icon": "flag",
-  "description": "A grid block, create grids or sliders",
+  "description": "A block that holds draggable and resizable blocks.",
   "attributes": {
-    "blockId": {
-      "type": "string"
+    "media": {
+      "type": "object",
+      "default": {
+        "id": 0,
+        "sizes": {},
+        "url": "https://placehold.co/200x200/000000/FFFFFF/png",
+        "alt": "",
+        "type": "",
+        "width": 0,
+        "height": 0
+      }
     },
-    "slideArrows": {
+    "biteId": {
       "type": "string",
-      "default": "side"
+      "default": ""
     },
-    "slidePagination": {
+    "biteImage": {
+      "type": "array",
+      "default": []
+    },
+    "imageStyle": {
+      "type": "array",
+      "default": []
+    },
+    "imageClass": {
       "type": "string",
-      "default": "dots-bottom"
+      "default": ""
     },
     "flexStyle": {
       "type": "array",
@@ -27,21 +44,15 @@
       "type": "string",
       "default": ""
     },
-    "gridClass": {
-      "type": "string",
-      "default": ""
-    },
-    "scrollProps": {
-      "type": "object",
-      "default": {
-        "mobile": 0,
-        "tablet": 0,
-        "desktop": 0
-      }
-    },
     "anchor": {
       "type": "string",
       "default": ""
+    },
+    "metadata": {
+      "type": "object",
+      "default": {
+        "name": "Canvas"
+      }
     }
   },
   "supports": {
@@ -53,14 +64,12 @@
       "background": true,
       "text": true
     },
-    "dimensions": {
-      "minHeight": true
-    },
     "spacing": {
       "margin": true,
       "padding": true,
-      "blockGap": false
-    }
+      "blockGap": true
+    },
+    "renaming": true
   },
   "textdomain": "blockbite",
   "editorScript": "file:./index.js"

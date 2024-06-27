@@ -26,12 +26,15 @@ class Editor
             'visual',
             'advanced-button',
             'counter',
-            'grid',
+            'slider',
             'icon',
             'heading',
             'repeater',
             'repeater-nav',
-            'repeater-content'
+            'repeater-content',
+            'canvas',
+            'carousel',
+            'carousel-slide'
         ];
 
         $this->blocknamespaces;
@@ -78,7 +81,7 @@ class Editor
     {
 
 
-        $dependencies = ['wp-edit-site', 'wp-plugins', 'wp-element'];
+        $dependencies = [];
         $version      = BLOCKBITE_PLUGIN_VERSION;
 
 
@@ -107,28 +110,73 @@ class Editor
         );
 
 
-       
 
         // only load in backend
         if (is_admin()) {
             wp_enqueue_script('blockbite-editor');
-            
             wp_enqueue_style('blockbite-editor-style');
         }
 
 
 
 
-        // pas data to react plugin
+        // global  api bite
         wp_localize_script(
             'blockbite-editor',
-            'blockbiteEditor',
+            'bite',
             [
+                'tailwind' => null,
                 'apiUrl'   => rest_url('blockbite/v1'),
                 'api' => 'blockbite/v1',
                 'blocks' => $this->blocks,
                 'blocknamespaces' => $this->blocknamespaces
             ]
         );
+    }
+
+    public function registerTailwindConfig()
+    {
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/tailwind-config.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/tailwind-config.asset.php';
+            $dependencies = $asset_file['dependencies'];
+            $version      = $asset_file['version'];
+        }
+        // register config script
+        wp_register_script(
+            'blockbite-tailwind-config',
+            plugins_url('build/tailwind-config.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+        if (is_admin()) {
+            wp_enqueue_script('blockbite-tailwind-config');
+        }
+    }
+
+    public function registerTailwindCdn()
+    {
+        // https://cdn.tailwindcss.com cdn script
+        wp_register_script(
+            'blockbite-tailwind-cdn',
+            'https://cdn.tailwindcss.com',
+            [],
+        );
+        if (is_admin()) {
+            wp_enqueue_script('blockbite-tailwind-cdn');
+        }
+    }
+
+    public function registerSwiperCdn()
+    {
+        wp_register_script(
+            'swiper-editor',
+            'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
+            [],
+            '11.1.4',
+        );
+        if (is_admin()) {
+            wp_enqueue_script('swiper-editor');
+        }
     }
 }

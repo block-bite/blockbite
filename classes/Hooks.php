@@ -4,6 +4,9 @@ namespace Blockbite\Blockbite;
 
 use Blockbite\Blockbite\Register;
 use Blockbite\Blockbite\Rest\Api;
+use Blockbite\Blockbite\Controllers\Database as DbController;
+
+
 
 class Hooks
 {
@@ -29,10 +32,6 @@ class Hooks
 	 */
 	protected $library;
 
-	/**
-	 * @var Tailwind
-	 */
-	protected $tailwind;
 
 	/**
 	 * @var SettingsPage
@@ -47,7 +46,6 @@ class Hooks
 		$this->editor = new Editor($plugin);
 		$this->frontend = new Frontend($plugin);
 		$this->library = new Library($plugin);
-		$this->tailwind = new Tailwind($plugin);
 		$this->settingsPage = new SettingsPage($plugin);
 	}
 
@@ -56,8 +54,10 @@ class Hooks
 	 */
 	public function addHooks()
 	{
-		
-		add_action('plugins_loaded', [$this->plugin, 'pluginLoaded']);		
+
+		add_action('plugins_loaded', [$this->plugin, 'pluginLoaded']);
+		add_action('admin_notices', [$this->plugin, 'adminNotice']);
+
 		// add_action( 'admin_menu', [$this->settingsPage, 'addPage' ]);
 		add_action('rest_api_init', [$this->plugin->getRestApi(), 'registerRoutes']);
 		add_action('enqueue_block_editor_assets', [$this->editor, 'registerAssets']);
@@ -66,46 +66,26 @@ class Hooks
 		add_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
 		add_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
 		add_action('admin_init', [$this->library, 'registerAssets']);
-		add_action('enqueue_block_assets', [$this->tailwind, 'registerAssets'], 10);
 		add_action('wp_head', [$this->frontend, 'blockbite_css']);
 		add_action('admin_enqueue_scripts', [$this->settingsPage, 'registerAssets']);
 		add_action('admin_menu', [$this->settingsPage, 'addPage']);
 		add_filter('body_class', [$this->frontend, 'blockbite_css_body']);
-		
+		add_action('enqueue_block_assets', [$this->editor, 'registerTailwindCdn'], 10);
+		add_action('enqueue_block_assets', [$this->editor, 'registerTailwindConfig'], 11);
+		add_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
 
-
-		// dynamic blocks add bitClass
-		// https://github.com/WordPress/gutenberg/issues/36127
-		$dynamic_blocks = [
-			"core/navigation",
-			"core/site-logo",
-			"core/site-title",
-			"core/site-tagline",
-			"core/post-author",
-			"core/post-date",
-			"core/post-template",
-			"core/post-excerpt",
-			"core/post-featured-image",
-			"core/post-title",
-			"core/post-content",
-			"core/post-terms",
-			"core/term-description",
-			"core/post-comments",
-			"core/loginout",
-			"core/query-title",
-			"core/query-pagination-numbers",
-			"core/query-pagination-next",
-			"core/query-pagination-previous",
-			"core/query-pagination",
-			"core/post-navigation-link"
-		];
-		foreach ($dynamic_blocks as $block) {
-			add_filter('render_block_' . $block, [$this->frontend, 'biteClassPostFeatured'], 10, 2);
+		$dynamic_block_result = DbController::getRecordByHandle('dynamic_block_support');
+		if (isset($dynamic_block_result->content)) {
+			$dynamic_blocks = json_decode($dynamic_block_result->content);
+			if (is_array($dynamic_blocks)) {
+				foreach ($dynamic_blocks as $block) {
+					add_filter('render_block_' . $block, [$this->frontend, 'biteClassDynamicBlocks'], 10, 2);
+				}
+			}
 		}
-
-
-		
 	}
+
+
 
 	/**
 	 * Remove Hooks
@@ -119,8 +99,9 @@ class Hooks
 		remove_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
 		remove_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
 		remove_action('admin_init', [$this->library, 'registerAssets']);
-		remove_action('admin_init', [$this->tailwind, 'registerAssets']);
-		add_action('admin_enqueue_scripts', [$this->settingsPage, 'registerAssets']);
+		remove_action('admin_enqueue_scripts', [$this->settingsPage, 'registerAssets']);
 		remove_action('admin_menu', [$this->settingsPage, 'addPage']);
+		remove_action('enqueue_block_assets', [$this->editor, 'registerTailwindCdn'], 10);
+		remove_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
 	}
 }

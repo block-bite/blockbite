@@ -55,7 +55,7 @@
     "metadata": {
       "type": "object",
       "default": {
-        "name": "Test"
+        "name": "Group"
       }
     }
   },

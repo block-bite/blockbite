@@ -24,11 +24,11 @@
         "height": 0
       }
     },
-    "imageStyle": {
+    "mediaStyle": {
       "type": "array",
       "default": []
     },
-    "imageClass": {
+    "mediaClass": {
       "type": "string",
       "default": ""
     },

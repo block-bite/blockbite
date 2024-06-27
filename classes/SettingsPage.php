@@ -42,12 +42,23 @@ class SettingsPage
             $version      = $asset_file['version'];
         }
 
+        // reuse editor style
+        wp_register_style(
+            SettingsPage::SCREEN,
+            plugins_url('build/blockbite-editor.css', BLOCKBITE_MAIN_FILE),
+            [],
+            $version
+        );
+
+
         wp_register_script(
             SettingsPage::SCREEN,
             plugins_url('build/blockbite-settings.js', BLOCKBITE_MAIN_FILE),
             $dependencies,
             $version,
         );
+
+        wp_enqueue_style('blockbite-editor-style');
     }
     /**
      * Adds the settings page to the Settings menu.
@@ -113,6 +124,7 @@ class SettingsPage
     public  function renderPage()
     {
         wp_enqueue_script(self::SCREEN);
+        wp_enqueue_style(self::SCREEN);
 
 
 
@@ -121,13 +133,18 @@ class SettingsPage
             ->getSettings()
             ->getAll();
 
-        
-         
-         wp_localize_script(
+
+
+        wp_localize_script(
             'blockbite-settings',
             'wpApiSettings',
-            array('root' => esc_url_raw(rest_url()), 'nonce' => wp_create_nonce('wp_rest'),  'apiUrl'   => rest_url('blockbite/v1'))
-     );
+            array(
+                'root' => esc_url_raw(rest_url()),
+                'nonce' => wp_create_nonce('wp_rest'),
+                'apiUrl'   => rest_url('blockbite/v1'),
+                'itemsVersion' => BLOCKBITE_ITEMS_VERSION,
+            )
+        );
 
 
 

@@ -28,11 +28,11 @@
       "type": "array",
       "default": []
     },
-    "imageStyle": {
+    "mediaStyle": {
       "type": "array",
       "default": []
     },
-    "imageClass": {
+    "mediaClass": {
       "type": "string",
       "default": ""
     },
@@ -51,7 +51,7 @@
     "metadata": {
       "type": "object",
       "default": {
-        "name": "Test"
+        "name": "Section"
       }
     }
   },

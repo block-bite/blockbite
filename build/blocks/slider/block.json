@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/slider",
+  "version": "0.1.0",
+  "title": "Slider",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "A slider block, create grids or sliders",
+  "attributes": {
+    "blockId": {
+      "type": "string"
+    },
+    "slideArrows": {
+      "type": "string",
+      "default": "side"
+    },
+    "slidePagination": {
+      "type": "string",
+      "default": "dots-bottom"
+    },
+    "flexStyle": {
+      "type": "array",
+      "default": []
+    },
+    "flexClass": {
+      "type": "string",
+      "default": ""
+    },
+    "gridClass": {
+      "type": "string",
+      "default": ""
+    },
+    "scrollProps": {
+      "type": "object",
+      "default": {
+        "mobile": 0,
+        "tablet": 0,
+        "desktop": 0
+      }
+    },
+    "anchor": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": false
+    }
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js"
+}

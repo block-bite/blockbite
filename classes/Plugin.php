@@ -3,6 +3,7 @@
 namespace Blockbite\Blockbite;
 
 use Blockbite\Blockbite\Rest\Api;
+use Blockbite\Blockbite\Controllers\Database;
 
 class Plugin
 {
@@ -78,12 +79,11 @@ class Plugin
 
 
 
-    public function __construct(Editor $editor, Frontend $frontend, Library $library, Tailwind $tailwind, Settings $settings)
+    public function __construct(Editor $editor, Frontend $frontend, Library $library,  Settings $settings)
     {
         $this->editor = $editor;
         $this->frontend = $frontend;
         $this->library = $library;
-        $this->tailwind = $tailwind;
         $this->settings = $settings;
     }
 
@@ -100,19 +100,35 @@ class Plugin
     {
 
         add_theme_support('editor-styles');
-        
+
         if (!isset($this->api)) {
             $this->api = new Api($this);
         }
         $this->hooks = new Hooks($this);
         $this->hooks->addHooks();
 
-        // create table
-		
-		
-        
+        if (!Database::checkTableExists()) {
+            Database::createTable();
+        }
     }
 
+    public function createTable()
+    {
+        Database::createTable();
+    }
+
+
+    public function adminNotice()
+    {
+        if (get_transient('blockbite_db_creation_failed')) {
+            echo '<div class="notice notice-error is-dismissible">
+                <p>' . __('Blockbite Plugin: Failed to create database tables.', 'blockbite') . '</p>
+            </div>';
+
+            // Delete the transient so the message only shows once
+            delete_transient('blockbite_db_creation_failed');
+        }
+    }
 
     /**
      * When the plugin is loaded:
@@ -127,27 +143,6 @@ class Plugin
     }
 
 
-    public function createTable(){
-
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'blockbite';
-        $charset_collate = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-            id INT(11) NOT NULL AUTO_INCREMENT,
-            handle VARCHAR(500) NOT NULL,
-            category INT(11),
-            title VARCHAR(500),
-            css TEXT NOT NULL,
-            tailwind TEXT NOT NULL,
-            PRIMARY KEY (id)
-        ) $charset_collate;";
-    
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
-        
-    }
-    
-
     /**
      * Get Settings
      *
@@ -155,11 +150,12 @@ class Plugin
      *
      * @return Settings
      */
-    public function getSettings() {
+    public function getSettings()
+    {
         return $this->settings;
     }
 
-    
+
     /**
      * Get API
      *

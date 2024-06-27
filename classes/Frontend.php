@@ -2,7 +2,8 @@
 
 namespace Blockbite\Blockbite;
 
-use Blockbite\Blockbite\Rest\Controllers\Editor;
+use Blockbite\Blockbite\Controllers\EditorStyles;
+use Blockbite\Blockbite\Controllers\LibraryComponents;
 
 class Frontend
 {
@@ -23,8 +24,9 @@ class Frontend
     }
 
 
+
     // add biteClass and biteMotion to all dynamic blocks
-    public function biteClassPostFeatured($block_content, $block)
+    public function biteClassDynamicBlocks($block_content, $block)
     {
         if (!$block_content || !isset($block['attrs']['biteClass'])) {
             return $block_content;
@@ -43,6 +45,7 @@ class Frontend
         );
     }
 
+
     /**
      * Defaults
      *
@@ -56,11 +59,12 @@ class Frontend
 
     public function blockbite_css()
     {
-        $tailwind = new Editor();
-        $result = $tailwind->get_styles($request = null);
+        $styles = EditorStyles::get_styles($request = null);
+        $components_css = LibraryComponents::get_components_css($request = null);
 
-     
-        echo '<style>' . $result['css'] . '</style>';
+        if (isset($styles['css'])) {
+            echo '<style id="blockbite">' . $styles['css'] . $components_css . '</style>';
+        }
     }
 
     public function blockbite_css_body($classes)
@@ -117,6 +121,16 @@ class Frontend
 
             ]
         );
+
+        // register swiper script
+        wp_register_script(
+            'swiper-frontend',
+            'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
+            [],
+            '11.1.4',
+        );
+
+        wp_enqueue_script('swiper-frontend');
     }
 
     public function registerAssetsBackend()
