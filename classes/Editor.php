@@ -40,9 +40,6 @@ class Editor
         $this->blocknamespaces;
     }
 
-
-
-
     /**
      * Defaults
      *

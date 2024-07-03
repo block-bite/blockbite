@@ -2,10 +2,10 @@
 
 /**
  * Plugin Name:       Blockbite
- * Description:       Tailwind Designer [dev]
+ * Description:       Tailwind Designer [dev-1]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.83
+ * Version: 1.0.84
  * Author:            Merijn van Essen
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
