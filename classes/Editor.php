@@ -2,6 +2,8 @@
 
 namespace Blockbite\Blockbite;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
 class Editor
 {
 
@@ -55,7 +57,6 @@ class Editor
     {
         foreach ((array) $this->blocks as $block) {
             register_block_type(BLOCKBITE_PLUGIN_DIR . 'build/blocks/' . $block);
-            // 
             array_push($this->blocknamespaces, 'blockbite/' . $block);
         }
     }
