@@ -16,7 +16,7 @@
       "type": "string",
       "default": ""
     },
-    "linkRel": {
+    "linkTitle": {
       "type": "string",
       "default": "Title"
     },

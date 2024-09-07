@@ -2,7 +2,7 @@
 
 namespace Blockbite\Blockbite;
 
-class SettingsPage
+class SettingsNavigation
 {
 
     const SCREEN = 'blockbite-settings';
@@ -44,15 +44,14 @@ class SettingsPage
 
         // reuse editor style
         wp_register_style(
-            SettingsPage::SCREEN,
+            SettingsNavigation::SCREEN,
             plugins_url('build/blockbite-editor.css', BLOCKBITE_MAIN_FILE),
             [],
             $version
         );
 
-
         wp_register_script(
-            SettingsPage::SCREEN,
+            SettingsNavigation::SCREEN,
             plugins_url('build/blockbite-settings.js', BLOCKBITE_MAIN_FILE),
             $dependencies,
             $version,
@@ -67,72 +66,48 @@ class SettingsPage
      *
      * @return string
      */
-    public function addPage()
+    public function addAdminMenu()
     {
-
-        // Add the page
-        $suffix = add_options_page(
-            __('blockbite', 'blockbite-plugin'),
-            __('blockbite', 'blockbite-plugin'),
+        // Add the main menu page
+        add_menu_page(
+            'Blockbite Design System',
+            'Blockbite',
             'manage_options',
             self::SCREEN,
-            [
-                $this,
-                'renderPage',
-            ]
+            [$this, 'renderSettings'],
+            'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjIwIiBoZWlnaHQ9IjIyMCIgdmlld0JveD0iMCAwIDIyMCAyMjAiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTc5LjAzLDEwNS41MkgyNy42OXYxMTIuNDhoMTEyLjQ4di01MS4zNGgtNjEuMTR2LTYxLjE0Wk03OS4wMyw1NC4xNXY1MS4zN2g2MS4xNHY2MS4xNGg1MS4zNGwuODEtNjEuMTR2LTUxLjM3aC0xMTMuMjlaTTI3LjY5LDJ2NTIuMTVoNTEuMzR2LTI2LjA3TDI3LjY5LDJaIi8+Cjwvc3ZnPg==',
+            50
         );
-
-        // This adds a link in the plugins list table
-        add_action(
-            'plugin_action_links_' . plugin_basename(BLOCKBITE_MAIN_FILE),
-            [
-                $this,
-                'addLinks',
-            ]
+        // Add a submenu item for 'Settings' (replaces the default 'Blockbite' submenu)
+        add_submenu_page(
+            self::SCREEN, // parent_slug
+            'Settings', // page_title
+            'Settings', // menu_title
+            'manage_options', // capability
+            self::SCREEN, // menu_slug should match the main menu to replace the first item
+            [$this, 'renderSettings'] // callback
         );
-
-        return $suffix;
+        // Add the submenu page under the main menu
+        add_submenu_page(
+            self::SCREEN, // parent_slug should match menu_slug from add_menu_page
+            'Blockbites', // page_title
+            'Blockbites', // menu_title
+            'manage_options', // capability
+            'edit.php?post_type=blockbites',
+            null
+        );
     }
 
-    /**
-     * Adds a link to the setting page to the plugin's entry in the plugins list table.
-     *
-     * @since 1.0.0
-     *
-     * @param array $links List of plugin action links HTML.
-     * @return array Modified list of plugin action links HTML.
-     */
-    public function addLinks($links)
-    {
-        // Add link as the first plugin action link.
-        $settings_link = sprintf(
-            '<a href="%s">%s</a>',
-            esc_url(add_query_arg('page', self::SCREEN, admin_url('options-general.php'))),
-            esc_html__('Settings', 'blockbite')
-        );
-        array_unshift($links, $settings_link);
 
-
-        return $links;
-    }
-
-    /**
-     * Renders the settings page.
-     *
-     * @since 0.0.1
-     */
-    public  function renderPage()
+    public  function renderSettings()
     {
         wp_enqueue_script(self::SCREEN);
         wp_enqueue_style(self::SCREEN);
-
-
 
         $settings = $this
             ->plugin
             ->getSettings()
             ->getAll();
-
 
 
         wp_localize_script(
@@ -145,17 +120,14 @@ class SettingsPage
                 'itemsVersion' => BLOCKBITE_ITEMS_VERSION,
             )
         );
-
-
-
-
-?>
-        <div class="blockbite">
-            <h1>
-                <?php esc_html_e('blockbite', 'blockbite'); ?>
-            </h1>
-            <div id="<?php echo esc_attr(self::SCREEN); ?>"></div>
-        </div>
+?><div id="blockbite-settings"></div>
 <?php
+    }
+
+
+
+    public function renderSubMenu()
+    {
+        echo '<h1>Blockbite Submenu</h1>';
     }
 }

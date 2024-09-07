@@ -28,6 +28,14 @@
       "type": "boolean",
       "default": false
     },
+    "flexStyle": {
+      "type": "array",
+      "default": []
+    },
+    "flexClass": {
+      "type": "string",
+      "default": ""
+    },
     "buttonType": {
       "type": "string",
       "default": "a"

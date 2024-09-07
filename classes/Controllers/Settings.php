@@ -18,7 +18,8 @@ class Settings extends Controller
     {
         $this->handles = [
             'preset',
-            'component'
+            'bites',
+            'design-tokens',
         ];
     }
 
@@ -115,13 +116,19 @@ class Settings extends Controller
 
     public static function sync_blockbite_items($request = null)
     {
-        $data = $request->get_params();
+        if (is_array($request)) {
+            $data = $request;
+        } else {
+            $data = $request->get_params();
+        }
+        error_log(json_encode($data));
 
         if (!isset($data['handle']) || !isset($data['version'])) {
             return new WP_Error('invalid_data', 'Invalid data', array('status' => 400));
         }
         $version = $data['version'];
         $handle = $data['handle'];
+        $platform = $data['platform'];
 
         $plugin_root = plugin_dir_path(__FILE__);
         $plugin_root = trailingslashit(dirname(dirname($plugin_root)));
@@ -141,7 +148,14 @@ class Settings extends Controller
             if (!array_key_exists("handle", $data[0]) && $data[0]['handle'] !== $handle) {
                 return new WP_Error('invalid_data', 'Invalid blockbite file', array('status' => 400));
             } else {
+                // query all records first
                 $db = new DbController();
+                $db->deleteAllRecordsByQuery([
+                    'handle' => $handle,
+                    'platform' => $platform,
+                    'version' => $version
+                ]);
+
                 $db->insertRecords($data);
             }
         }

@@ -1,9 +1,9 @@
 <?php
+
 namespace Blockbite\Blockbite;
 
 // use settings
-use Blockbite\Blockbite\SettingsPage
-;
+use Blockbite\Blockbite\SettingsNavigation;
 
 class Settings
 {
@@ -11,7 +11,6 @@ class Settings
     // construct
     public function __construct()
     {
-      
     }
 
     /**
@@ -22,7 +21,7 @@ class Settings
      * @var string
      */
     protected $optionName = 'blockbite-settings';
-    
+
 
     /**
      * Defaults
@@ -53,7 +52,7 @@ class Settings
          * @param array $data Data to save
          */
         $data = apply_filters('blockbite_save_settings', $data);
-        update_option($this->optionName,$data);
+        update_option($this->optionName, $data);
     }
     /**
      * Get all settings

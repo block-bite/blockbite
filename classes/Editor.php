@@ -2,6 +2,8 @@
 
 namespace Blockbite\Blockbite;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
 class Editor
 {
 
@@ -26,15 +28,12 @@ class Editor
             'visual',
             'advanced-button',
             'counter',
-            'slider',
             'icon',
             'heading',
-            'repeater',
-            'repeater-nav',
-            'repeater-content',
             'canvas',
             'carousel',
-            'carousel-slide'
+            'carousel-slide',
+            'bites-wrap'
         ];
 
         $this->blocknamespaces;
@@ -55,7 +54,6 @@ class Editor
     {
         foreach ((array) $this->blocks as $block) {
             register_block_type(BLOCKBITE_PLUGIN_DIR . 'build/blocks/' . $block);
-            // 
             array_push($this->blocknamespaces, 'blockbite/' . $block);
         }
     }
@@ -74,7 +72,7 @@ class Editor
         return $categories_sorted;
     }
 
-    public function registerAssets()
+    public function registerEditor()
     {
 
 
@@ -96,8 +94,6 @@ class Editor
             $dependencies,
             $version,
         );
-
-
         // register editor style
         wp_register_style(
             'blockbite-editor-style',
@@ -106,61 +102,45 @@ class Editor
             $version
         );
 
-
-
         // only load in backend
         if (is_admin()) {
             wp_enqueue_script('blockbite-editor');
             wp_enqueue_style('blockbite-editor-style');
         }
-
-
-
-
         // global  api bite
         wp_localize_script(
             'blockbite-editor',
-            'bite',
+            'blockbite',
             [
-                'tailwind' => null,
                 'apiUrl'   => rest_url('blockbite/v1'),
                 'api' => 'blockbite/v1',
-                'blocks' => $this->blocks,
-                'blocknamespaces' => $this->blocknamespaces
+                'tailwindParser' => null,
+                'data' => [
+                    'postType' => get_post_type(),
+                    'id' => get_the_ID(),
+                ]
             ]
         );
     }
 
-    public function registerTailwindConfig()
+    public function registerTailwind()
     {
         // Use asset file if it exists
-        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/tailwind-config.asset.php')) {
-            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/tailwind-config.asset.php';
-            $dependencies = $asset_file['dependencies'];
-            $version      = $asset_file['version'];
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-tailwind.asset.php')) {
+            $asset_file_tailwind   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-tailwind.asset.php';
+            $dependencies_tailwind = $asset_file_tailwind['dependencies'];
+            $version_tailwind      = $asset_file_tailwind['version'];
         }
-        // register config script
+        // register editor script
         wp_register_script(
-            'blockbite-tailwind-config',
-            plugins_url('build/tailwind-config.js', BLOCKBITE_MAIN_FILE),
-            $dependencies,
-            $version,
+            'blockbite-tailwind',
+            plugins_url('build/blockbite-tailwind.js', BLOCKBITE_MAIN_FILE),
+            $dependencies_tailwind,
+            $version_tailwind,
         );
-        if (is_admin()) {
-            wp_enqueue_script('blockbite-tailwind-config');
-        }
-    }
 
-    public function registerTailwindCdn()
-    {
-        // https://cdn.tailwindcss.com cdn script
-        wp_register_script(
-            'blockbite-tailwind-cdn',
-            'https://cdn.tailwindcss.com',
-            [],
-        );
         if (is_admin()) {
-            wp_enqueue_script('blockbite-tailwind-cdn');
+            wp_enqueue_script('blockbite-tailwind');
         }
     }
 

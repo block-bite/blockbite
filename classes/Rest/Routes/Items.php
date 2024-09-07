@@ -32,8 +32,25 @@ class Items extends Api
                     ],
                 ]
             ]
-
         ]);
+
+
+
+        register_rest_route($this->namespace, '/items/get-item', [
+            [
+                'methods' => 'GET',
+                'callback' => [$itemsController, 'get_item'],
+                'permission_callback' => [$itemsController, 'authorize'],
+                'args' => [
+                    'handle' => [
+                        'required' => true,
+                        'type' => 'string',
+                    ],
+                ]
+            ]
+        ]);
+
+
         register_rest_route($this->namespace, '/items/upsert', [
             [
                 'methods' => 'POST',
@@ -70,8 +87,50 @@ class Items extends Api
                     ],
                 ]
             ],
-
         ]);
+
+        register_rest_route($this->namespace, '/items/upsert-handle', [
+            [
+                'methods' => 'POST',
+                'callback' => [$itemsController, 'upsert_item_handle'],
+                'permission_callback' => [$itemsController, 'authorize'],
+                'args' => [
+                    'id' => [
+                        'required' => false,
+                        'type' => 'number',
+                    ],
+                    'is_default' => [
+                        'required' => false,
+                        'type' => 'boolean',
+                    ],
+                    'platform' => [
+                        'required' => false,
+                        'type' => 'string',
+                    ],
+                    'handle' => [
+                        'required' => true,
+                        'type' => 'string',
+                    ],
+                    'blockname' => [
+                        'required' => false,
+                        'type' => 'string',
+                    ],
+                    'slug' => [
+                        'required' => false,
+                        'type' => 'string',
+                    ],
+                    'content' => [
+                        'required' => false,
+                        'type' => 'string',
+                    ],
+                ]
+            ],
+        ]);
+
+
+
+
+
         register_rest_route($this->namespace, '/items/delete', [
             [
                 'methods' => 'POST',

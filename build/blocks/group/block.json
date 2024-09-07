@@ -20,11 +20,11 @@
         "height": 0
       }
     },
-    "imageStyle": {
+    "mediaStyle": {
       "type": "array",
       "default": []
     },
-    "imageClass": {
+    "mediaClass": {
       "type": "string",
       "default": ""
     },
@@ -40,7 +40,7 @@
       "type": "string",
       "default": ""
     },
-    "linkRel": {
+    "linkTitle": {
       "type": "string",
       "default": "Title"
     },

@@ -5,8 +5,8 @@
  * Description:       Tailwind Designer [dev-1]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.85
- * Author:            Merijn van Essen
+ * Version: 1.0.88
+ * Author:            Blockbite
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
  * License:           GPL-2.0-or-later
@@ -17,7 +17,6 @@
 
 use Blockbite\Blockbite\Editor;
 use Blockbite\Blockbite\Frontend;
-use Blockbite\Blockbite\Library;
 use Blockbite\Blockbite\Plugin;
 use Blockbite\Blockbite\Settings;
 
@@ -51,7 +50,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 $plugin = new Blockbite\Blockbite\Plugin(
 	new Blockbite\Blockbite\Editor(),
 	new Blockbite\Blockbite\Frontend(),
-	new Blockbite\Blockbite\Library(),
 	new Blockbite\Blockbite\Settings()
 );
 

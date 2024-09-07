@@ -3,10 +3,10 @@
 namespace Blockbite\Blockbite\Rest\Routes;
 
 use Blockbite\Blockbite\Plugin;
-use Blockbite\Blockbite\Controllers\EditorStyles as EditorStylesController;
+use Blockbite\Blockbite\Controllers\EditorSettings as EditorSettingsController;
 use Blockbite\Blockbite\Rest\Api;
 
-class EditorStyles extends Api
+class EditorSettings extends Api
 {
 
 
@@ -16,21 +16,29 @@ class EditorStyles extends Api
     {
 
 
-        $editorStylesController = new EditorStylesController($this->plugin);
+        $editorSettingsController = new EditorSettingsController($this->plugin);
 
 
 
-        // save the styles
+        register_rest_route($this->namespace, '/editor-settings', [
+            [
+                'methods' => 'GET',
+                'callback' => [$editorSettingsController, 'get_settings'],
+                'permission_callback' => [$editorSettingsController, 'authorize']
+            ]
+        ]);
+
+
         register_rest_route($this->namespace, '/editor-styles', [
             [
                 'methods' => 'GET',
-                'callback' => [$editorStylesController, 'get_styles'],
-                'permission_callback' => [$editorStylesController, 'authorize']
+                'callback' => [$editorSettingsController, 'get_styles'],
+                'permission_callback' => [$editorSettingsController, 'authorize']
             ],
             [
                 'methods' => 'POST',
-                'callback' => [$editorStylesController, 'update_styles'],
-                'permission_callback' => [$editorStylesController, 'authorize'],
+                'callback' => [$editorSettingsController, 'update_styles'],
+                'permission_callback' => [$editorSettingsController, 'authorize'],
                 'args' => [
                     'blockbite_css' => [
                         'required' => true,
@@ -47,13 +55,11 @@ class EditorStyles extends Api
 
         ]);
 
-
-        // save the styles
         register_rest_route($this->namespace, '/editor-styles/safelist', [
             [
                 'methods' => 'POST',
-                'callback' => [$editorStylesController, 'update_safelist'],
-                'permission_callback' => [$editorStylesController, 'authorize'],
+                'callback' => [$editorSettingsController, 'update_safelist'],
+                'permission_callback' => [$editorSettingsController, 'authorize'],
                 'args' => [
                     'list' => [
                         'required' => true
@@ -62,13 +68,11 @@ class EditorStyles extends Api
             ],
         ]);
 
-
-        // save the references
         register_rest_route($this->namespace, '/editor-styles/references', [
             [
                 'methods' => 'POST',
-                'callback' => [$editorStylesController, 'update_references'],
-                'permission_callback' => [$editorStylesController, 'authorize'],
+                'callback' => [$editorSettingsController, 'update_references'],
+                'permission_callback' => [$editorSettingsController, 'authorize'],
                 'args' => [
                     'references' => [
                         'required' => true,

@@ -2,8 +2,7 @@
 
 namespace Blockbite\Blockbite;
 
-use Blockbite\Blockbite\Controllers\EditorStyles;
-use Blockbite\Blockbite\Controllers\LibraryComponents;
+use Blockbite\Blockbite\Controllers\EditorSettings;
 
 class Frontend
 {
@@ -37,9 +36,19 @@ class Frontend
             $injected_class .= ' ' . $block['attrs']['biteMotionClass'];
         }
 
+        $interaction_type_data_attr = '';
+        if (isset($block['attrs']['biteMeta']['interaction']['actionType'])) {
+            $interaction_type_data_attr = 'data-b_action_type="' . $block['attrs']['biteMeta']['interaction']['actionType'] . '"';
+        }
+
+        $interaction_ref_data_attr = '';
+        if (isset($block['attrs']['biteMeta']['interaction']['actionRef'])) {
+            $interaction_ref_data_attr = 'data-b_action_ref="' . $block['attrs']['biteMeta']['interaction']['actionRef'] . '"';
+        }
+
         return preg_replace(
             '/' . preg_quote('class="', '/') . '/',
-            'class="' . esc_attr($injected_class) . ' ',
+            'class="' . esc_attr($injected_class) . '" ' . $interaction_type_data_attr . ' ' . $interaction_ref_data_attr . ' ',
             $block_content,
             1
         );
@@ -59,11 +68,11 @@ class Frontend
 
     public function blockbite_css()
     {
-        $styles = EditorStyles::get_styles($request = null);
-        $components_css = LibraryComponents::get_components_css($request = null);
+        $styles = EditorSettings::get_styles($request = null);
+        // $components_css = LibraryComponents::get_components_css($request = null);
 
         if (isset($styles['css'])) {
-            echo '<style id="blockbite">' . $styles['css'] . $components_css . '</style>';
+            echo '<style id="blockbite">' . $styles['css'] . '</style>';
         }
     }
 
@@ -135,6 +144,27 @@ class Frontend
 
     public function registerAssetsBackend()
     {
+
+        $dependencies = [];
+        $version      = BLOCKBITE_PLUGIN_VERSION;
+
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-frontend.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-frontend.asset.php';
+            $dependencies = $asset_file['dependencies'];
+            $version      = $asset_file['version'];
+        }
+
         add_editor_style($this->css_url);
+
+        // register frontend script
+        wp_register_script(
+            'blockbite-frontend',
+            plugins_url('build/blockbite-frontend.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+
+        wp_enqueue_script('blockbite-frontend');
     }
 }

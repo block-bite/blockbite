@@ -14,9 +14,7 @@ class Database extends Controller
     // icon uri
     private $icon_uri;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
     public static function prepData($data)
@@ -46,9 +44,10 @@ class Database extends Controller
                 slug VARCHAR(500) NOT NULL,
                 version VARCHAR(100) DEFAUlT '1.0.0',
                 summary VARCHAR(500) NOT NULL,
-                css TEXT NOT NULL,
+                css LONGTEXT NOT NULL,
                 tailwind TEXT NOT NULL,
-                content TEXT NOT NULL,
+                content LONGTEXT NOT NULL,
+                post_id INT(11) NOT NULL,
                 parent INT(11) NOT NULL,
                 PRIMARY KEY (id)
             ) $charset_collate;";
@@ -111,7 +110,6 @@ class Database extends Controller
 
         $where_clause = implode(' AND ', $where_clauses);
         $query = $wpdb->prepare("SELECT * FROM $table_name WHERE $where_clause", ...$where_values);
-
         $record = $wpdb->get_row($query);
 
         if (isset($record->id)) {
@@ -216,17 +214,51 @@ class Database extends Controller
         $record = $wpdb->get_row($query);
         return $record;
     }
-
     public static function getAllRecordsByHandle($handle)
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'blockbite';
         $query = $wpdb->prepare("SELECT * FROM $table_name WHERE handle = %s", $handle);
         $records = $wpdb->get_results($query);
-        // if record is not in an array create one
-        if (!is_array($records)) {
-            $records = [$records];
+
+        // Ensure $records is an array (this might not be necessary as get_results returns an array)
+        if (empty($records)) {
+            return [];
         }
+
+        return $records;
+    }
+
+    public static function getRecordByQuery($query)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+        $where_clauses = [];
+        $where_values = [];
+        foreach ($query as $column => $value) {
+            $where_clauses[] = "$column = %s";
+            $where_values[] = $value;
+        }
+        $where_clause = implode(' AND ', $where_clauses);
+        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE $where_clause", ...$where_values);
+        $record = $wpdb->get_row($query);
+        return $record;
+    }
+
+
+    public static function getRecordsByHandles($handles = [])
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+        $where_clauses = [];
+        $where_values = [];
+        foreach ($handles as $handle) {
+            $where_clauses[] = "handle = %s";
+            $where_values[] = $handle;
+        }
+        $where_clause = implode(' OR ', $where_clauses);
+        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE $where_clause", ...$where_values);
+        $records = $wpdb->get_results($query);
         return $records;
     }
 
@@ -268,6 +300,14 @@ class Database extends Controller
         $table_name = $wpdb->prefix . 'blockbite';
         $deleted = $wpdb->delete($table_name, ['id' => intval($id)]);
         // error_log('deleted: ' . $deleted);
+        return $deleted;
+    }
+
+    public static function deleteAllRecordsByQuery($query)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+        $deleted = $wpdb->delete($table_name, $query);
         return $deleted;
     }
 

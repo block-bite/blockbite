@@ -32,6 +32,14 @@
       "type": "array",
       "default": []
     },
+    "counterSeperator": {
+      "type": "boolean",
+      "default": false
+    },
+    "counterDelay": {
+      "type": "string",
+      "default": "0"
+    },
     "flexClass": {
       "type": "string",
       "default": ""

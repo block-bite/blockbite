@@ -4,10 +4,10 @@ namespace Blockbite\Blockbite\Rest;
 
 use Blockbite\Blockbite\Plugin;
 use Blockbite\Blockbite\Rest\Routes\BlockHelpers as BlockHelperRoute;
-use Blockbite\Blockbite\Rest\Routes\LibraryComponents as LibraryComponentsRoute;
-use Blockbite\Blockbite\Rest\Routes\EditorStyles as EditorStylesRoute;
+use Blockbite\Blockbite\Rest\Routes\EditorSettings as EditorSettingsRoute;
 use Blockbite\Blockbite\Rest\Routes\BlockSupport as BlockSupportRoute;
 use Blockbite\Blockbite\Rest\Routes\Items as ItemsRoute;
+use Blockbite\Blockbite\Rest\Routes\Bites as BitesRoute;
 use Blockbite\Blockbite\Rest\Routes\Settings as SettingsRoute;
 
 /**
@@ -51,11 +51,11 @@ class Api
     {
         $routes = [
             new BlockHelperRoute($this->plugin),
-            new LibraryComponentsRoute($this->plugin),
-            new EditorStylesRoute($this->plugin),
+            new EditorSettingsRoute($this->plugin),
             new BlockSupportRoute($this->plugin),
             new ItemsRoute($this->plugin),
             new SettingsRoute($this->plugin),
+            new BitesRoute($this->plugin),
         ];
 
         foreach ($routes as $route) {

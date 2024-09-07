@@ -20,30 +20,6 @@
         "height": 0
       }
     },
-    "biteId": {
-      "type": "string",
-      "default": ""
-    },
-    "biteImage": {
-      "type": "array",
-      "default": []
-    },
-    "imageStyle": {
-      "type": "array",
-      "default": []
-    },
-    "imageClass": {
-      "type": "string",
-      "default": ""
-    },
-    "flexStyle": {
-      "type": "array",
-      "default": []
-    },
-    "flexClass": {
-      "type": "string",
-      "default": ""
-    },
     "anchor": {
       "type": "string",
       "default": ""

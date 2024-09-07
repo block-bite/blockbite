@@ -24,7 +24,9 @@ class BlockHelperIcons extends Controller
         // check if BLOCKBITE_ICON_DIR is directory
         if (!is_dir($this->icon_dir)) {
             return [
-                'error' => 'Icon directory not found' . $this->icon_dir
+                'icon_url' => '',
+                'icons' => [],
+                'dir' =>  ''
             ];
         } else {
             $icons = scandir($this->icon_dir);
@@ -57,15 +59,10 @@ class BlockHelperIcons extends Controller
         $icon = $request['icon'] . '.svg';
         //
         if (!file_exists($this->icon_dir . '/' . $icon)) {
-            return new WP_Error('icon_not_found', 'Icon not found', array('status' => 404));
+            return "Icon not found";
         } else {
             $content = file_get_contents($this->icon_dir . '/' . $icon);
-            // remove fills and class
-            $icon_inline_format1 = str_replace('fill', 'data-fill', $content);
-            $icon_inline_format2 = str_replace('class', 'data-class', $icon_inline_format1);
-            $icon_inline = str_replace('<svg', '<svg fill="currentColor" stroke="currentColor"', $icon_inline_format2);
-
-            return $icon_inline;
+            return $content;
         }
     }
 }

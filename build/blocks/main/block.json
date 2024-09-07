@@ -22,7 +22,14 @@
       "margin": true,
       "padding": true,
       "blockGap": true
-    }
+    },
+    "metadata": {
+      "type": "object",
+      "default": {
+        "name": "Main"
+      }
+    },
+    "renaming": true
   },
   "textdomain": "blockbite",
   "editorScript": "file:./index.js"

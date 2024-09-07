@@ -60,6 +60,10 @@ class Settings extends Api
                         'required' => true,
                         'type' => 'string',
                     ],
+                    'platform' => [
+                        'required' => true,
+                        'type' => 'string',
+                    ],
                 ]
             ],
         ]);

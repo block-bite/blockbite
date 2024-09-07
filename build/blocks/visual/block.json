@@ -31,6 +31,18 @@
     "mediaClass": {
       "type": "string",
       "default": ""
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "linkTitle": {
+      "type": "string",
+      "default": "Title"
+    },
+    "linkTarget": {
+      "type": "string",
+      "default": "_self"
     }
   },
   "supports": {

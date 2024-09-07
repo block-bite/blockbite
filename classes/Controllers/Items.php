@@ -86,6 +86,29 @@ class Items extends Controller
         ], 200);
     }
 
+
+
+    public static function upsert_item_handle($request = null)
+    {
+        $data = $request->get_params();
+        $validated_data = self::validate($data, ['handle']);
+
+        if (is_wp_error($validated_data)) {
+            return $validated_data;
+        }
+        $handle = $validated_data['handle'];
+        $upsert = DbController::updateOrCreateHandle($data, $handle);
+
+        return new WP_REST_Response([
+            'status' => 200,
+            'message' => $handle . ' saved',
+            'data' => $upsert
+        ], 200);
+    }
+
+
+
+
     public static function delete_item($request = null)
     {
         $data = $request->get_params();
@@ -130,6 +153,28 @@ class Items extends Controller
             'data' => $result
         ], 200);
     }
+
+    public static function get_item($request)
+    {
+        $data = $request->get_params();
+        $validated_data = self::validate($data, ['handle']);
+
+        if (is_wp_error($validated_data)) {
+            return $validated_data;
+        }
+
+        $handle = $validated_data['handle'];
+        $id = $validated_data['id'];
+        $result = DbController::getRecordByHandle($handle);
+
+        return new WP_REST_Response([
+            'status' => 200,
+            'message' => $handle . ' fetched',
+            'data' => $result
+        ], 200);
+    }
+
+
 
     public static function toggle_default_item($request = null)
     {

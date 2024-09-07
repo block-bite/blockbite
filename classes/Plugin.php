@@ -4,6 +4,7 @@ namespace Blockbite\Blockbite;
 
 use Blockbite\Blockbite\Rest\Api;
 use Blockbite\Blockbite\Controllers\Database;
+use Blockbite\Blockbite\Controllers\Settings as SettingsController;
 
 class Plugin
 {
@@ -47,18 +48,10 @@ class Plugin
 
     protected $frontend;
 
-    /**
-     * Library instance
-     *
-     * @since 0.0.1
-     *
-     * @var Library
-     */
-    protected $library;
 
 
     /**
-     * Library instance
+     * Tailwind instance
      *
      * @since 0.0.1
      *
@@ -79,11 +72,10 @@ class Plugin
 
 
 
-    public function __construct(Editor $editor, Frontend $frontend, Library $library,  Settings $settings)
+    public function __construct(Editor $editor, Frontend $frontend,  Settings $settings)
     {
         $this->editor = $editor;
         $this->frontend = $frontend;
-        $this->library = $library;
         $this->settings = $settings;
     }
 
@@ -104,11 +96,18 @@ class Plugin
         if (!isset($this->api)) {
             $this->api = new Api($this);
         }
-        $this->hooks = new Hooks($this);
-        $this->hooks->addHooks();
 
         if (!Database::checkTableExists()) {
             Database::createTable();
+            // add default
+            SettingsController::sync_blockbite_items([
+                'handle' => 'preset',
+                'version' => BLOCKBITE_ITEMS_VERSION,
+                'platform' => 'blockbite'
+            ]);
+        } else {
+            $this->hooks = new Hooks($this);
+            $this->hooks->addHooks();
         }
     }
 
