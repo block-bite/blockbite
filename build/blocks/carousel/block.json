@@ -58,17 +58,11 @@
       "type": "object",
       "default": {
         "navigation": true,
-        "slidesPerView": {
-          "xs": 1,
-          "md": 1,
-          "lg": 1
-        },
+        "slidesPerView": 1,
         "speed": 500,
         "loop": false,
         "autoplay": null,
-        "pagination": null,
-        "spaceBetween": 0,
-        "cssMode": false
+        "pagination": null
       }
     }
   },

@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
     'Blockbite\\Blockbite\\Tests\\' => array($baseDir . '/tests/WordPress'),
     'Blockbite\\Blockbite\\' => array($baseDir . '/classes'),
 );
