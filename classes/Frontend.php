@@ -22,36 +22,62 @@ class Frontend
         $this->css_url = plugins_url('build/blockbite-frontend.css', BLOCKBITE_MAIN_FILE);
     }
 
-
-
-    // add biteClass and biteMotion to all dynamic blocks
     public function biteClassDynamicBlocks($block_content, $block)
     {
+        // Check for valid block content and biteClass attribute
         if (!$block_content || !isset($block['attrs']['biteClass'])) {
             return $block_content;
         }
-        $injected_class =  $block['attrs']['biteClass'];
 
-        if (isset($block['attrs']['biteMotionClass'])) {
-            $injected_class .= ' ' . $block['attrs']['biteMotionClass'];
+        // Load block content into DOMDocument safely
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);  // Suppress warnings from malformed HTML
+        $dom->loadHTML(mb_convert_encoding($block_content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors(); // Clear any libxml errors after loading
+
+        // Get the first element in the block
+        $xpath = new \DOMXPath($dom);
+        $element = $xpath->query('//*')->item(0);  // The first element
+
+        if ($element) {
+            // Handle classes - append injected classes
+            $this->appendClasses($element, $block['attrs']);
+
+            // Inject data attributes for interaction
+            $this->injectDataAttributes($element, $block['attrs']['biteMeta'] ?? []);
         }
 
-        $interaction_type_data_attr = '';
-        if (isset($block['attrs']['biteMeta']['interaction']['actionType'])) {
-            $interaction_type_data_attr = 'data-b_action_type="' . $block['attrs']['biteMeta']['interaction']['actionType'] . '"';
+        // Return the updated HTML content
+        return $dom->saveHTML($element);
+    }
+
+    // Helper function to append classes
+    private function appendClasses(&$element, $attrs)
+    {
+        $injected_class = esc_attr($attrs['biteClass']);
+
+        // Append motion class if available
+        if (isset($attrs['biteMotionClass'])) {
+            $injected_class .= ' ' . esc_attr($attrs['biteMotionClass']);
         }
 
-        $interaction_ref_data_attr = '';
-        if (isset($block['attrs']['biteMeta']['interaction']['actionRef'])) {
-            $interaction_ref_data_attr = 'data-b_action_ref="' . $block['attrs']['biteMeta']['interaction']['actionRef'] . '"';
+        // Append classes to the existing class attribute
+        $existing_classes = $element->getAttribute('class');
+        $element->setAttribute('class', trim($existing_classes . ' ' . $injected_class));
+    }
+
+    // Helper function to inject data attributes
+    private function injectDataAttributes(&$element, $biteMeta)
+    {
+        // Inject 'data-b_action_type' if actionType is set
+        if (isset($biteMeta['interaction']['actionType'])) {
+            $element->setAttribute('data-b_action_type', esc_attr($biteMeta['interaction']['actionType']));
         }
 
-        return preg_replace(
-            '/' . preg_quote('class="', '/') . '/',
-            'class="' . esc_attr($injected_class) . '" ' . $interaction_type_data_attr . ' ' . $interaction_ref_data_attr . ' ',
-            $block_content,
-            1
-        );
+        // Inject 'data-b_action_ref' if actionRef is set
+        if (isset($biteMeta['interaction']['actionRef'])) {
+            $element->setAttribute('data-b_action_ref', esc_attr($biteMeta['interaction']['actionRef']));
+        }
     }
 
 

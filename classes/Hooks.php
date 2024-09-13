@@ -85,15 +85,7 @@ class Hooks
 		// add_filter('allowed_block_types_all', [PostTypes::class, 'restrict_block_to_post_type'], 10, 2);
 
 
-		$dynamic_block_result = DbController::getRecordByHandle('dynamic_block_support');
-		if (isset($dynamic_block_result->content)) {
-			$dynamic_blocks = json_decode($dynamic_block_result->content);
-			if (is_array($dynamic_blocks)) {
-				foreach ($dynamic_blocks as $block) {
-					add_filter('render_block_' . $block, [$this->frontend, 'biteClassDynamicBlocks'], 10, 2);
-				}
-			}
-		}
+
 	}
 
 
