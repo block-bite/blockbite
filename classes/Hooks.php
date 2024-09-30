@@ -74,7 +74,11 @@ class Hooks
 		add_filter('block_categories_all', [$this->editor, 'registerBlockCategory']);
 		add_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
 		add_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
+		add_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 		add_action('wp_head', [$this->frontend, 'blockbite_css']);
+		// Editor technically doesn't need server-side rendered styles
+        // But this prevents a FOUC before the tailwind playground is loaded
+		add_action('admin_head', [$this->editor, 'blockbite_editor_css']);
 		add_action('admin_enqueue_scripts', [$this->settingsNavigation, 'registerAssets']);
 		add_filter('body_class', [$this->frontend, 'blockbite_css_body']);
 		add_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
@@ -100,6 +104,7 @@ class Hooks
 		remove_action('admin_enqueue_scripts', [$this->editor, 'registerAssets']);
 		remove_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
 		remove_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
+		add_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 		remove_action('enqueue_block_assets', [$this->editor, 'registerTailwindCdn'], 10);
 		remove_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
 	}

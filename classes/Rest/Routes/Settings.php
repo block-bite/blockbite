@@ -85,5 +85,26 @@ class Settings extends Api
                 ]
             ],
         ]);
+
+        register_rest_route($this->namespace, '/settings/swiper', array(
+            array(
+                'methods' => 'GET',
+                'callback' => [$settingsController, 'get_swiper_setting'],
+                'permission_callback' => [$settingsController, 'authorize'],
+            ),
+            array(
+                'methods' => 'POST',
+                'callback' => [$settingsController, 'update_swiper_setting'],
+                'permission_callback' => [$settingsController, 'authorize'],
+                'args' => array(
+                    'isSwiperEnabled' => array(
+                        'required' => true,
+                        'validate_callback' => function($param) {
+                            return is_bool($param);
+                        }
+                    ),
+                ),
+            )
+        ));
     }
 }

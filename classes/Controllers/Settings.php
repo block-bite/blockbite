@@ -160,4 +160,23 @@ class Settings extends Controller
             }
         }
     }
+
+    // Callback to get the current Swiper setting
+    public static function get_swiper_setting() {
+        $isSwiperEnabled = get_option('blockbite_load_swiper', true);
+        return rest_ensure_response(array('isSwiperEnabled' => (bool) $isSwiperEnabled));
+    }
+
+    // Callback to update the Swiper setting
+    public static function update_swiper_setting($request) {
+        $isSwiperEnabled = $request->get_param('isSwiperEnabled');
+
+        if ( get_option( 'blockbite_load_swiper' ) === false ) {
+            add_option( 'blockbite_load_swiper', $isSwiperEnabled );
+        } else {
+            update_option( 'blockbite_load_swiper', $isSwiperEnabled );
+        }
+
+        return rest_ensure_response(array('success' => true, 'isSwiperEnabled' => (bool) $isSwiperEnabled));
+    }
 }

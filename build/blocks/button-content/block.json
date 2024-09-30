@@ -1,16 +1,16 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
-  "name": "blockbite/heading",
+  "name": "blockbite/button-content",
   "version": "0.1.0",
-  "title": "Heading",
+  "title": "Button Content",
   "category": "blockbite",
   "icon": "flag",
-  "description": "heading block",
+  "description": "Button content, used within the Advanced Button block",
   "attributes": {
     "content": {
       "type": "string",
-      "default": "Heading"
+      "default": "Button"
     },
     "contentString": {
       "type": "boolean",

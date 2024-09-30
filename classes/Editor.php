@@ -3,6 +3,7 @@
 namespace Blockbite\Blockbite;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use Blockbite\Blockbite\Controllers\EditorSettings;
 
 class Editor
 {
@@ -29,7 +30,7 @@ class Editor
             'advanced-button',
             'counter',
             'icon',
-            'heading',
+            'button-content',
             'canvas',
             'carousel',
             'carousel-slide',
@@ -146,14 +147,37 @@ class Editor
 
     public function registerSwiperCdn()
     {
-        wp_register_script(
-            'swiper-editor',
-            'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
-            [],
-            '11.1.4',
-        );
-        if (is_admin()) {
+        $load_swiper = get_option('blockbite_load_swiper', true);
+
+        if ($load_swiper && is_admin()) {
+            wp_register_script(
+                'swiper-editor',
+                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
+                [],
+                '11.1.4',
+            );
             wp_enqueue_script('swiper-editor');
+        }
+    }
+
+    function registerLibrarySettings() {
+        register_setting(
+            'blockbite_settings',
+            'blockbite_load_swiper',
+            [
+                'type'              => 'boolean',
+                'sanitize_callback' => 'rest_sanitize_boolean',
+                'default'           => true,
+                'show_in_rest'      => true,
+            ]);
+    }
+
+    public function blockbite_editor_css()
+    {
+        $styles = EditorSettings::get_styles($request = null);
+
+        if (isset($styles['css']) && is_admin()) {
+            echo '<style id="blockbite-editor-css-ssr">' . $styles['css'] . '</style>';
         }
     }
 }

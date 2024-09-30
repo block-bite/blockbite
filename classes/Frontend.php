@@ -158,14 +158,17 @@ class Frontend
         );
 
         // register swiper script
-        wp_register_script(
-            'swiper-frontend',
-            'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
-            [],
-            '11.1.4',
-        );
+        $load_swiper = get_option('blockbite_load_swiper', true);
 
-        wp_enqueue_script('swiper-frontend');
+        if ($load_swiper) {
+            wp_register_script(
+                'swiper-frontend',
+                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
+                [],
+                '11.1.4',
+            );
+            wp_enqueue_script('swiper-frontend');
+        }
     }
 
     public function registerAssetsBackend()

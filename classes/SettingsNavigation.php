@@ -58,6 +58,8 @@ class SettingsNavigation
         );
 
         wp_enqueue_style('blockbite-editor-style');
+        wp_enqueue_style('wp-components'); // Loads Gutenberg components styles
+        wp_enqueue_style('wp-edit-post');  // Loads block editor styles
     }
     /**
      * Adds the settings page to the Settings menu.
