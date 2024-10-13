@@ -2,7 +2,7 @@
 
 namespace Blockbite\Blockbite;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
 use Blockbite\Blockbite\Controllers\EditorSettings;
 
 class Editor
@@ -160,7 +160,8 @@ class Editor
         }
     }
 
-    function registerLibrarySettings() {
+    function registerLibrarySettings()
+    {
         register_setting(
             'blockbite_settings',
             'blockbite_load_swiper',
@@ -169,15 +170,23 @@ class Editor
                 'sanitize_callback' => 'rest_sanitize_boolean',
                 'default'           => true,
                 'show_in_rest'      => true,
-            ]);
+            ]
+        );
     }
+
 
     public function blockbite_editor_css()
     {
         $styles = EditorSettings::get_styles($request = null);
 
+        // Enqueue a dummy stylesheet or one that's already enqueued for the block editor.
+        wp_enqueue_style('blockbite-editor', false); // Use a registered style handle if available.
+
         if (isset($styles['css']) && is_admin()) {
-            echo '<style id="blockbite-editor-css-ssr">' . $styles['css'] . '</style>';
+            // Append inline styles to the enqueued style.
+            if (isset($styles['css']) && is_admin()) {
+                //   echo '<style id="blockbite-editor-css-ssr">' . $styles['css'] . '</style>';
+            }
         }
     }
 }
