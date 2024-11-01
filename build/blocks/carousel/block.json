@@ -7,6 +7,9 @@
   "category": "blockbite",
   "icon": "flag",
   "description": "A carousel slider block.",
+  "allowedBlocks": [
+    "blockbite/carousel-slide"
+  ],
   "attributes": {
     "media": {
       "type": "object",

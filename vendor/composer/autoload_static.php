@@ -27,11 +27,13 @@ class ComposerStaticInit312a102d31d3c1a6fe82b0b49c16e0b0
 
     public static $classMap = array (
         'Blockbite\\Blockbite\\Controllers\\Bites' => __DIR__ . '/../..' . '/classes/Controllers/Bites.php',
+        'Blockbite\\Blockbite\\Controllers\\BlockHelperAI' => __DIR__ . '/../..' . '/classes/Controllers/BlockHelperAI.php',
         'Blockbite\\Blockbite\\Controllers\\BlockHelperIcons' => __DIR__ . '/../..' . '/classes/Controllers/BlockHelperIcons.php',
         'Blockbite\\Blockbite\\Controllers\\BlockHelperLinks' => __DIR__ . '/../..' . '/classes/Controllers/BlockHelperLinks.php',
         'Blockbite\\Blockbite\\Controllers\\BlockRender' => __DIR__ . '/../..' . '/classes/Controllers/BlockRender.php',
         'Blockbite\\Blockbite\\Controllers\\BlockSupport' => __DIR__ . '/../..' . '/classes/Controllers/BlockSupport.php',
         'Blockbite\\Blockbite\\Controllers\\Controller' => __DIR__ . '/../..' . '/classes/Controllers/Controller.php',
+        'Blockbite\\Blockbite\\Controllers\\DataEncryption' => __DIR__ . '/../..' . '/classes/Controllers/DataEncryption.php',
         'Blockbite\\Blockbite\\Controllers\\Database' => __DIR__ . '/../..' . '/classes/Controllers/Database.php',
         'Blockbite\\Blockbite\\Controllers\\EditorSettings' => __DIR__ . '/../..' . '/classes/Controllers/EditorSettings.php',
         'Blockbite\\Blockbite\\Controllers\\Items' => __DIR__ . '/../..' . '/classes/Controllers/Items.php',

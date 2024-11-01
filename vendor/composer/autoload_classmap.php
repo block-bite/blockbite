@@ -7,11 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Blockbite\\Blockbite\\Controllers\\Bites' => $baseDir . '/classes/Controllers/Bites.php',
+    'Blockbite\\Blockbite\\Controllers\\BlockHelperAI' => $baseDir . '/classes/Controllers/BlockHelperAI.php',
     'Blockbite\\Blockbite\\Controllers\\BlockHelperIcons' => $baseDir . '/classes/Controllers/BlockHelperIcons.php',
     'Blockbite\\Blockbite\\Controllers\\BlockHelperLinks' => $baseDir . '/classes/Controllers/BlockHelperLinks.php',
     'Blockbite\\Blockbite\\Controllers\\BlockRender' => $baseDir . '/classes/Controllers/BlockRender.php',
     'Blockbite\\Blockbite\\Controllers\\BlockSupport' => $baseDir . '/classes/Controllers/BlockSupport.php',
     'Blockbite\\Blockbite\\Controllers\\Controller' => $baseDir . '/classes/Controllers/Controller.php',
+    'Blockbite\\Blockbite\\Controllers\\DataEncryption' => $baseDir . '/classes/Controllers/DataEncryption.php',
     'Blockbite\\Blockbite\\Controllers\\Database' => $baseDir . '/classes/Controllers/Database.php',
     'Blockbite\\Blockbite\\Controllers\\EditorSettings' => $baseDir . '/classes/Controllers/EditorSettings.php',
     'Blockbite\\Blockbite\\Controllers\\Items' => $baseDir . '/classes/Controllers/Items.php',

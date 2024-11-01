@@ -100,6 +100,9 @@ class Frontend
         if (isset($styles['css'])) {
             echo '<style id="blockbite">' . $styles['css'] . '</style>';
         }
+        if (isset($styles['user_css'])) {
+            echo '<style id="blockbite-user-css">' . $styles['user_css'] . '</style>';
+        }
     }
 
     public function blockbite_css_body($classes)

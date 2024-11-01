@@ -4,6 +4,10 @@
   "name": "blockbite/advanced-button",
   "version": "0.1.1",
   "title": "Advanced Button",
+  "allowedBlocks": [
+    "blockbite/button-content",
+    "blockbite/icon"
+  ],
   "category": "blockbite",
   "icon": "flag",
   "description": "Advanced Button with SVG Icon",

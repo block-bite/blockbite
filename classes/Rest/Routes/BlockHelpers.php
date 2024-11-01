@@ -5,6 +5,7 @@ namespace Blockbite\Blockbite\Rest\Routes;
 use Blockbite\Blockbite\Plugin;
 use Blockbite\Blockbite\Controllers\BlockHelperIcons as BlockIconsController;
 use Blockbite\Blockbite\Controllers\BlockHelperLinks as BlockLinksController;
+use Blockbite\Blockbite\Controllers\BlockHelperAI as BlockAIController;
 use Blockbite\Blockbite\Rest\Api;
 
 class BlockHelpers extends Api
@@ -19,6 +20,7 @@ class BlockHelpers extends Api
 
         $blockIcons = new BlockIconsController($this->plugin);
         $blockLinks = new BlockLinksController($this->plugin);
+        $blockAI = new BlockAIController($this->plugin);
 
 
         // get icons
@@ -38,6 +40,12 @@ class BlockHelpers extends Api
             'methods' => 'GET',
             'callback' => [$blockLinks, 'pick_link'],
             'permission_callback' => [$blockLinks, 'authorize'],
+        ));
+        // generate styles with call to OpenAI
+        register_rest_route($this->namespace, 'block-helpers/generate_styles', array(
+            'methods' => 'POST',
+            'callback' => [$blockAI, 'generate_styles'],
+            'permission_callback' => [$blockAI, 'authorize'],
         ));
     }
 }

@@ -64,16 +64,23 @@ class EditorSettings extends Controller
     {
         $tailwind = '';
         $css = '';
+        $user_css = '';
 
         $result = DbController::getRecordByHandle('global');
         if (isset($result->tailwind) && isset($result->css)) {
             $tailwind = $result->tailwind;
             $css = $result->css;
         }
+        $user_styles_result = DbController::getRecordByHandle('global-user-styles');
+        if (isset($user_styles_result->css)) {
+            // Custom global style
+            $user_css = $user_styles_result->css;
+        }
         return
             [
                 'tailwind' => $tailwind,
-                'css' =>  $css
+                'css' =>  $css,
+                'user_css' => $user_css
             ];
     }
 

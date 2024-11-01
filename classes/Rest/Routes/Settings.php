@@ -106,5 +106,26 @@ class Settings extends Api
                 ),
             )
         ));
+
+        register_rest_route($this->namespace, '/settings/openai_key', array(
+            array(
+                'methods' => 'GET',
+                'callback' => [$settingsController, 'get_openai_key'],
+                'permission_callback' => [$settingsController, 'authorize'],
+            ),
+            array(
+                'methods' => 'POST',
+                'callback' => [$settingsController, 'set_openai_key'],
+                'permission_callback' => [$settingsController, 'authorize'],
+                'args' => array(
+                    'key' => array(
+                        'required' => true,
+                        'validate_callback' => function($param) {
+                            return is_string($param);
+                        }
+                    ),
+                ),
+            )
+        ));
     }
 }

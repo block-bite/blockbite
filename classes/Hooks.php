@@ -76,7 +76,7 @@ class Hooks
 		add_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
 		add_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 		add_action('wp_head', [$this->frontend, 'blockbite_css']);
-		// add_action('enqueue_block_editor', [$this->editor, 'blockbite_editor_css']);
+
 		add_action('admin_enqueue_scripts', [$this->settingsNavigation, 'registerAssets']);
 		add_filter('body_class', [$this->frontend, 'blockbite_css_body']);
 		add_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
@@ -85,9 +85,7 @@ class Hooks
 		add_action('after_setup_theme', [EditorSettings::class, 'add_theme_settings'], 20);
 		add_action('wp_head', [PostTypes::class, 'bites_noindex']);
 		// add_filter('allowed_block_types_all', [PostTypes::class, 'restrict_block_to_post_type'], 10, 2);
-
-
-
+		add_filter('block_editor_settings_all', [$this->editor, 'add_global_styles']);
 	}
 
 

@@ -4,6 +4,7 @@ namespace Blockbite\Blockbite;
 
 
 use Blockbite\Blockbite\Controllers\EditorSettings;
+use Blockbite\Blockbite\Controllers\Database as DbController;
 
 class Editor
 {
@@ -34,7 +35,8 @@ class Editor
             'canvas',
             'carousel',
             'carousel-slide',
-            'bites-wrap'
+            'bites-wrap',
+            'ai-generated'
         ];
 
         $this->blocknamespaces;
@@ -188,5 +190,20 @@ class Editor
                 //   echo '<style id="blockbite-editor-css-ssr">' . $styles['css'] . '</style>';
             }
         }
+    }
+
+    function add_global_styles($editorSettings) {
+        // Fetch CSS string from the database
+        $styleRecord = DBController::getRecordByHandle('global-user-styles');
+    
+        if ($styleRecord && !empty($styleRecord->css)) {
+            $editorSettings['styles'][] = array(
+                'css' => $styleRecord->css,
+                '__unstableType' => 'theme',
+                'source' => 'blockbite-global',
+            );
+        }
+    
+        return $editorSettings;
     }
 }

@@ -35,6 +35,7 @@ class SettingsNavigation
         $dependencies = [];
         $version      = BLOCKBITE_PLUGIN_VERSION;
 
+
         // Use asset file if it exists
         if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-settings.asset.php')) {
             $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-settings.asset.php';
@@ -42,11 +43,10 @@ class SettingsNavigation
             $version      = $asset_file['version'];
         }
 
-        // reuse editor style
         wp_register_style(
             SettingsNavigation::SCREEN,
             plugins_url('build/blockbite-editor.css', BLOCKBITE_MAIN_FILE),
-            [],
+            ['wp-edit-post'],
             $version
         );
 
@@ -103,8 +103,6 @@ class SettingsNavigation
     {
         wp_enqueue_script(self::SCREEN);
         wp_enqueue_style(self::SCREEN);
-        // wp_enqueue_style('wp-components'); // Loads Gutenberg components styles
-        // wp_enqueue_style('wp-edit-post');  // Loads block editor styles
 
         $settings = $this
             ->plugin

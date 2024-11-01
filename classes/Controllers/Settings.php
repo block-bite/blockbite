@@ -8,11 +8,11 @@ use WP_Error;
 use Blockbite\Blockbite\Controllers\Database as DbController;
 use Blockbite\Blockbite\Controllers\MigrateTemplates as MigrateTemplates;
 
-
 class Settings extends Controller
 {
 
     protected $handles = [];
+    private static $encryption;
 
     public function __construct()
     {
@@ -21,6 +21,7 @@ class Settings extends Controller
             'bites',
             'design-tokens',
         ];
+        self::$encryption = new \Blockbite\Blockbite\Controllers\DataEncryption();
     }
 
     public  function export_items($request = null)
@@ -179,4 +180,47 @@ class Settings extends Controller
 
         return rest_ensure_response(array('success' => true, 'isSwiperEnabled' => (bool) $isSwiperEnabled));
     }
+
+    // Functions for getting/setting openai key
+    public static function get_openai_key() {
+        $encrypted_key = get_option('openai_api_key', '');
+    
+        try {
+            $key = $encrypted_key ? self::$encryption->decrypt($encrypted_key) : '';
+    
+            if ($key === false) {
+                error_log('Decryption failed: Invalid encrypted key or decryption error.');
+                return new WP_Error('decryption_failed', 'Failed to decrypt the OpenAI API key.', array('status' => 500));
+            }
+    
+            return rest_ensure_response(array('key' => $key));
+        } catch (Exception $e) {
+            error_log('Exception encountered: ' . $e->getMessage());
+            return new WP_Error('exception_occurred', 'An error occurred while retrieving the OpenAI API key.', array('status' => 500));
+        }
+    }    
+    
+    public static function set_openai_key($request) {
+        try {
+            $key = $request->get_param('key');
+            $encrypted_key = self::$encryption->encrypt($key);
+    
+            if ($encrypted_key === false) {
+                error_log('Encryption failed: Invalid key or encryption error.');
+                return new WP_Error('encryption_failed', 'Failed to encrypt the OpenAI API key. Ensure LOGGED_IN_KEY and LOGGED_IN_SALT variables are set.', array('status' => 500));
+            }
+    
+            if (get_option('openai_api_key') === false) {
+                add_option('openai_api_key', $encrypted_key);
+            } else {
+                update_option('openai_api_key', $encrypted_key);
+            }
+    
+            return rest_ensure_response(array('success' => true));
+    
+        } catch (Exception $e) {
+            error_log('Exception encountered: ' . $e->getMessage());
+            return new WP_Error('exception_occurred', 'An error occurred while setting the OpenAI API key.', array('status' => 500));
+        }
+    }    
 }
