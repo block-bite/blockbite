@@ -117,7 +117,7 @@ class Editor
             [
                 'apiUrl'   => rest_url('blockbite/v1'),
                 'api' => 'blockbite/v1',
-                'tailwindParser' => null,
+                'createTailwindcss' => null,
                 'data' => [
                     'postType' => get_post_type(),
                     'id' => get_the_ID(),
@@ -126,15 +126,44 @@ class Editor
         );
     }
 
+
+
+    public function registerPlayground()
+    {
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-playground.asset.php')) {
+            $asset_file_playground   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-playground.asset.php';
+            $dependencies_playground = $asset_file_playground['dependencies'];
+            $version_playground      = $asset_file_playground['version'];
+        }
+        // register editor script
+        wp_register_script(
+            'blockbite-playground',
+            plugins_url('build/blockbite-playground.js', BLOCKBITE_MAIN_FILE),
+            $dependencies_playground,
+            $version_playground,
+        );
+
+        if (is_admin()) {
+            wp_enqueue_script('blockbite-playground');
+        }
+    }
+
     public function registerTailwind()
     {
+
+        // Initialize dependencies array for blockbite-tailwind
+        $dependencies_tailwind = ['blockbite-playground']; // Add blockbite-playground as a dependency by default
+        $version_tailwind = BLOCKBITE_PLUGIN_VERSION;
+
         // Use asset file if it exists
         if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-tailwind.asset.php')) {
             $asset_file_tailwind   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-tailwind.asset.php';
             $dependencies_tailwind = $asset_file_tailwind['dependencies'];
             $version_tailwind      = $asset_file_tailwind['version'];
         }
-        // register editor script
+
+        // Register blockbite-tailwind script with blockbite-playground as a dependency
         wp_register_script(
             'blockbite-tailwind',
             plugins_url('build/blockbite-tailwind.js', BLOCKBITE_MAIN_FILE),
@@ -146,6 +175,9 @@ class Editor
             wp_enqueue_script('blockbite-tailwind');
         }
     }
+
+
+
 
     public function registerSwiperCdn()
     {
@@ -192,10 +224,11 @@ class Editor
         }
     }
 
-    function add_global_styles($editorSettings) {
+    function add_global_styles($editorSettings)
+    {
         // Fetch CSS string from the database
         $styleRecord = DBController::getRecordByHandle('global-user-styles');
-    
+
         if ($styleRecord && !empty($styleRecord->css)) {
             $editorSettings['styles'][] = array(
                 'css' => $styleRecord->css,
@@ -203,7 +236,7 @@ class Editor
                 'source' => 'blockbite-global',
             );
         }
-    
+
         return $editorSettings;
     }
 }

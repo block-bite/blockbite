@@ -25,12 +25,21 @@ class EditorSettings extends Controller
                 $designTokens = json_decode($row->content);
             }
         }
+
+        // query single post_type wp_global_styles
         return [
             'designtokens' => $designTokens,
             'designtokensOptin' => $designTokensOptin,
             'utils' => BitesController::get_merged_bite_utils(),
             'blockStyles' => BitesController::get_merged_blockstyles(),
+
         ];
+    }
+
+
+    public static function get_native_global_styles()
+    {
+        return DbController::getGlobalStyles();
     }
 
 
@@ -83,6 +92,7 @@ class EditorSettings extends Controller
                 'user_css' => $user_css
             ];
     }
+
 
 
 

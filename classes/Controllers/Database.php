@@ -320,4 +320,20 @@ class Database extends Controller
         $default = $wpdb->update($table_name, ['is_default' => $is_default], ['id' => $id]);
         return $default;
     }
+
+
+    public static function getGlobalStyles()
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'posts';
+        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE post_type = %s", 'wp_global_styles');
+        $record = $wpdb->get_row($query);
+
+        // if post_content
+        if (isset($record->post_content)) {
+            return json_decode($record->post_content);
+        }
+
+        return $record;
+    }
 }

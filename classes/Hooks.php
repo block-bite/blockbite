@@ -68,8 +68,10 @@ class Hooks
 		add_action('admin_notices', [$this->plugin, 'adminNotice']);
 		add_action('admin_menu', [$this->settingsNavigation, 'addAdminMenu']);
 		add_action('rest_api_init', [$this->plugin->getRestApi(), 'registerRoutes']);
-		add_action('enqueue_block_assets', [$this->editor, 'registerTailwind'], 10);
-		add_action('enqueue_block_editor_assets', [$this->editor, 'registerEditor'], 11);
+		add_action('enqueue_block_assets', [$this->editor, 'registerPlayground'], 10);
+		add_action('enqueue_block_assets', [$this->editor, 'registerTailwind'], 11);
+
+		add_action('enqueue_block_editor_assets', [$this->editor, 'registerEditor'], 12);
 		add_action('init', [$this->editor, 'initBlocks']);
 		add_filter('block_categories_all', [$this->editor, 'registerBlockCategory']);
 		add_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);

@@ -68,6 +68,16 @@ class EditorSettings extends Api
             ],
         ]);
 
+        register_rest_route($this->namespace, '/editor-settings/native-global-styles', [
+            [
+                'methods' => 'GET',
+                'callback' => [$editorSettingsController, 'get_native_global_styles'],
+                'permission_callback' => [$editorSettingsController, 'authorize']
+            ]
+        ]);
+
+
+
         register_rest_route($this->namespace, '/editor-styles/references', [
             [
                 'methods' => 'POST',
