@@ -134,7 +134,8 @@ class Frontend
         wp_enqueue_style('blockbite-frontend-style');
 
         // public/css/style.css with [], filemtime(get_stylesheet_directory()
-        wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], filemtime(get_stylesheet_directory() . '/public/style.css'));
+        // wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], filemtime(get_stylesheet_directory() . '/public/style.css'));
+        wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], '1.0.0');
 
 
         // pas data to react plugin
