@@ -2,6 +2,10 @@
 
 namespace Blockbite\Blockbite;
 
+use Blockbite\Blockbite\Controllers\EditorSettings as EditorSettingsController;
+
+
+
 use WP_Error;
 
 class PostTypes
@@ -48,10 +52,19 @@ class PostTypes
         register_post_type('blockbites', $args);
     }
 
-    public static function bites_noindex()
+    /*
+        Pulls in the styles for the blockbite
+        Hide the blockbite from search engines
+    */
+
+    public static function bites_view()
     {
         if (is_singular('blockbites')) {
             echo '<meta name="robots" content="noindex, nofollow" />';
+            $styles = EditorSettingsController::get_styles_handle('bites-css');
+            if (isset($styles['css'])) {
+                echo '<style id="blockbite">' . $styles['css'] . '</style>';
+            }
         }
     }
 

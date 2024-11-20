@@ -53,29 +53,61 @@ class EditorSettings extends Controller
         return $output;
     }
 
-
     public static function update_styles($request)
     {
-        $content_css = $request->get_param('blockbite_css');
-        $content_tailwind = $request->get_param('blockbite_tailwind');
+        $content_css = $request->get_param('css');
+        $content_tailwind = $request->get_param('tailwind');
+        $content_handle = $request->get_param('handle');
 
+        // Check if content_handle is either frontend-css or blockbite-css
+        if ($content_handle !== 'frontend-css' && $content_handle !== 'bites-css') {
+            return new WP_Error('invalid_handle', 'Invalid handle', ['status' => 400]);
+        }
 
-        return DbController::updateOrCreateRecordById([
-            'id' => 1,
-            'handle' => 'global',
-            'css' => self::minify($content_css),
+        // Minify the CSS
+        $css = self::minify($content_css);
+
+        // If frontend-css, write to public/css/style.css
+        if ($content_handle === 'frontend-css') {
+            $file_path = BLOCKBITE_PLUGIN_DIR . '/public/style.css';
+
+            // Open the file and check for errors
+            $file = fopen($file_path, 'w');
+            if ($file === false) {
+                return new WP_Error('file_error', 'Failed to open CSS file for writing', ['status' => 500]);
+            }
+
+            // Write to the file and close it
+            fwrite($file, $css);
+            fclose($file);
+            $css = ''; // Clear the CSS after writing it, no need to store it in the database
+        }
+
+        // Update or create the handle in the database
+        return DbController::updateOrCreateHandle([
+            'css' => $css,
             'tailwind' => $content_tailwind
-        ], 1);
+        ], $content_handle);
     }
 
 
-    public static function get_styles()
+
+    public static function get_styles($request)
+    {
+        $handle = $request->get_param('handle');
+        $styles = self::get_styles_handle($handle);
+        return $styles;
+    }
+
+
+    public static function get_styles_handle($handle)
     {
         $tailwind = '';
         $css = '';
         $user_css = '';
 
-        $result = DbController::getRecordByHandle('global');
+
+        $result = DbController::getRecordByHandle($handle);
         if (isset($result->tailwind) && isset($result->css)) {
             $tailwind = $result->tailwind;
             $css = $result->css;
@@ -92,7 +124,6 @@ class EditorSettings extends Controller
                 'user_css' => $user_css
             ];
     }
-
 
 
 

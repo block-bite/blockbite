@@ -133,7 +133,7 @@ class Settings extends Controller
 
         $plugin_root = plugin_dir_path(__FILE__);
         $plugin_root = trailingslashit(dirname(dirname($plugin_root)));
-        $file = $plugin_root . 'public/json/' . $handle . '-' . $version . '.json';
+        $file = $plugin_root . 'assets/json/' . $handle . '-' . $version . '.json';
 
         if (!file_exists($file) || !is_readable($file)) {
             return new WP_Error('file_not_found', 'File not found', array('status' => 400));
@@ -163,64 +163,67 @@ class Settings extends Controller
     }
 
     // Callback to get the current Swiper setting
-    public static function get_swiper_setting() {
+    public static function get_swiper_setting()
+    {
         $isSwiperEnabled = get_option('blockbite_load_swiper', true);
         return rest_ensure_response(array('isSwiperEnabled' => (bool) $isSwiperEnabled));
     }
 
     // Callback to update the Swiper setting
-    public static function update_swiper_setting($request) {
+    public static function update_swiper_setting($request)
+    {
         $isSwiperEnabled = $request->get_param('isSwiperEnabled');
 
-        if ( get_option( 'blockbite_load_swiper' ) === false ) {
-            add_option( 'blockbite_load_swiper', $isSwiperEnabled );
+        if (get_option('blockbite_load_swiper') === false) {
+            add_option('blockbite_load_swiper', $isSwiperEnabled);
         } else {
-            update_option( 'blockbite_load_swiper', $isSwiperEnabled );
+            update_option('blockbite_load_swiper', $isSwiperEnabled);
         }
 
         return rest_ensure_response(array('success' => true, 'isSwiperEnabled' => (bool) $isSwiperEnabled));
     }
 
     // Functions for getting/setting openai key
-    public static function get_openai_key() {
+    public static function get_openai_key()
+    {
         $encrypted_key = get_option('openai_api_key', '');
-    
+
         try {
             $key = $encrypted_key ? self::$encryption->decrypt($encrypted_key) : '';
-    
+
             if ($key === false) {
                 error_log('Decryption failed: Invalid encrypted key or decryption error.');
                 return new WP_Error('decryption_failed', 'Failed to decrypt the OpenAI API key.', array('status' => 500));
             }
-    
+
             return rest_ensure_response(array('key' => $key));
         } catch (Exception $e) {
             error_log('Exception encountered: ' . $e->getMessage());
             return new WP_Error('exception_occurred', 'An error occurred while retrieving the OpenAI API key.', array('status' => 500));
         }
-    }    
-    
-    public static function set_openai_key($request) {
+    }
+
+    public static function set_openai_key($request)
+    {
         try {
             $key = $request->get_param('key');
             $encrypted_key = self::$encryption->encrypt($key);
-    
+
             if ($encrypted_key === false) {
                 error_log('Encryption failed: Invalid key or encryption error.');
                 return new WP_Error('encryption_failed', 'Failed to encrypt the OpenAI API key. Ensure LOGGED_IN_KEY and LOGGED_IN_SALT variables are set.', array('status' => 500));
             }
-    
+
             if (get_option('openai_api_key') === false) {
                 add_option('openai_api_key', $encrypted_key);
             } else {
                 update_option('openai_api_key', $encrypted_key);
             }
-    
+
             return rest_ensure_response(array('success' => true));
-    
         } catch (Exception $e) {
             error_log('Exception encountered: ' . $e->getMessage());
             return new WP_Error('exception_occurred', 'An error occurred while setting the OpenAI API key.', array('status' => 500));
         }
-    }    
+    }
 }

@@ -1,0 +1,53 @@
+{
+  "0": {
+    "id": "12",
+    "handle": "preset",
+    "category": "style",
+    "blockname": "core/list",
+    "is_default": "1",
+    "platform": "blockbite",
+    "title": "list",
+    "slug": "",
+    "version": "1.0.0",
+    "summary": "",
+    "css": "",
+    "tailwind": "",
+    "content": "{\"presetStyle\":[{\"id\":\"liststyle\",\"value\":\"disc\",\"screen\":\"all\",\"strategies\":[]},{\"id\":\"liststylePosition\",\"value\":\"outside\",\"screen\":\"all\",\"strategies\":[]},{\"id\":\"liststyleImage\",\"value\":\"\",\"screen\":\"all\",\"strategies\":[]},{\"id\":\"fontsize\",\"value\":\"lg\",\"screen\":\"all\",\"strategies\":[]},{\"id\":\"listcolor\",\"value\":\"blue-400\",\"screen\":\"all\",\"strategies\":[]}],\"presetClass\":\"list-disc list-outside list-image- text-lg marker:text-blue-400 \"}",
+    "post_id": "0",
+    "parent": "0"
+  },
+  "6": {
+    "id": "39",
+    "handle": "preset",
+    "category": null,
+    "blockname": "blockbite/section",
+    "is_default": "1",
+    "platform": "blockbite",
+    "title": "section",
+    "slug": "",
+    "version": "1.0.0",
+    "summary": "",
+    "css": "",
+    "tailwind": "",
+    "content": "{\"biteStyle\":[{\"id\":\"position\",\"value\":\"relative\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]}],\"biteMotionStyle\":[],\"flexStyle\":[{\"id\":\"flexgapa\",\"value\":5,\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]},{\"id\":\"flextype\",\"value\":\"flex\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]},{\"id\":\"flexdirection\",\"value\":\"col\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]},{\"id\":\"flexwidth\",\"value\":\"b_container-fluid\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]}],\"mediaStyle\":[],\"biteClass\":\"relative \",\"biteMotionClass\":\"\",\"flexClass\":\"gap-5 flex flex-col b_container-fluid \",\"mediaClass\":\"\"}",
+    "post_id": "0",
+    "parent": "0"
+  },
+  "7": {
+    "id": "7",
+    "handle": "preset",
+    "category": null,
+    "blockname": "blockbite/canvas",
+    "is_default": "1",
+    "platform": "blockbite",
+    "title": "canvas",
+    "slug": "",
+    "version": "1.0.0",
+    "summary": "",
+    "css": "",
+    "tailwind": "",
+    "content": "{\"flexStyle\":[{\"id\":\"flextype\",\"value\":\"b_grid-area-16\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]},{\"id\":\"flexheight\",\"value\":\"h-full\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]}],\"flexClass\":\"b_grid-area-16 h-full \",\"biteStyle\":[{\"id\":\"height\",\"value\":\"96\",\"screen\":\"all\",\"interaction\":\"\",\"strategies\":[]}],\"biteClass\":\"h-96 \"}",
+    "post_id": "0",
+    "parent": "0"
+  }
+}

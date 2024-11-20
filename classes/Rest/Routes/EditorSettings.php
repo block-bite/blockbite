@@ -33,19 +33,30 @@ class EditorSettings extends Api
             [
                 'methods' => 'GET',
                 'callback' => [$editorSettingsController, 'get_styles'],
-                'permission_callback' => [$editorSettingsController, 'authorize']
+                'permission_callback' => [$editorSettingsController, 'authorize'],
+                'args' => [
+                    'handle' => [
+                        'required' => true,
+                        'type' => 'string',
+                    ],
+                ]
             ],
             [
                 'methods' => 'POST',
                 'callback' => [$editorSettingsController, 'update_styles'],
                 'permission_callback' => [$editorSettingsController, 'authorize'],
                 'args' => [
-                    'blockbite_css' => [
+                    'css' => [
                         'required' => true,
                         'sanitize_callback' => 'sanitize_text_field',
                         'type' => 'string',
                     ],
-                    'blockbite_tailwind' => [
+                    'tailwind' => [
+                        'required' => true,
+                        'sanitize_callback' => 'sanitize_text_field',
+                        'type' => 'string',
+                    ],
+                    'handle' => [
                         'required' => true,
                         'sanitize_callback' => 'sanitize_text_field',
                         'type' => 'string',

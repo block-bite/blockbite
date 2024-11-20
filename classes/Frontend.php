@@ -92,26 +92,11 @@ class Frontend
         'apiKey' => '',
     ];
 
-    public function blockbite_css()
-    {
-        $styles = EditorSettings::get_styles($request = null);
-        // $components_css = LibraryComponents::get_components_css($request = null);
-
-        if (isset($styles['css'])) {
-            echo '<style id="blockbite">' . $styles['css'] . '</style>';
+    /*
+     if (is_singular('blockbites')) {
+            $handle = 'bites-css';
         }
-        if (isset($styles['user_css'])) {
-            echo '<style id="blockbite-user-css">' . $styles['user_css'] . '</style>';
-        }
-    }
-
-    public function blockbite_css_body($classes)
-    {
-        $classes[] = 'bite';
-        return $classes;
-    }
-
-
+    */
 
 
     public function registerAssetsFrontend()
@@ -147,6 +132,9 @@ class Frontend
 
         // add to frontend
         wp_enqueue_style('blockbite-frontend-style');
+
+        // public/css/style.css with [], filemtime(get_stylesheet_directory()
+        wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], filemtime(get_stylesheet_directory() . '/public/style.css'));
 
 
         // pas data to react plugin

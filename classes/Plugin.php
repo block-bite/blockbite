@@ -96,9 +96,11 @@ class Plugin
         if (!isset($this->api)) {
             $this->api = new Api($this);
         }
-
         if (!Database::checkTableExists()) {
+            // create table
             Database::createTable();
+            // create style file
+            $this->createStyleFile();
             // add default
             SettingsController::sync_blockbite_items([
                 'handle' => 'preset',
@@ -110,6 +112,40 @@ class Plugin
             $this->hooks->addHooks();
         }
     }
+
+    public function createStyleFile()
+    {
+        // Define the path to your CSS file
+        $css_file_path = BLOCKBITE_PLUGIN_DIR . 'public/style.css';
+
+        // Define the directory path
+        $directory_path = dirname($css_file_path);
+
+
+        // Check if the directory doesn't exist
+        if (!is_dir($directory_path)) {
+            // Create the directory, including any parent directories
+            if (!mkdir($directory_path, 0755, true) && !is_dir($directory_path)) {
+                // Handle error, if needed
+                error_log("Failed to create directory: " . $directory_path);
+                return;
+            }
+        }
+
+        // Check if the file doesn't exist to avoid overwriting an existing file
+        if (!file_exists($css_file_path)) {
+            // Write to the CSS file
+            $file = fopen($css_file_path, 'w');
+            if ($file) {
+                fwrite($file, '');
+                fclose($file);
+            } else {
+                // Handle error, if needed
+                error_log("Failed to create CSS file: " . $css_file_path);
+            }
+        }
+    }
+
 
     public function createTable()
     {

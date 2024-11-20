@@ -105,6 +105,12 @@ class Editor
             $version
         );
 
+
+        // FOUC loading
+        wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], filemtime(get_stylesheet_directory() . '/public/style.css'));
+
+
+
         // only load in backend
         if (is_admin()) {
             wp_enqueue_script('blockbite-editor');
@@ -209,6 +215,9 @@ class Editor
     }
 
 
+    /*
+    @tianhe is this still used
+    
     public function blockbite_editor_css()
     {
         $styles = EditorSettings::get_styles($request = null);
@@ -223,6 +232,7 @@ class Editor
             }
         }
     }
+    */
 
     function add_global_styles($editorSettings)
     {

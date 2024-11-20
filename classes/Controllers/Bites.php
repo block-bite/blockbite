@@ -94,6 +94,7 @@ class Bites extends Controller
             $block_content = json_decode($bites->content);
 
             $blocks = [];
+            $index = 0;
             foreach ($block_content as $block) {
 
                 $strip_component =   self::strip_bite($block->component);
@@ -107,6 +108,7 @@ class Bites extends Controller
                     continue;
                 }
                 array_push($blocks, [
+                    'id' => $block->id,
                     'preview' => render_block($parse_block[0]),
                     'component' => $strip_component,
                     'raw' => $strip_raw,

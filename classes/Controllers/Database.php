@@ -2,6 +2,8 @@
 
 namespace Blockbite\Blockbite\Controllers;
 // use Exception
+
+use Error;
 use Exception;
 // use WP_Error
 use WP_Error;
@@ -49,6 +51,7 @@ class Database extends Controller
                 content LONGTEXT NOT NULL,
                 post_id INT(11) NOT NULL,
                 parent INT(11) NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (id)
             ) $charset_collate;";
 
@@ -133,28 +136,40 @@ class Database extends Controller
 
     public static function updateOrCreateHandle($data, $handle)
     {
+        if (empty($handle)) {
+            throw new Exception('handle column is required and cannot be empty');
+        }
 
         $data = self::prepData($data);
+        $handle = trim($handle);
 
-        if (!isset($handle)) {
-            throw new Exception('handle column is required');
-        }
-        // find handle
         global $wpdb;
         $table_name = $wpdb->prefix . 'blockbite';
-        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE handle = %s", $handle);
+
+        // Find the most relevant record to update
+        $query = $wpdb->prepare(
+            "SELECT * FROM $table_name WHERE handle = %s ORDER BY updated_at DESC LIMIT 1",
+            $handle
+        );
         $record = $wpdb->get_row($query);
+
+        error_log('record: ' . json_encode($record));
+
         if ($record) {
-            $wpdb->update($table_name, $data, ['handle' => $handle]);
+            // Update the record
+            $wpdb->update($table_name, $data, ['id' => $record->id, 'handle' => $handle]);
             $record_id = $record->id;
         } else {
+            // Create a new record
             $data['handle'] = $handle;
             $wpdb->insert($table_name, $data);
             $record_id = $wpdb->insert_id;
         }
+
         $data['id'] = $record_id;
         return $data;
     }
+
 
     /**
      * Update or create a record in the database by id
