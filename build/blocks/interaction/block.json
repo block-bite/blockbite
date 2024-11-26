@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/interaction",
+  "version": "0.1.0",
+  "title": "Interaction",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "Interaction",
+  "attributes": {
+    "transition": {
+      "type": "string",
+      "default": "tile_in"
+    },
+    "biteMeta": {
+      "type": "object",
+      "default": {
+        "interaction": {
+          "actionType": "click",
+          "actionRef": null,
+          "actionPreview": "false"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "default": {
+        "name": "Interaction"
+      }
+    }
+  },
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    },
+    "renaming": true
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js"
+}

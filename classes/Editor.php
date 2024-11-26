@@ -35,8 +35,11 @@ class Editor
             'canvas',
             'carousel',
             'carousel-slide',
+            'carousel-header',
+            'carousel-footer',
             'bites-wrap',
-            'ai-generated'
+            'ai-generated',
+            'interaction'
         ];
 
         $this->blocknamespaces;
@@ -104,14 +107,6 @@ class Editor
             [],
             $version
         );
-
-
-        // FOUC loading
-        // wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], filemtime(get_stylesheet_directory() . '/public/style.css'));
-        wp_enqueue_style('blockbite-style', BLOCKBITE_PLUGIN_URL . 'public/style.css', [], '1.0.0');
-
-
-
         // only load in backend
         if (is_admin()) {
             wp_enqueue_script('blockbite-editor');
@@ -132,6 +127,28 @@ class Editor
             ]
         );
     }
+
+
+    public function registerEditorFrontend()
+    {
+        // Define paths for the CSS file
+        $style_url = BLOCKBITE_PLUGIN_URL . 'public/style.css';
+        $style_path = BLOCKBITE_PLUGIN_DIR . 'public/style.css'; // Filesystem path
+
+        // Validate the file exists and is not empty
+        if (file_exists($style_path) && filesize($style_path) > 0) {
+            $cache_version = filemtime($style_path); // Cache-busting with file's last modified time
+        } else {
+            $cache_version = time(); // Fallback cache version
+            error_log('Warning: Blockbite style.css is missing or empty.');
+        }
+
+        // Enqueue the editor style
+        if (!is_singular('blockbites')) {
+            wp_enqueue_style('blockbite-editor-frontend-style', $style_url, [], $cache_version);
+        }
+    }
+
 
 
 
@@ -216,29 +233,12 @@ class Editor
     }
 
 
-    /*
-    @tianhe is this still used
-    
-    public function blockbite_editor_css()
-    {
-        $styles = EditorSettings::get_styles($request = null);
 
-        // Enqueue a dummy stylesheet or one that's already enqueued for the block editor.
-        wp_enqueue_style('blockbite-editor', false); // Use a registered style handle if available.
-
-        if (isset($styles['css']) && is_admin()) {
-            // Append inline styles to the enqueued style.
-            if (isset($styles['css']) && is_admin()) {
-                //   echo '<style id="blockbite-editor-css-ssr">' . $styles['css'] . '</style>';
-            }
-        }
-    }
-    */
-
+    // fetch global editor css and add to localize script
     function add_global_styles($editorSettings)
     {
         // Fetch CSS string from the database
-        $styleRecord = DBController::getRecordByHandle('global-user-styles');
+        $styleRecord = DBController::getRecordByHandle('blockbite-global-css');
 
         if ($styleRecord && !empty($styleRecord->css)) {
             $editorSettings['styles'][] = array(

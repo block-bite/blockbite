@@ -59,6 +59,7 @@ class EditorSettings extends Controller
         $content_tailwind = $request->get_param('tailwind');
         $content_handle = $request->get_param('handle');
 
+
         // Check if content_handle is either frontend-css or blockbite-css
         if ($content_handle !== 'frontend-css' && $content_handle !== 'bites-css') {
             return new WP_Error('invalid_handle', 'Invalid handle', ['status' => 400]);
@@ -100,6 +101,7 @@ class EditorSettings extends Controller
     }
 
 
+
     public static function get_styles_handle($handle)
     {
         $tailwind = '';
@@ -112,11 +114,7 @@ class EditorSettings extends Controller
             $tailwind = $result->tailwind;
             $css = $result->css;
         }
-        $user_styles_result = DbController::getRecordByHandle('global-user-styles');
-        if (isset($user_styles_result->css)) {
-            // Custom global style
-            $user_css = $user_styles_result->css;
-        }
+
         return
             [
                 'tailwind' => $tailwind,

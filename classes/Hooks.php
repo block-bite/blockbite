@@ -70,6 +70,7 @@ class Hooks
 		add_action('rest_api_init', [$this->plugin->getRestApi(), 'registerRoutes']);
 		add_action('enqueue_block_assets', [$this->editor, 'registerPlayground'], 10);
 		add_action('enqueue_block_assets', [$this->editor, 'registerTailwind'], 11);
+		add_action('enqueue_block_assets', [$this->editor, 'registerEditorFrontend'], 12);
 
 		add_action('enqueue_block_editor_assets', [$this->editor, 'registerEditor'], 12);
 		add_action('init', [$this->editor, 'initBlocks']);
@@ -84,9 +85,23 @@ class Hooks
 		add_action('init', [PostTypes::class, 'register_bites']);
 		add_action('after_setup_theme', [EditorSettings::class, 'add_theme_settings'], 20);
 		add_action('wp_head', [PostTypes::class, 'bites_view']);
+		add_action('wp_head', [$this->frontend, 'global_css'], 20);
+
+
 
 		// add_filter('allowed_block_types_all', [PostTypes::class, 'restrict_block_to_post_type'], 10, 2);
 		add_filter('block_editor_settings_all', [$this->editor, 'add_global_styles']);
+
+
+		$dynamic_block_result = DbController::getRecordByHandle('dynamic_block_support');
+		if (isset($dynamic_block_result->content)) {
+			$dynamic_blocks = json_decode($dynamic_block_result->content);
+			if (is_array($dynamic_blocks)) {
+				foreach ($dynamic_blocks as $block) {
+					add_filter('render_block_' . $block, [$this->frontend, 'biteClassDynamicBlocks'], 10, 2);
+				}
+			}
+		}
 	}
 
 
@@ -101,7 +116,7 @@ class Hooks
 		remove_action('admin_enqueue_scripts', [$this->editor, 'registerAssets']);
 		remove_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
 		remove_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
-		add_action('admin_init', [$this->editor, 'registerLibrarySettings']);
+		remove_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 		remove_action('enqueue_block_assets', [$this->editor, 'registerTailwindCdn'], 10);
 		remove_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
 	}
