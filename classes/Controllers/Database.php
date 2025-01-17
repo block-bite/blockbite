@@ -51,7 +51,7 @@ class Database extends Controller
             post_id INT(11) NOT NULL,
             parent INT(11) NOT NULL,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            data JSON NOT NULL DEFAULT '{}',  -- Set '{}' as the default value for the JSON column
+            data JSON NOT NULL,
             PRIMARY KEY (id),
             INDEX idx_handle (handle)
         ) $charset_collate;";
@@ -168,6 +168,15 @@ class Database extends Controller
     {
         $data = self::prepData($data);
         $data['updated_at'] = current_time('mysql');
+
+        /*
+            check if data has data property since we use no default property but : data JSON NOT NULL
+            we experienced difficulties with different databases when adding a default value on the db creation
+            this should be a solid fix
+        */
+        if (!isset($data['data'])) {
+            $data['data'] = json_encode([]);
+        }
         return $data;
     }
 

@@ -87,6 +87,7 @@ class DynamicContent extends Api
                 [
                     'methods' => 'GET',
                     'callback' => [$dynamicContentController, 'render_dynamic_content_rest'],
+                    'permission_callback' => [$dynamicContentController, 'authorize'],
                     'args' => [
                         'designId' => [
                             'required' => false,

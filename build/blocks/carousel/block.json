@@ -7,11 +7,6 @@
   "category": "blockbite",
   "icon": "flag",
   "description": "A carousel slider block.",
-  "allowedBlocks": [
-    "blockbite/carousel-slide",
-    "blockbite/carousel-header",
-    "blockbite/carousel-footer"
-  ],
   "providesContext": {
     "blockbite/swiperEditMode": "swiperEditMode"
   },

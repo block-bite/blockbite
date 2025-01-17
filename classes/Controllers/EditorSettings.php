@@ -155,7 +155,7 @@ class EditorSettings extends Controller
     private static function get_optin_settings()
     {
         $optinRecord = DBController::getRecordByHandle('design-tokens-optin');
-        if (!$optinRecord) {
+        if (!isset($optinRecord->data)) {
             return null;
         } else {
             return $optinRecord->data;

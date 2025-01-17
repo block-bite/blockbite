@@ -52,9 +52,9 @@ class Items extends Controller
         foreach ($fields_schema as $field => $type) {
             switch ($type) {
                 case 'int':
-                    $validated_data[$field] = isset($data[$field]) && is_numeric($data[$field]) && $data[$field] != 0
-                        ? intval($data[$field])
-                        : null;
+                    if (isset($data[$field]) && is_numeric($data[$field])) {
+                        $validated_data[$field] = intval($data[$field]);
+                    }
                     break;
 
                 case 'string':

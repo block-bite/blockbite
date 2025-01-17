@@ -23,6 +23,10 @@
     "linkTarget": {
       "type": "string",
       "default": "_self"
+    },
+    "size": {
+      "type": "string",
+      "default": "medium"
     }
   },
   "supports": {
