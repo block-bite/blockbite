@@ -1,0 +1,161 @@
+@media (min-width: 960px) {
+  :root {
+    --b_column-width: calc(
+      (
+          var(--b_container-fluid-xl, 95vw) -
+            (var(--b_container-padding, 1rem) * 2)
+        ) / 12
+    );
+  }
+}
+@media (min-width: 1440px) {
+  :root {
+    --b_column-width: calc(
+      (120px * 12 - (var(--b_container-padding, 1rem) * 2)) / 12
+    );
+  }
+}
+@media (min-width: 1536px) {
+  :root {
+    --b_column-width: calc(
+      (128px * 12 - (var(--b_container-padding, 1rem) * 2)) / 12
+    );
+  }
+}
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
+}
+.bottom-0 {
+  bottom: 0;
+}
+.left-0 {
+  left: 0;
+}
+.right-0 {
+  right: 0;
+}
+.top-0 {
+  top: 0;
+}
+.z-50 {
+  z-index: 50;
+}
+.h-full {
+  height: 100%;
+}
+.w-full {
+  width: 100%;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.bg-b_color-1,
+.bg-b_color-2 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(28 59 79 / var(--tw-bg-opacity));
+}
+.bg-b_color-2 {
+  background-color: rgb(95 108 62 / var(--tw-bg-opacity));
+}
+.bg-b_color-3,
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 239 242 / var(--tw-bg-opacity));
+}
+.text-b_color-1 {
+  --tw-text-opacity: 1;
+  color: rgb(28 59 79 / var(--tw-text-opacity));
+}
+.text-b_color-2,
+.text-b_color-5 {
+  --tw-text-opacity: 1;
+  color: rgb(95 108 62 / var(--tw-text-opacity));
+}
+.text-b_color-5 {
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.wp-block-blockbite-interaction mark {
+  font-family: 'Forma DJR Deck';
+}
+.post-type-archive-projecten {
+  --tw-bg-opacity: 1;
+  background-color: rgb(28 59 79 / var(--tw-bg-opacity));
+}
+.post-type-archive-blog {
+  --tw-bg-opacity: 1;
+  background-color: rgb(95 108 62 / var(--tw-bg-opacity));
+}
+.card-entrance .bf_layout {
+  position: static !important;
+}
+@media (min-width: 1280px) {
+  .type-blog:nth-child(odd) .card-entrance,
+  .type-projecten:nth-child(even) .card-entrance {
+    order: 1;
+  }
+  .type-blog:nth-child(even) .card-entrance,
+  .type-blog:nth-child(odd) .card-image,
+  .type-projecten:nth-child(odd) .card-entrance,
+  .type-projecten:nth-child(odd) .card-image {
+    order: 2;
+  }
+}
+.bb_navigation--logo {
+  --tw-text-opacity: 1;
+  color: rgb(28 59 79 / var(--tw-text-opacity));
+}
+.bb_navigation--logo .logo-haakje,
+.post-type-archive-blog .bb_navigation--logo,
+.post-type-archive-projecten .bb_navigation--logo {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.page-id-112 .bb_navigation--logo {
+  --tw-text-opacity: 1;
+  color: rgb(95 108 62 / var(--tw-text-opacity));
+}
+.single-projecten .bb_navigation--logo {
+  --tw-text-opacity: 1;
+  color: rgb(28 59 79 / var(--tw-text-opacity));
+}
+.single-blog .bb_navigation--logo {
+  --tw-text-opacity: 1;
+  color: rgb(95 108 62 / var(--tw-text-opacity));
+}
+.wp-block-post {
+  position: relative;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  overflow: hidden;
+}
+.wp-block-post .wp-block-read-more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 50;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+.wp-block-post .card-image img {
+  opacity: 0.75;
+}
+.wp-block-post:hover .card-image img {
+  opacity: 1;
+}
+.wp-block-post-excerpt__excerpt {
+  font-family: 'Forma DJR Deck' !important;
+  --tw-text-opacity: 1;
+  color: rgb(28 59 79 / var(--tw-text-opacity));
+}

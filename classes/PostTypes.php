@@ -3,6 +3,7 @@
 namespace Blockbite\Blockbite;
 
 use Blockbite\Blockbite\Controllers\EditorSettings as EditorSettingsController;
+use Blockbite\Blockbite\Frontend as FrontendController;
 
 
 
@@ -65,6 +66,8 @@ class PostTypes
             if (isset($styles['css'])) {
                 echo '<style id="blockbite">' . $styles['css'] . '</style>';
             }
+            // show headings and blockbite-editor-css as well
+            FrontendController::frontendGlobalStyles();
         }
     }
 

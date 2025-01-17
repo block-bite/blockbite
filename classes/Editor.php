@@ -39,7 +39,10 @@ class Editor
             'carousel-footer',
             'bites-wrap',
             'ai-generated',
-            'interaction'
+            'interaction',
+            'dynamic-content',
+            'dynamic-display',
+            'dynamic-design'
         ];
 
         $this->blocknamespaces;
@@ -208,12 +211,14 @@ class Editor
         $load_swiper = get_option('blockbite_load_swiper', true);
 
         if ($load_swiper && is_admin()) {
+
             wp_register_script(
                 'swiper-editor',
                 'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
                 [],
                 '11.1.4',
             );
+
             wp_enqueue_script('swiper-editor');
         }
     }
@@ -238,7 +243,7 @@ class Editor
     function add_global_styles($editorSettings)
     {
         // Fetch CSS string from the database
-        $styleRecord = DBController::getRecordByHandle('blockbite-global-css');
+        $styleRecord = DBController::getRecordByHandle('blockbite-editor-css');
 
         if ($styleRecord && !empty($styleRecord->css)) {
             $editorSettings['styles'][] = array(

@@ -9,6 +9,7 @@ use Blockbite\Blockbite\Rest\Routes\BlockSupport as BlockSupportRoute;
 use Blockbite\Blockbite\Rest\Routes\Items as ItemsRoute;
 use Blockbite\Blockbite\Rest\Routes\Bites as BitesRoute;
 use Blockbite\Blockbite\Rest\Routes\Settings as SettingsRoute;
+use Blockbite\Blockbite\Rest\Routes\DynamicContent as DynamicContentRoute;
 
 /**
  * Register all routes for REST API
@@ -56,6 +57,7 @@ class Api
             new ItemsRoute($this->plugin),
             new SettingsRoute($this->plugin),
             new BitesRoute($this->plugin),
+            new DynamicContentRoute($this->plugin),
         ];
 
         foreach ($routes as $route) {

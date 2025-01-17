@@ -20,9 +20,9 @@ class EditorSettings extends Controller
         $designTokens = false;
         foreach ($data as $row) {
             if ($row->handle === 'design-tokens-optin') {
-                $designTokensOptin = json_decode($row->content);
+                $designTokensOptin = json_decode($row->data);
             } else if ($row->handle === 'design-tokens') {
-                $designTokens = json_decode($row->content);
+                $designTokens = json_decode($row->data);
             }
         }
 
@@ -108,13 +108,11 @@ class EditorSettings extends Controller
         $css = '';
         $user_css = '';
 
-
         $result = DbController::getRecordByHandle($handle);
         if (isset($result->tailwind) && isset($result->css)) {
             $tailwind = $result->tailwind;
             $css = $result->css;
         }
-
         return
             [
                 'tailwind' => $tailwind,
@@ -160,15 +158,14 @@ class EditorSettings extends Controller
         if (!$optinRecord) {
             return null;
         } else {
-            $content = json_decode($optinRecord->content);
-            return $content;
+            return $optinRecord->data;
         }
     }
 
     private static function get_tokens_content()
     {
         $tokensRecord = DBController::getRecordByHandle('design-tokens');
-        return $tokensRecord ? json_decode($tokensRecord->content) : null;
+        return $tokensRecord ? json_decode($tokensRecord->data) : null;
     }
 
     private static function add_support($supportType, $items, $map, $disable)

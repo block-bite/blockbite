@@ -7,6 +7,9 @@
   "category": "blockbite",
   "icon": "flag",
   "description": "A slide within the carousel slider.",
+  "usesContext": [
+    "blockbite/swiperEditMode"
+  ],
   "attributes": {
     "media": {
       "type": "object",

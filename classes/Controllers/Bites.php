@@ -11,31 +11,43 @@ class Bites extends Controller
 
     public static function update_bites($request)
     {
-        $bites = $request->get_param('bites');
         $post_id = intval($request->get_param('post_id'));
-        $utils = $request->get_param('utils');
-        $blockstyles = $request->get_param('blockstyles');
+
+
+        $utils = json_encode(
+            $request->get_param('utils')
+        );
+        $blockstyles = json_encode(
+            $request->get_param('blockstyles')
+        );
+        $bites = json_encode(
+            $request->get_param('bites')
+        );
 
 
         $bites_saved = DbController::updateOrCreateRecord(
-            ['content' => $bites, 'handle' => 'bites', 'post_id' => $post_id],
+            [
+                'data' => $bites,
+                'handle' => 'bites',
+                'post_id' => $post_id
+            ],
             ['post_id' => $post_id, 'handle' => 'bites'],
         );
 
         $utils_saved = DbController::updateOrCreateRecord(
-            ['content' => $utils, 'handle' => 'utils', 'post_id' => $post_id],
+            ['data' => $utils, 'handle' => 'utils', 'post_id' => $post_id],
             ['post_id' => $post_id, 'handle' => 'utils'],
         );
 
         $blockstyles_saved = DbController::updateOrCreateRecord(
-            ['content' => $blockstyles, 'handle' => 'blockstyles', 'post_id' => $post_id],
+            ['data' => $blockstyles, 'handle' => 'blockstyles', 'post_id' => $post_id],
             ['post_id' => $post_id, 'handle' => 'blockstyles'],
         );
 
         return [
             'status' => 200,
             'bites' => 'Bites saved',
-            'utils' => $utils_saved,
+            'utils' => $utils,
             'blockstyles' => $blockstyles_saved,
             'post_id' => $post_id,
         ];
@@ -91,7 +103,7 @@ class Bites extends Controller
             ];
         } else {
 
-            $block_content = json_decode($bites->content);
+            $block_content = json_decode($bites->data);
 
             $blocks = [];
             $index = 0;
@@ -130,7 +142,7 @@ class Bites extends Controller
         $utilsResult = DbController::getAllRecordsByHandle('utils');
         $utils = [];
         foreach ($utilsResult as $util) {
-            $utils = array_merge($utils, json_decode($util->content, true));
+            $utils = array_merge($utils, json_decode($util->data, true));
         }
         return  $utils;
     }
@@ -140,7 +152,7 @@ class Bites extends Controller
         $blockstylesResult = DbController::getAllRecordsByHandle('blockstyles');
         $blockstyles = [];
         foreach ($blockstylesResult as $blockstyle) {
-            $blockstyles = array_merge($blockstyles, json_decode($blockstyle->content, true));
+            $blockstyles = array_merge($blockstyles, json_decode($blockstyle->data, true));
         }
         return  $blockstyles;
     }

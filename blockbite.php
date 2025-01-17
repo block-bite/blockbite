@@ -5,7 +5,7 @@
  * Description:       Tailwind Designer [Beta][Developent]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.112
+ * Version: 1.0.118
  * Author:            Blockbite
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
@@ -56,6 +56,3 @@ $plugin = new Blockbite\Blockbite\Plugin(
 add_action('plugins_loaded', function () use ($plugin) {
 	$plugin->init();
 });
-
-
-register_activation_hook(BLOCKBITE_MAIN_FILE, [$plugin, 'createTable']);

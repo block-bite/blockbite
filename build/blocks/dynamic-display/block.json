@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "blockbite/dynamic-display",
+  "version": "0.1.0",
+  "title": "Dynamic Display",
+  "category": "blockbite",
+  "icon": "flag",
+  "description": "A block to present dynamic content",
+  "attributes": {
+    "contentId": {
+      "type": "string",
+      "default": ""
+    },
+    "designId": {
+      "type": "string",
+      "default": "slot-a"
+    },
+    "renderTag": {
+      "type": "string",
+      "default": "element"
+    },
+    "metadata": {
+      "type": "object",
+      "default": {
+        "name": "Dynamic Display"
+      }
+    }
+  },
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    },
+    "renaming": true
+  },
+  "textdomain": "blockbite",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

@@ -70,12 +70,16 @@ class Hooks
 		add_action('rest_api_init', [$this->plugin->getRestApi(), 'registerRoutes']);
 		add_action('enqueue_block_assets', [$this->editor, 'registerPlayground'], 10);
 		add_action('enqueue_block_assets', [$this->editor, 'registerTailwind'], 11);
-		add_action('enqueue_block_assets', [$this->editor, 'registerEditorFrontend'], 12);
+		add_action('enqueue_block_assets', [$this->editor, 'registerEditorFrontend'], 21);
+
+
+
+
 
 		add_action('enqueue_block_editor_assets', [$this->editor, 'registerEditor'], 12);
 		add_action('init', [$this->editor, 'initBlocks']);
 		add_filter('block_categories_all', [$this->editor, 'registerBlockCategory']);
-		add_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
+
 		add_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
 		add_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 
@@ -85,8 +89,10 @@ class Hooks
 		add_action('init', [PostTypes::class, 'register_bites']);
 		add_action('after_setup_theme', [EditorSettings::class, 'add_theme_settings'], 20);
 		add_action('wp_head', [PostTypes::class, 'bites_view']);
-		add_action('wp_head', [$this->frontend, 'global_css'], 20);
 
+
+		add_action('wp_head', [$this->frontend, 'frontendGlobalStyles'], 22);
+		add_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend'], 15);
 
 
 		// add_filter('allowed_block_types_all', [PostTypes::class, 'restrict_block_to_post_type'], 10, 2);

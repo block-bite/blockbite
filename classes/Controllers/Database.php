@@ -29,31 +29,32 @@ class Database extends Controller
 
     public static function createTable()
     {
-
         global $wpdb;
 
         try {
             $table_name = $wpdb->prefix . 'blockbite';
             $charset_collate = $wpdb->get_charset_collate();
             $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-                id INT(11) NOT NULL AUTO_INCREMENT,
-                handle VARCHAR(500) NOT NULL,
-                category VARCHAR(500),
-                blockname VARCHAR(500),
-                is_default BOOLEAN DEFAULT 0,
-                platform VARCHAR(100),
-                title VARCHAR(500),
-                slug VARCHAR(500) NOT NULL,
-                version VARCHAR(100) DEFAUlT '1.0.0',
-                summary VARCHAR(500) NOT NULL,
-                css LONGTEXT NOT NULL,
-                tailwind TEXT NOT NULL,
-                content LONGTEXT NOT NULL,
-                post_id INT(11) NOT NULL,
-                parent INT(11) NOT NULL,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (id)
-            ) $charset_collate;";
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            handle VARCHAR(500) NOT NULL,
+            category VARCHAR(500),
+            blockname VARCHAR(500),
+            is_default BOOLEAN DEFAULT 0,
+            platform VARCHAR(100),
+            title VARCHAR(500),
+            slug VARCHAR(500) NOT NULL,
+            version VARCHAR(100) DEFAULT '1.0.0',
+            summary VARCHAR(500) NOT NULL,
+            css LONGTEXT NOT NULL,
+            tailwind LONGTEXT NOT NULL,
+            content LONGTEXT NOT NULL,
+            post_id INT(11) NOT NULL,
+            parent INT(11) NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            data JSON NOT NULL DEFAULT '{}',  -- Set '{}' as the default value for the JSON column
+            PRIMARY KEY (id),
+            INDEX idx_handle (handle)
+        ) $charset_collate;";
 
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
@@ -62,6 +63,7 @@ class Database extends Controller
             set_transient('blockbite_db_creation_failed', true, 60 * 60); // Set for 1 hour
         }
     }
+
 
     /**
      * Check if the table exists in the database
@@ -77,10 +79,8 @@ class Database extends Controller
         $result = $wpdb->get_var($wpdb->prepare($query, $table_name));
 
         if ($result == $table_name) {
-            // Table exists
             return true;
         } else {
-            // Table does not exist
             return false;
         }
     }
@@ -91,39 +91,31 @@ class Database extends Controller
      * @param mixed $where 
      * @return int|false 
      */
-
-
     public static function updateOrCreateRecord($data, $where)
     {
-
-        $data = self::prepData($data);
-
-        // Update or insert based on the $where condition
         global $wpdb;
         $table_name = $wpdb->prefix . 'blockbite';
 
-        // Build the WHERE clause dynamically
-        $where_clauses = [];
-        $where_values = [];
+        // Prepare the data and ensure updated_at is set
+        $data = self::prepAndAddTimestamps($data);
 
-        foreach ($where as $column => $value) {
-            $where_clauses[] = "$column = %s";
-            $where_values[] = $value;
-        }
+        // Build the WHERE clause
+        $where_clause_data = self::buildWhereClause($where);
 
-        $where_clause = implode(' AND ', $where_clauses);
-        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE $where_clause", ...$where_values);
-        $record = $wpdb->get_row($query);
+        // Fetch the record
+        $record = self::findRecord($table_name, $where_clause_data['clause'], $where_clause_data['values']);
 
-        if (isset($record->id)) {
+        if ($record) {
+            // Update the record
             $wpdb->update($table_name, $data, $where);
             $record_id = $record->id;
         } else {
+            // Insert a new record
             $wpdb->insert($table_name, $data);
             $record_id = $wpdb->insert_id;
         }
-        $data['id'] = $record_id;
 
+        $data['id'] = $record_id;
         return $data;
     }
 
@@ -133,18 +125,17 @@ class Database extends Controller
      * @param mixed $handle 
      * @return int|false 
      */
-
     public static function updateOrCreateHandle($data, $handle)
     {
         if (empty($handle)) {
             throw new Exception('handle column is required and cannot be empty');
         }
 
-        $data = self::prepData($data);
-        $handle = trim($handle);
-
         global $wpdb;
         $table_name = $wpdb->prefix . 'blockbite';
+
+        // Prepare the data and ensure updated_at is set
+        $data = self::prepAndAddTimestamps($data);
 
         // Find the most relevant record to update
         $query = $wpdb->prepare(
@@ -153,14 +144,12 @@ class Database extends Controller
         );
         $record = $wpdb->get_row($query);
 
-        error_log('record: ' . json_encode($record));
-
         if ($record) {
             // Update the record
             $wpdb->update($table_name, $data, ['id' => $record->id, 'handle' => $handle]);
             $record_id = $record->id;
         } else {
-            // Create a new record
+            // Insert a new record
             $data['handle'] = $handle;
             $wpdb->insert($table_name, $data);
             $record_id = $wpdb->insert_id;
@@ -170,33 +159,56 @@ class Database extends Controller
         return $data;
     }
 
-
     /**
-     * Update or create a record in the database by id
-     * @param mixed $data 
-     * @param mixed $id 
-     * @return int|false 
+     * Prepare data and add timestamps
+     * @param array $data
+     * @return array
      */
-    public static function updateOrCreateRecordById($data, $id)
+    private static function prepAndAddTimestamps($data)
     {
         $data = self::prepData($data);
-
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'blockbite';
-        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $id);
-        $record = $wpdb->get_row($query);
-        if ($record) {
-            // update
-            $wpdb->update($table_name, $data, ['id' => $id]);
-            $record_id = $record->id;
-        } else {
-            $data['id'] = $id;
-            $wpdb->insert($table_name, $data);
-            $record_id = $wpdb->insert_id;
-        }
-        $data['id'] = $record_id;
+        $data['updated_at'] = current_time('mysql');
         return $data;
     }
+
+    /**
+     * Build a WHERE clause from an array
+     * @param array $where
+     * @return array
+     */
+    private static function buildWhereClause($where)
+    {
+        $where_clauses = [];
+        $where_values = [];
+
+        foreach ($where as $column => $value) {
+            $where_clauses[] = "$column = %s";
+            $where_values[] = $value;
+        }
+
+        return [
+            'clause' => implode(' AND ', $where_clauses),
+            'values' => $where_values,
+        ];
+    }
+
+    /**
+     * Find a record in the database
+     * @param string $table_name
+     * @param string $where_clause
+     * @param array $where_values
+     * @return object|null
+     */
+    private static function findRecord($table_name, $where_clause, $where_values)
+    {
+        global $wpdb;
+        $query = $wpdb->prepare(
+            "SELECT * FROM $table_name WHERE $where_clause ORDER BY updated_at DESC LIMIT 1",
+            ...$where_values
+        );
+        return $wpdb->get_row($query);
+    }
+
 
 
     public static function insertRecords($data)
@@ -229,11 +241,17 @@ class Database extends Controller
         $record = $wpdb->get_row($query);
         return $record;
     }
-    public static function getAllRecordsByHandle($handle)
+
+
+    public static function getAllRecordsByHandle($handle, $select = ['*'])
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'blockbite';
-        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE handle = %s", $handle);
+
+        // Convert the $select array to a comma-separated string
+        $select_clause = implode(', ', $select);
+
+        $query = $wpdb->prepare("SELECT $select_clause FROM $table_name WHERE handle = %s", $handle);
         $records = $wpdb->get_results($query);
 
         // Ensure $records is an array (this might not be necessary as get_results returns an array)

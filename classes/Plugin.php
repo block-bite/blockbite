@@ -96,7 +96,7 @@ class Plugin
         if (!isset($this->api)) {
             $this->api = new Api($this);
         }
-        if (!Database::checkTableExists()) {
+        if (!Database::checkTableExists('blockbite')) {
             // create table
             Database::createTable();
             // create style file
@@ -146,11 +146,6 @@ class Plugin
         }
     }
 
-
-    public function createTable()
-    {
-        Database::createTable();
-    }
 
 
     public function adminNotice()

@@ -28,22 +28,24 @@ class Bites extends Api
                 'callback' => [$bitesController, 'update_bites'],
                 'permission_callback' => [$bitesController, 'authorize'],
                 'args' => [
-                    'utils' => [
-                        'required' => true,
-                    ],
                     'post_id' => [
                         'required' => true,
                         'sanitize_callback' => 'sanitize_text_field',
                         'type' => 'string',
                     ],
                     'bites' => [
-                        'required' => true,
-                        'type' => 'string',
+                        'required' => false,
+                        'type' => 'json',
                     ],
                     'blockstyles' => [
-                        'required' => true,
-                        'type' => 'string',
+                        'required' => false,
+                        'type' => 'json',
                     ],
+                    'utils' => [
+                        'required' => false,
+                        'type' => 'json',
+                    ],
+
                 ]
             ],
         ]);

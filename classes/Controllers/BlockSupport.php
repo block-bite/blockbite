@@ -44,11 +44,11 @@ class BlockSupport extends Controller
         $disallowed = DbController::getRecordByHandle('block_support');
         $allowed_dynamic = DbController::getRecordByHandle('dynamic_block_support');
 
-        if (isset($disallowed->content)) {
-            $disallowed = json_decode($disallowed->content);
+        if (isset($disallowed->data)) {
+            $disallowed = json_decode($disallowed->data);
         }
-        if (isset($allowed_dynamic->content)) {
-            $allowed_dynamic = json_decode($allowed_dynamic->content);
+        if (isset($allowed_dynamic->data)) {
+            $allowed_dynamic = json_decode($allowed_dynamic->data);
         }
 
         return [
@@ -83,8 +83,8 @@ class BlockSupport extends Controller
     private static function fetch_dynamic_blocks()
     {
         $result = DbController::getRecordByHandle('dynamic_block_support');
-        return is_object($result) && isset($result->content)
-            ? json_decode($result->content, true)
+        return is_object($result) && isset($result->data)
+            ? json_decode($result->data, true)
             : [];
     }
 

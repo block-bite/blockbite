@@ -35,7 +35,8 @@ class Frontend
                 // Load block content into DOMDocument safely
                 $dom = new \DOMDocument();
                 libxml_use_internal_errors(true); // Suppress warnings from malformed HTML
-                $dom->loadHTML(mb_convert_encoding($block_content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $dom->loadHTML(htmlspecialchars_decode($block_content), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
                 libxml_clear_errors(); // Clear any libxml errors after loading
 
                 // Get the first element in the block
@@ -185,18 +186,19 @@ class Frontend
         // add to frontend
         wp_enqueue_style('blockbite-frontend-style');
 
-        $style_path = BLOCKBITE_PLUGIN_URL . 'public/style.css';
-
-        if (file_exists($style_path) && filesize($style_path) > 0) {
-            $cache_version = filemtime($style_path); // Use file's last modified time
-        } else {
-            $cache_version = time(); // Fallback to current time
-            error_log('Warning: blockbite style.css is missing or empty.');
-        }
 
         if (!is_singular('blockbites')) {
-            wp_enqueue_style('blockbite-style', $style_path, [], $cache_version);
+            wp_enqueue_style(
+                'main-styles',
+                BLOCKBITE_PLUGIN_URL . '/public/style.css',
+                array(),
+                filemtime(BLOCKBITE_PLUGIN_DIR . '/public/style.css'),
+                false
+            );
         }
+
+
+
 
         // pas data to react plugin
         wp_localize_script(
@@ -220,6 +222,19 @@ class Frontend
                 '11.1.4',
             );
             wp_enqueue_script('swiper-frontend');
+        }
+    }
+
+
+    public static function frontendGlobalStyles()
+    {
+
+        $styles = EditorSettings::get_styles_handle('blockbite-editor-css');
+        $headings = EditorSettings::get_styles_handle('headings-css');
+
+        if (isset($styles['css'])) {
+            echo '<style id="blockbite-editor-css">' . $styles['css'] . '</style>';
+            echo '<style id="blockbite-headings-css">' . $headings['css'] . '</style>';
         }
     }
 
@@ -248,13 +263,5 @@ class Frontend
         );
 
         wp_enqueue_script('blockbite-frontend');
-    }
-
-    public static function global_css()
-    {
-        $styles = EditorSettings::get_styles_handle('blockbite-global-css');
-        if (isset($styles['css'])) {
-            echo '<style id="blockbite">' . $styles['css'] . '</style>';
-        }
     }
 }

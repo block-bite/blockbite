@@ -85,6 +85,10 @@ class Items extends Api
                         'required' => true,
                         'type' => 'string',
                     ],
+                    "data" => [
+                        'required' => false,
+                        'type' => 'json',
+                    ],
                 ]
             ],
         ]);
@@ -122,6 +126,10 @@ class Items extends Api
                     'content' => [
                         'required' => false,
                         'type' => 'string',
+                    ],
+                    "data" => [
+                        'required' => false,
+                        'type' => 'json',
                     ],
                 ]
             ],

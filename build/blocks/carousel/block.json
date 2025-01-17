@@ -12,6 +12,9 @@
     "blockbite/carousel-header",
     "blockbite/carousel-footer"
   ],
+  "providesContext": {
+    "blockbite/swiperEditMode": "swiperEditMode"
+  },
   "attributes": {
     "media": {
       "type": "object",
@@ -59,6 +62,10 @@
         "name": "Carousel"
       }
     },
+    "swiperEditMode": {
+      "type": "string",
+      "default": "play"
+    },
     "carouselSettings": {
       "type": "object",
       "default": {
@@ -69,12 +76,18 @@
           "lg": 1,
           "xl": 1
         },
-        "speed": 500,
+        "speed": "500",
         "loop": false,
-        "autoplay": null,
+        "autoplay": {
+          "delay": "0",
+          "disableOnInteraction": true
+        },
         "pagination": null,
         "spaceBetween": 0,
-        "cssMode": false
+        "cssMode": false,
+        "init": true,
+        "freeMode": false,
+        "newsticker": false
       }
     }
   },
