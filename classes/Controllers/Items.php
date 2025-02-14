@@ -38,8 +38,6 @@ class Items extends Controller
             'slug' => 'string',
             'version' => 'string',
             'summary' => 'string',
-            'css' => 'text',
-            'tailwind' => 'text',
             'content' => 'text',
             'post_id' => 'int',
             'parent' => 'int',
@@ -110,6 +108,10 @@ class Items extends Controller
     {
         $data = $request->get_params();
         $validated_data = self::validate($data);
+
+
+        error_log(print_r($validated_data, true));
+
 
         if (is_wp_error($validated_data)) {
             return $validated_data;

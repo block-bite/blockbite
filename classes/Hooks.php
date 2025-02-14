@@ -68,12 +68,6 @@ class Hooks
 		add_action('admin_notices', [$this->plugin, 'adminNotice']);
 		add_action('admin_menu', [$this->settingsNavigation, 'addAdminMenu']);
 		add_action('rest_api_init', [$this->plugin->getRestApi(), 'registerRoutes']);
-		add_action('enqueue_block_assets', [$this->editor, 'registerPlayground'], 10);
-		add_action('enqueue_block_assets', [$this->editor, 'registerTailwind'], 11);
-		add_action('enqueue_block_assets', [$this->editor, 'registerEditorFrontend'], 21);
-
-
-
 
 
 		add_action('enqueue_block_editor_assets', [$this->editor, 'registerEditor'], 12);
@@ -84,15 +78,25 @@ class Hooks
 		add_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 
 		add_action('admin_enqueue_scripts', [$this->settingsNavigation, 'registerAssets']);
+
+
+		add_action('enqueue_block_assets', [$this->editor, 'registerCssParser'], 10);
+		add_action('enqueue_block_assets', [$this->editor, 'registerTailwind'], 11);
+		add_action('enqueue_block_assets', [$this->editor, 'registerEditorFrontend'], 21);
+		add_action('enqueue_block_assets', [$this->frontend, 'registerAssetsFrontend'], 15);
 		add_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
-		add_filter('render_block', [$this->render, 'carousel_dynamic'], 13, 2);
+		add_action('enqueue_block_assets', [$this->editor, 'registerGsapCdn'], 12);
+		add_action('enqueue_block_assets', [$this->editor, 'registerLottieCdn'], 12);
+
 		add_action('init', [PostTypes::class, 'register_bites']);
 		add_action('after_setup_theme', [EditorSettings::class, 'add_theme_settings'], 20);
 		add_action('wp_head', [PostTypes::class, 'bites_view']);
-
-
 		add_action('wp_head', [$this->frontend, 'frontendGlobalStyles'], 22);
-		add_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend'], 15);
+
+		//var_dump($this->frontend);
+
+
+		add_filter('upload_mimes', [$this->editor, 'blockbite_mime_types'], 18);
 
 
 		// add_filter('allowed_block_types_all', [PostTypes::class, 'restrict_block_to_post_type'], 10, 2);
@@ -125,5 +129,8 @@ class Hooks
 		remove_action('admin_init', [$this->editor, 'registerLibrarySettings']);
 		remove_action('enqueue_block_assets', [$this->editor, 'registerTailwindCdn'], 10);
 		remove_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
+		remove_action('enqueue_block_assets', [$this->editor, 'registerGsapCdn'], 12);
+		remove_action('enqueue_block_assets', [$this->editor, 'registerLottieCdn'], 12);
+		remove_filter('upload_mimes', [$this->editor, 'blockbite_mime_types'], 18);
 	}
 }

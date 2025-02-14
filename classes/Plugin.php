@@ -101,12 +101,6 @@ class Plugin
             Database::createTable();
             // create style file
             $this->createStyleFile();
-            // add default
-            SettingsController::sync_blockbite_items([
-                'handle' => 'preset',
-                'version' => BLOCKBITE_ITEMS_VERSION,
-                'platform' => 'blockbite'
-            ]);
         } else {
             $this->hooks = new Hooks($this);
             $this->hooks->addHooks();

@@ -5,7 +5,7 @@
  * Description:       Tailwind Designer [Beta][Developent]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.0.121
+ * Version: 1.2.2
  * Author:            Blockbite
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com
@@ -21,7 +21,8 @@ use Blockbite\Blockbite\Plugin;
 use Blockbite\Blockbite\Settings;
 
 
-
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 if (!defined('BLOCKBITE_PLUGIN_URL')) {
 	define('BLOCKBITE_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -40,6 +41,12 @@ define('BLOCKBITE_MAIN_FILE', __FILE__);
 define('BLOCKBITE_ICON_DIR', 'resources/svg/');
 define('BLOCKBITE_ICON_URI', 'resources/svg/');
 define('BLOCKBITE_PLUGIN_DIR', plugin_dir_path(__FILE__));
+
+
+if (!defined('BLOCKBITE_PLATFORM_URL')) {
+	define('BLOCKBITE_PLATFORM_URL',  isset($_ENV['PLATFORM_URL']) ? $_ENV['PLATFORM_URL'] : 'https://block-bite.com');
+}
+
 
 // include autoloader from composer
 require_once __DIR__ . '/vendor/autoload.php';

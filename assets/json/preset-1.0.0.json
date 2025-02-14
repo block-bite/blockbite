@@ -73,7 +73,6 @@
           "strategies": []
         }
       ],
-      "biteMotionStyle": [],
       "flexStyle": [
         {
           "id": "flexgapa",
@@ -106,7 +105,6 @@
       ],
       "mediaStyle": [],
       "biteClass": "relative ",
-      "biteMotionClass": "",
       "flexClass": "gap-5 flex flex-col b_container-fluid ",
       "mediaClass": ""
     },

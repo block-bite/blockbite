@@ -110,15 +110,21 @@ class SettingsNavigation
             ->getAll();
 
 
+
+
         wp_localize_script(
             'blockbite-settings',
-            'wpApiSettings',
-            array(
-                'root' => esc_url_raw(rest_url()),
-                'nonce' => wp_create_nonce('wp_rest'),
+            'blockbite',
+            [
                 'apiUrl'   => rest_url('blockbite/v1'),
-                'itemsVersion' => BLOCKBITE_ITEMS_VERSION,
-            )
+                'api' => 'blockbite/v1',
+                'createTailwindcss' => null,
+                'settings' => [
+                    'root' => esc_url_raw(rest_url()),
+                    'nonce' => wp_create_nonce('wp_rest'),
+                    'itemsVersion' => BLOCKBITE_ITEMS_VERSION,
+                ]
+            ]
         );
 ?><div id="blockbite-settings"></div>
 <?php

@@ -11,46 +11,21 @@ class Bites extends Controller
 
     public static function update_bites($request)
     {
-        $post_id = intval($request->get_param('post_id'));
+        $bites = json_decode(json_encode($request->get_param('bites')));
 
 
-        $utils = json_encode(
-            $request->get_param('utils')
-        );
-        $blockstyles = json_encode(
-            $request->get_param('blockstyles')
-        );
-        $bites = json_encode(
-            $request->get_param('bites')
-        );
-
-
-        $bites_saved = DbController::updateOrCreateRecord(
-            [
-                'data' => $bites,
+        foreach ($bites as $bite) {
+            // Save bite
+            DbController::updateOrCreateRecord([
+                'data' => json_encode($bite),
                 'handle' => 'bites',
-                'post_id' => $post_id
-            ],
-            ['post_id' => $post_id, 'handle' => 'bites'],
-        );
+                'slug' => $bite->id,
+                'post_id' => $bite->post_id,
+            ], ['post_id' => $bite->post_id, 'handle' => 'bites', 'slug' => $bite->id]);
+        }
 
-        $utils_saved = DbController::updateOrCreateRecord(
-            ['data' => $utils, 'handle' => 'utils', 'post_id' => $post_id],
-            ['post_id' => $post_id, 'handle' => 'utils'],
-        );
-
-        $blockstyles_saved = DbController::updateOrCreateRecord(
-            ['data' => $blockstyles, 'handle' => 'blockstyles', 'post_id' => $post_id],
-            ['post_id' => $post_id, 'handle' => 'blockstyles'],
-        );
-
-        return [
-            'status' => 200,
-            'bites' => 'Bites saved',
-            'utils' => $utils,
-            'blockstyles' => $blockstyles_saved,
-            'post_id' => $post_id,
-        ];
+        // return updated utils 
+        return ['status' => 200, 'utils' => self::get_utils()];
     }
 
 
@@ -88,64 +63,46 @@ class Bites extends Controller
 
     public static function get_bite_blocks($request)
     {
+        $bites_result = DbController::getAllRecordsByHandle('bites');
 
-        $post_id = intval($request->get_param('post_id'));
-
-        $bites = DbController::getRecordByQuery([
-            'handle' => 'bites',
-            'post_id' => $post_id
-        ]);
-
-        if (empty($bites)) {
+        if (empty($bites_result)) {
             return [
                 'status' => 404,
                 'message' => 'No bites found'
             ];
         } else {
-
-            $block_content = json_decode($bites->data);
-
-            $blocks = [];
-            $index = 0;
-            foreach ($block_content as $block) {
-
-                $strip_component =   self::strip_bite($block->component);
-                $strip_raw =   self::strip_bite($block->raw);
-
-                $parse_block = parse_blocks(
-                    $strip_raw
-                );
-
-                if (empty($parse_block)) {
-                    continue;
-                }
-                array_push($blocks, [
-                    'id' => $block->id,
-                    'preview' => render_block($parse_block[0]),
-                    'component' => $strip_component,
-                    'raw' => $strip_raw,
-                    'width' => $block->width,
-                    'height' => $block->height,
-                ]);
-            }
-
+            $bites_result = self::parse_bite_blocks($bites_result);
             return [
                 'status' => 200,
-                'blocks' => $blocks,
-
+                'bites' => $bites_result,
             ];
         }
     }
 
-    public static function get_merged_bite_utils()
+
+    public static function parse_bite_blocks($bites)
     {
-        $utilsResult = DbController::getAllRecordsByHandle('utils');
-        $utils = [];
-        foreach ($utilsResult as $util) {
-            $utils = array_merge($utils, json_decode($util->data, true));
+        // loop over bites and json decode the data
+        foreach ($bites as $bites_row) {
+            // parse the data
+            $bites_row->data = json_decode($bites_row->data);
+
+            // Directly process the serialized property
+            $stripped_block = self::strip_bite($bites_row->data->serialized);
+            $parsed_block = parse_blocks($stripped_block);
+            $bites_row->data->rendered = $stripped_block;
+            $bites_row->data->preview = render_block($parsed_block[0]);
         }
-        return  $utils;
+        return $bites;
     }
+
+
+    public static function get_utils()
+    {
+        return DbController::getUtils();
+    }
+
+
 
     public static function get_merged_blockstyles()
     {
@@ -158,12 +115,53 @@ class Bites extends Controller
     }
 
 
+    /*
+        Get all bites
+    */
+    public static function get_bite_bites()
+    {
+        $bitesResult = DbController::getAllRecordsByHandle('bites');
+        $bites = [];
+        foreach ($bitesResult as $bite) {
+            $bites = json_decode($bite->data, true);
+            foreach ((array) $bites as $bite) {
+                if (isset($bite->blocks)) {
+                    $bites = array_merge($bites, $bite);
+                }
+            }
+        }
+        return  $bites;
+    }
+
 
     public static function get_bite_utils($request)
     {
         return [
             'status' => 200,
-            'utils' => self::get_merged_bite_utils(),
+            'utils' => self::get_utils(),
         ];
+    }
+
+
+    public static function get_project()
+    {
+        // load incluhire_projects.json from public folder of plugin
+        $file = file_get_contents(BLOCKBITE_PLUGIN_DIR . 'public/incluhire_projects.json');
+        $data = [];
+        // if file json decode
+        if ($file === false) {
+            return new WP_Error('file_not_found', 'Failed to load project file.', array('status' => 500));
+        } else {
+            // json_decode
+            $data = json_decode($file);
+            if (isset($data->bites)) {
+                $parsed_bites = self::parse_bite_blocks($data->bites);
+                foreach ($data->bites as $bite) {
+                    $bite->data = json_decode($bite->data);
+                }
+            }
+        }
+
+        return rest_ensure_response($data);
     }
 }

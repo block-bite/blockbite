@@ -3,6 +3,7 @@
 namespace Blockbite\Blockbite;
 
 use Blockbite\Blockbite\Controllers\EditorSettings;
+use Blockbite\Blockbite\Controllers\Database as DbController;
 
 class Frontend
 {
@@ -108,12 +109,6 @@ class Frontend
     private function appendClasses(&$element, $attrs)
     {
         $injected_class = esc_attr($attrs['biteClass']);
-
-        // Append motion class if available
-        if (isset($attrs['biteMotionClass'])) {
-            $injected_class .= ' ' . esc_attr($attrs['biteMotionClass']);
-        }
-
         // Append classes to the existing class attribute
         $existing_classes = $element->getAttribute('class');
         $element->setAttribute('class', trim($existing_classes . ' ' . $injected_class));
@@ -185,56 +180,27 @@ class Frontend
 
         // add to frontend
         wp_enqueue_style('blockbite-frontend-style');
-
-
-        if (!is_singular('blockbites')) {
-            wp_enqueue_style(
-                'main-styles',
-                BLOCKBITE_PLUGIN_URL . '/public/style.css',
-                array(),
-                filemtime(BLOCKBITE_PLUGIN_DIR . '/public/style.css'),
-                false
-            );
-        }
-
-
-
-
-        // pas data to react plugin
-        wp_localize_script(
-            'blockbite-frontend',
-            'blockbiteFrontend',
-            [
-                'apiUrl'   => rest_url('blockbite/v1'),
-                'settings' => [],
-
-            ]
-        );
-
-        // register swiper script
-        $load_swiper = get_option('blockbite_load_swiper', true);
-
-        if ($load_swiper) {
-            wp_register_script(
-                'swiper-frontend',
-                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
-                [],
-                '11.1.4',
-            );
-            wp_enqueue_script('swiper-frontend');
-        }
     }
 
 
     public static function frontendGlobalStyles()
     {
 
-        $styles = EditorSettings::get_styles_handle('blockbite-editor-css');
-        $headings = EditorSettings::get_styles_handle('headings-css');
+        $frontendAssets = DbController::getRecordsByHandles([
+            'blockbite-editor-css',
+            'headings-css',
+            'blockbite-editor-js',
+        ]);
 
-        if (isset($styles['css'])) {
-            echo '<style id="blockbite-editor-css">' . $styles['css'] . '</style>';
-            echo '<style id="blockbite-headings-css">' . $headings['css'] . '</style>';
+
+        foreach ($frontendAssets as $asset) {
+            if (isset($asset->handle) && $asset->handle === 'blockbite-editor-css') {
+                echo '<style id="blockbite-editor-css">' . $asset->content . '</style>';
+            } else if (isset($asset->handle) && $asset->handle === 'headings-css') {
+                echo '<style id="blockbite-headings-css">' . $asset->content . '</style>';
+            } else if (isset($asset->handle) && $asset->handle === 'blockbite-editor-js') {
+                echo '<script id="blockbite-editor-js"> document.addEventListener("DOMContentLoaded", function () {' . $asset->content . '});</script>';
+            }
         }
     }
 

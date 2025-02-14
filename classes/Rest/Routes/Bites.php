@@ -28,11 +28,6 @@ class Bites extends Api
                 'callback' => [$bitesController, 'update_bites'],
                 'permission_callback' => [$bitesController, 'authorize'],
                 'args' => [
-                    'post_id' => [
-                        'required' => true,
-                        'sanitize_callback' => 'sanitize_text_field',
-                        'type' => 'string',
-                    ],
                     'bites' => [
                         'required' => false,
                         'type' => 'json',
@@ -50,18 +45,12 @@ class Bites extends Api
             ],
         ]);
 
-        register_rest_route($this->namespace, '/bites/blocks/(?P<post_id>\d+)', [
+        register_rest_route($this->namespace, '/bites/blocks', [
             [
                 'methods' => 'GET',
                 'callback' => [$bitesController, 'get_bite_blocks'],
                 'permission_callback' => [$bitesController, 'authorize'],
-                'args' => [
-                    'post_id' => [
-                        'required' => true,
-                        'sanitize_callback' => 'absint',
-                        'type' => 'integer',
-                    ],
-                ]
+                'args' => []
             ],
         ]);
 
@@ -70,6 +59,15 @@ class Bites extends Api
             [
                 'methods' => 'GET',
                 'callback' => [$bitesController, 'get_bite_library'],
+                'permission_callback' => [$bitesController, 'authorize'],
+                'args' => []
+            ],
+        ]);
+
+        register_rest_route($this->namespace, '/bites/bites', [
+            [
+                'methods' => 'GET',
+                'callback' => [$bitesController, 'get_bites'],
                 'permission_callback' => [$bitesController, 'authorize'],
                 'args' => []
             ],

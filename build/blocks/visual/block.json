@@ -43,6 +43,35 @@
     "linkTarget": {
       "type": "string",
       "default": "_self"
+    },
+    "lottie": {
+      "type": "object",
+      "default": {
+        "autoplay": {
+          "type": "boolean",
+          "default": true
+        },
+        "hover": {
+          "type": "boolean",
+          "default": false
+        },
+        "loop": {
+          "type": "boolean",
+          "default": true
+        },
+        "playOnScroll": {
+          "type": "boolean",
+          "default": false
+        },
+        "controls": {
+          "type": "boolean",
+          "default": false
+        },
+        "direction": {
+          "type": "number",
+          "default": 0
+        }
+      }
     }
   },
   "supports": {

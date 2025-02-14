@@ -8,17 +8,17 @@
   "icon": "flag",
   "description": "Display your bites (custom components) within your bite component library. Only blocks within the Bites Wrap block are parsed as bites.",
   "attributes": {
+    "bitesId": {
+      "type": "string",
+      "default": ""
+    },
     "addAsBlockStyles": {
       "type": "boolean",
       "default": false
     },
-    "flexStyle": {
-      "type": "array",
-      "default": []
-    },
-    "flexClass": {
-      "type": "string",
-      "default": ""
+    "previewSize": {
+      "type": "number",
+      "default": "small"
     }
   },
   "supports": {

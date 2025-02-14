@@ -60,12 +60,11 @@ class PostTypes
 
     public static function bites_view()
     {
+
+
         if (is_singular('blockbites')) {
             echo '<meta name="robots" content="noindex, nofollow" />';
-            $styles = EditorSettingsController::get_styles_handle('bites-css');
-            if (isset($styles['css'])) {
-                echo '<style id="blockbite">' . $styles['css'] . '</style>';
-            }
+
             // show headings and blockbite-editor-css as well
             FrontendController::frontendGlobalStyles();
         }

@@ -32,13 +32,11 @@ class Editor
             'counter',
             'icon',
             'button-content',
-            'canvas',
             'carousel',
             'carousel-slide',
             'carousel-header',
             'carousel-footer',
             'bites-wrap',
-            'ai-generated',
             'interaction',
             'dynamic-content',
             'dynamic-display',
@@ -126,6 +124,12 @@ class Editor
                 'data' => [
                     'postType' => get_post_type(),
                     'id' => get_the_ID(),
+                ],
+                'settings' => [
+                    'gsap' => get_option('blockbite_load_gsap', true),
+                    'swiper' => get_option('blockbite_load_swiper', true),
+                    'lottie' => get_option('blockbite_load_lottie', true),
+                    'tw_base' => get_option('blockbite_load_tw_base', false),
                 ]
             ]
         );
@@ -135,8 +139,9 @@ class Editor
     public function registerEditorFrontend()
     {
         // Define paths for the CSS file
-        $style_url = BLOCKBITE_PLUGIN_URL . 'public/style.css';
-        $style_path = BLOCKBITE_PLUGIN_DIR . 'public/style.css'; // Filesystem path
+        $file_name = get_option('blockbite_css_name', 'style') . '.css';
+        $style_url = BLOCKBITE_PLUGIN_URL . 'public/' . $file_name;
+        $style_path = BLOCKBITE_PLUGIN_DIR . 'public/' . $file_name;
 
         // Validate the file exists and is not empty
         if (file_exists($style_path) && filesize($style_path) > 0) {
@@ -155,24 +160,29 @@ class Editor
 
 
 
-    public function registerPlayground()
+    public function registerCssParser()
     {
+
+        $dependencies_css_parser = [];
+        $version_css_parser = BLOCKBITE_PLUGIN_VERSION;
+
         // Use asset file if it exists
-        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-playground.asset.php')) {
-            $asset_file_playground   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-playground.asset.php';
-            $dependencies_playground = $asset_file_playground['dependencies'];
-            $version_playground      = $asset_file_playground['version'];
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-css-parser.asset.php')) {
+            $asset_file_css_parser   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-css-parser.asset.php';
+            $dependencies_css_parser = $asset_file_css_parser['dependencies'];
+            $version_css_parser      = $asset_file_css_parser['version'];
         }
-        // register editor script
+
+
         wp_register_script(
-            'blockbite-playground',
-            plugins_url('build/blockbite-playground.js', BLOCKBITE_MAIN_FILE),
-            $dependencies_playground,
-            $version_playground,
+            'blockbite-css-parser',
+            plugins_url('build/blockbite-css-parser.js', BLOCKBITE_MAIN_FILE),
+            $dependencies_css_parser,
+            $version_css_parser,
         );
 
         if (is_admin()) {
-            wp_enqueue_script('blockbite-playground');
+            wp_enqueue_script('blockbite-css-parser');
         }
     }
 
@@ -180,7 +190,7 @@ class Editor
     {
 
         // Initialize dependencies array for blockbite-tailwind
-        $dependencies_tailwind = ['blockbite-playground']; // Add blockbite-playground as a dependency by default
+        $dependencies_tailwind = ['blockbite-css-parser']; // Add blockbite-css_parser as a dependency by default
         $version_tailwind = BLOCKBITE_PLUGIN_VERSION;
 
         // Use asset file if it exists
@@ -190,7 +200,7 @@ class Editor
             $version_tailwind      = $asset_file_tailwind['version'];
         }
 
-        // Register blockbite-tailwind script with blockbite-playground as a dependency
+
         wp_register_script(
             'blockbite-tailwind',
             plugins_url('build/blockbite-tailwind.js', BLOCKBITE_MAIN_FILE),
@@ -210,7 +220,7 @@ class Editor
     {
         $load_swiper = get_option('blockbite_load_swiper', true);
 
-        if ($load_swiper && is_admin()) {
+        if ($load_swiper) {
 
             wp_register_script(
                 'swiper-editor',
@@ -223,6 +233,41 @@ class Editor
         }
     }
 
+    public function registerGsapCdn()
+    {
+
+        $load_gsap = get_option('blockbite_load_gsap', true);
+        if ($load_gsap) {
+            wp_register_script(
+                'gsap-editor',
+                'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
+                [],
+                '3.12.7',
+            );
+            wp_enqueue_script('gsap-editor');
+        }
+    }
+
+
+    public function registerLottieCdn()
+    {
+        $load_lottie = get_option('blockbite_load_lottie', true);
+        if ($load_lottie) {
+
+
+            wp_register_script(
+                'lottie-player',
+                'https://unpkg.com/@dotlottie/player-component@2.7.10/dist/dotlottie-player.js',
+                [],
+                '2.7.12',
+
+            );
+            wp_enqueue_script('lottie-player');
+        }
+    }
+
+
+
     function registerLibrarySettings()
     {
         register_setting(
@@ -232,6 +277,20 @@ class Editor
                 'type'              => 'boolean',
                 'sanitize_callback' => 'rest_sanitize_boolean',
                 'default'           => true,
+                'show_in_rest'      => true,
+            ],
+            'blockbite_load_gsap',
+            [
+                'type'              => 'boolean',
+                'sanitize_callback' => 'rest_sanitize_boolean',
+                'default'           => false,
+                'show_in_rest'      => true,
+            ],
+            'blockbite_load_lottie',
+            [
+                'type'              => 'boolean',
+                'sanitize_callback' => 'rest_sanitize_boolean',
+                'default'           => false,
                 'show_in_rest'      => true,
             ]
         );
@@ -245,14 +304,22 @@ class Editor
         // Fetch CSS string from the database
         $styleRecord = DBController::getRecordByHandle('blockbite-editor-css');
 
-        if ($styleRecord && !empty($styleRecord->css)) {
+        if ($styleRecord && !empty($styleRecord->content)) {
             $editorSettings['styles'][] = array(
-                'css' => $styleRecord->css,
+                'css' => $styleRecord->content,
                 '__unstableType' => 'theme',
                 'source' => 'blockbite-global',
             );
         }
 
         return $editorSettings;
+    }
+
+    /* Additions */
+    function blockbite_mime_types($mimes)
+    {
+        $mimes['svg'] = 'image/svg+xml';
+        $mimes['lottie'] = 'application/json';
+        return $mimes;
     }
 }

@@ -31,6 +31,8 @@ class Database extends Controller
     {
         global $wpdb;
 
+
+        // should match validate function in Items.php
         try {
             $table_name = $wpdb->prefix . 'blockbite';
             $charset_collate = $wpdb->get_charset_collate();
@@ -45,12 +47,12 @@ class Database extends Controller
             slug VARCHAR(500) NOT NULL,
             version VARCHAR(100) DEFAULT '1.0.0',
             summary VARCHAR(500) NOT NULL,
-            css LONGTEXT NOT NULL,
-            tailwind LONGTEXT NOT NULL,
             content LONGTEXT NOT NULL,
             post_id INT(11) NOT NULL,
             parent INT(11) NOT NULL,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            css LONGTEXT NOT NULL,
+            tailwind LONGTEXT NOT NULL,
             data JSON NOT NULL,
             PRIMARY KEY (id),
             INDEX idx_handle (handle)
@@ -377,5 +379,33 @@ class Database extends Controller
         }
 
         return $record;
+    }
+
+
+    public static function getUtils()
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+
+        // Corrected SQL query to extract only the 'utils' field
+        $query = $wpdb->prepare("SELECT JSON_EXTRACT(data, '$.utils') as utils FROM $table_name WHERE handle = %s", 'bites');
+
+        // Get results (fetch all matching rows)
+        $records = $wpdb->get_results($query);
+
+
+
+        $utils_array = [];
+
+        // Loop through results and decode JSON utils
+        foreach ($records as $record) {
+            $utils = json_decode($record->utils, true); // Decode JSON string into PHP array
+            if (is_array($utils)) {
+                $utils_array = array_merge($utils_array, $utils); // Merge into a single array
+            }
+        }
+
+
+        return $utils_array;
     }
 }

@@ -29,42 +29,31 @@ class EditorSettings extends Api
         ]);
 
 
-        register_rest_route($this->namespace, '/editor-styles', [
+        register_rest_route($this->namespace, '/frontend-css', [
             [
                 'methods' => 'GET',
-                'callback' => [$editorSettingsController, 'get_styles'],
+                'callback' => [$editorSettingsController, 'get_frontend_css'],
                 'permission_callback' => [$editorSettingsController, 'authorize'],
-                'args' => [
-                    'handle' => [
-                        'required' => true,
-                        'type' => 'string',
-                    ],
-                ]
+                'args' => []
             ],
             [
                 'methods' => 'POST',
-                'callback' => [$editorSettingsController, 'update_styles'],
+                'callback' => [$editorSettingsController, 'update_frontend_css'],
                 'permission_callback' => [$editorSettingsController, 'authorize'],
                 'args' => [
-                    'css' => [
-                        'required' => true,
+                    'data' => [
+                        'required' => false,
+                        'type' => 'json',
+                    ],
+                    'content' => [
+                        'required' => false,
                         'sanitize_callback' => 'sanitize_text_field',
                         'type' => 'string',
-                    ],
-                    'tailwind' => [
-                        'required' => true,
-                        'sanitize_callback' => 'sanitize_text_field',
-                        'type' => 'string',
-                    ],
-                    'handle' => [
-                        'required' => true,
-                        'sanitize_callback' => 'sanitize_text_field',
-                        'type' => 'string',
-                    ],
+                    ]
                 ]
             ],
-
         ]);
+
 
         register_rest_route($this->namespace, '/editor-styles/safelist', [
             [

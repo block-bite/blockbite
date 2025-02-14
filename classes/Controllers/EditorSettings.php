@@ -30,7 +30,8 @@ class EditorSettings extends Controller
         return [
             'designtokens' => $designTokens,
             'designtokensOptin' => $designTokensOptin,
-            'utils' => BitesController::get_merged_bite_utils(),
+            'utils' => self::frontend_matching_utils(),
+            'utilsOrigin' => BitesController::get_utils(),
             'blockStyles' => BitesController::get_merged_blockstyles(),
 
         ];
@@ -42,8 +43,6 @@ class EditorSettings extends Controller
         return DbController::getGlobalStyles();
     }
 
-
-
     private static function minify($input)
     {
         // remove comments
@@ -53,73 +52,99 @@ class EditorSettings extends Controller
         return $output;
     }
 
-    public static function update_styles($request)
+    public static function update_frontend_css($request)
     {
-        $content_css = $request->get_param('css');
-        $content_tailwind = $request->get_param('tailwind');
-        $content_handle = $request->get_param('handle');
+        $data = $request->get_param('data');
+        $content = $request->get_param('content');
 
+        // get option blockbite_css_name (default is style)
 
-        // Check if content_handle is either frontend-css or blockbite-css
-        if ($content_handle !== 'frontend-css' && $content_handle !== 'bites-css') {
-            return new WP_Error('invalid_handle', 'Invalid handle', ['status' => 400]);
-        }
+        $file_name = get_option('blockbite_css_name', 'style') . '.css';
 
         // Minify the CSS
-        $css = self::minify($content_css);
+        $css = self::minify($content);
+        $file_path = BLOCKBITE_PLUGIN_DIR . '/public/' . $file_name;
 
-        // If frontend-css, write to public/css/style.css
-        if ($content_handle === 'frontend-css') {
-            $file_path = BLOCKBITE_PLUGIN_DIR . '/public/style.css';
+        // Open the file and check for errors
+        $file = fopen($file_path, 'w');
 
-            // Open the file and check for errors
-            $file = fopen($file_path, 'w');
-            if ($file === false) {
-                return new WP_Error('file_error', 'Failed to open CSS file for writing', ['status' => 500]);
-            }
 
-            // Write to the file and close it
-            fwrite($file, $css);
-            fclose($file);
-            $css = ''; // Clear the CSS after writing it, no need to store it in the database
-        }
+        // Write to the file and close it
+        fwrite($file, $css);
+        fclose($file);
+        $css = ''; // Clear the CSS after writing it, no need to store it in the database
+
 
         // Update or create the handle in the database
         return DbController::updateOrCreateHandle([
-            'css' => $css,
-            'tailwind' => $content_tailwind
-        ], $content_handle);
+            'data' => json_encode($data),
+            // for now we can leave this to an empty string, we can add an inline option later
+            'content' => '',
+        ], 'frontend-css');
     }
 
 
 
-    public static function get_styles($request)
-    {
-        $handle = $request->get_param('handle');
-        $styles = self::get_styles_handle($handle);
-        return $styles;
-    }
 
-
-
-    public static function get_styles_handle($handle)
+    public static function get_frontend_css()
     {
         $tailwind = '';
-        $css = '';
-        $user_css = '';
+        $bites = '';
 
-        $result = DbController::getRecordByHandle($handle);
-        if (isset($result->tailwind) && isset($result->css)) {
-            $tailwind = $result->tailwind;
-            $css = $result->css;
+        $result = DbController::getRecordByHandle('frontend-css');
+        if (isset($result->data)) {
+            $data = json_decode($result->data);
+
+            if (isset($data->tailwind)) {
+                $tailwind = $data->tailwind;
+            }
+            if (isset($data->bites)) {
+                $bites = $data->bites;
+            }
         }
         return
             [
                 'tailwind' => $tailwind,
-                'css' =>  $css,
-                'user_css' => $user_css
+                'bites' =>  $bites,
             ];
     }
+
+    public static function get_scripts_handle($handle)
+    {
+
+        $js = '';
+        $result = DbController::getRecordByHandle($handle);
+
+        if (isset($result->content)) {
+            $js = $result->content;
+        }
+        return
+            [
+                'content' =>  $js,
+            ];
+    }
+
+
+
+    // Optimized for performance
+    public static function frontend_matching_utils()
+    {
+        $frontendCss = self::get_frontend_css();
+        $all_utils = BitesController::get_utils();
+
+        if (!$all_utils) {
+            return [];
+        }
+
+        $bites = isset($frontendCss['bites']) ? explode(' ', $frontendCss['bites']) : [];
+
+        $matches = array_filter($all_utils, function ($util) use ($bites) {
+            return in_array($util['id'], $bites, true);
+        });
+
+        return array_values($matches);
+    }
+
 
 
 
