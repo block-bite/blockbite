@@ -14,7 +14,7 @@
     },
     "designId": {
       "type": "string",
-      "default": "slot-a"
+      "default": ""
     },
     "renderTag": {
       "type": "string",

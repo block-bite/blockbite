@@ -25,7 +25,6 @@ return array(
     'Blockbite\\Blockbite\\Frontend' => $baseDir . '/classes/Frontend.php',
     'Blockbite\\Blockbite\\Hooks' => $baseDir . '/classes/Hooks.php',
     'Blockbite\\Blockbite\\Plugin' => $baseDir . '/classes/Plugin.php',
-    'Blockbite\\Blockbite\\PostTypes' => $baseDir . '/classes/PostTypes.php',
     'Blockbite\\Blockbite\\Rest\\Api' => $baseDir . '/classes/Rest/Api.php',
     'Blockbite\\Blockbite\\Rest\\Routes\\Bites' => $baseDir . '/classes/Rest/Routes/Bites.php',
     'Blockbite\\Blockbite\\Rest\\Routes\\BlockHelpers' => $baseDir . '/classes/Rest/Routes/BlockHelpers.php',

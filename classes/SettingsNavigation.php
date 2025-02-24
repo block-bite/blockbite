@@ -87,15 +87,6 @@ class SettingsNavigation
             self::SCREEN, // menu_slug should match the main menu to replace the first item
             [$this, 'renderSettings'] // callback
         );
-        // Add the submenu page under the main menu
-        add_submenu_page(
-            self::SCREEN, // parent_slug should match menu_slug from add_menu_page
-            'Blockbites', // page_title
-            'Blockbites', // menu_title
-            'manage_options', // capability
-            'edit.php?post_type=blockbites',
-            null
-        );
     }
 
 

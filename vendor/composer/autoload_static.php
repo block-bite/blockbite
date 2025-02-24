@@ -93,7 +93,6 @@ class ComposerStaticInit7c7012463a7fd1649331056da93edd70
         'Blockbite\\Blockbite\\Frontend' => __DIR__ . '/../..' . '/classes/Frontend.php',
         'Blockbite\\Blockbite\\Hooks' => __DIR__ . '/../..' . '/classes/Hooks.php',
         'Blockbite\\Blockbite\\Plugin' => __DIR__ . '/../..' . '/classes/Plugin.php',
-        'Blockbite\\Blockbite\\PostTypes' => __DIR__ . '/../..' . '/classes/PostTypes.php',
         'Blockbite\\Blockbite\\Rest\\Api' => __DIR__ . '/../..' . '/classes/Rest/Api.php',
         'Blockbite\\Blockbite\\Rest\\Routes\\Bites' => __DIR__ . '/../..' . '/classes/Rest/Routes/Bites.php',
         'Blockbite\\Blockbite\\Rest\\Routes\\BlockHelpers' => __DIR__ . '/../..' . '/classes/Rest/Routes/BlockHelpers.php',

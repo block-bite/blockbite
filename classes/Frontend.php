@@ -161,48 +161,110 @@ class Frontend
 
         // register frontend script
         wp_register_script(
-            'blockbite-frontend',
+            'blockbite-frontend-asset',
             plugins_url('build/blockbite-frontend.js', BLOCKBITE_MAIN_FILE),
             $dependencies,
             $version,
         );
 
-        wp_enqueue_script('blockbite-frontend');
+        wp_enqueue_script('blockbite-frontend-asset');
 
 
         // register frontend style
         wp_register_style(
-            'blockbite-frontend-style',
+            'blockbite-frontend-asset',
             $this->css_url,
             [],
             $version
         );
 
         // add to frontend
-        wp_enqueue_style('blockbite-frontend-style');
+        wp_enqueue_style('blockbite-frontend-asset');
     }
 
-
-    public static function frontendGlobalStyles()
+    public static function frontendCodeEditorStyles()
     {
-
         $frontendAssets = DbController::getRecordsByHandles([
             'blockbite-editor-css',
-            'headings-css',
             'blockbite-editor-js',
         ]);
 
-
         foreach ($frontendAssets as $asset) {
-            if (isset($asset->handle) && $asset->handle === 'blockbite-editor-css') {
-                echo '<style id="blockbite-editor-css">' . $asset->content . '</style>';
-            } else if (isset($asset->handle) && $asset->handle === 'headings-css') {
-                echo '<style id="blockbite-headings-css">' . $asset->content . '</style>';
-            } else if (isset($asset->handle) && $asset->handle === 'blockbite-editor-js') {
-                echo '<script id="blockbite-editor-js"> document.addEventListener("DOMContentLoaded", function () {' . $asset->content . '});</script>';
+            if (isset($asset->handle)) {
+                if ($asset->handle === 'blockbite-editor-css') {
+                    wp_register_style('blockbite-editor-css', false);
+                    wp_enqueue_style('blockbite-editor-css');
+                    wp_add_inline_style('blockbite-editor-css', $asset->content);
+                } elseif ($asset->handle === 'blockbite-editor-js') {
+                    wp_register_script('blockbite-editor-js', '', [], false, true);
+                    wp_enqueue_script('blockbite-editor-js');
+                    wp_add_inline_script('blockbite-editor-js', 'document.addEventListener("DOMContentLoaded", function () {' . $asset->content . '});');
+                }
             }
         }
     }
+
+
+    public static function addHeadings($headings)
+    {
+        wp_register_style('blockbite-headings-css', false);
+        wp_enqueue_style('blockbite-headings-css');
+        if (isset($headings->content)) {
+            wp_add_inline_style('blockbite-headings-css', $headings->content); // Add inline styles
+        }
+    }
+
+
+    public static function frontendHeadingEditor()
+    {
+        $headings = DbController::getRecordByHandle('headings-css-be');
+        self::addHeadings($headings);
+    }
+
+    public static function frontendHeadingSite()
+    {
+        $headings = DbController::getRecordByHandle('headings-css-fe');
+        self::addHeadings($headings);
+    }
+
+
+
+    public static function getFrontendCss()
+    {
+        // Define paths for the CSS file
+        $file_name = get_option('blockbite_css_name', 'style') . '.css';
+        $style_url = BLOCKBITE_PLUGIN_URL . 'public/' . $file_name;
+        $style_path = BLOCKBITE_PLUGIN_DIR . 'public/' . $file_name;
+
+        // Validate the file exists and is not empty
+        if (file_exists($style_path) && filesize($style_path) > 0) {
+            $cache_version = filemtime($style_path); // Cache-busting with file's last modified time
+        } else {
+            $cache_version = time(); // Fallback cache version
+            error_log('Warning: Blockbite style.css is missing or empty.');
+        }
+        return [
+            'url' => $style_url,
+            'version' => $cache_version,
+        ];
+    }
+
+
+    public function registerParsedCssFrontend()
+    {
+        $frontendCss = $this->getFrontendCss();
+        // Register the frontend CSS
+        wp_register_style(
+            'blockbite-parsed-frontend',
+            $frontendCss['url'],
+            [],
+            $frontendCss['version']
+        );
+        // Enqueue the frontend CSS
+        wp_enqueue_style('blockbite-parsed-frontend');
+    }
+
+
 
     public function registerAssetsBackend()
     {

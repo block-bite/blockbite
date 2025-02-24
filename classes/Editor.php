@@ -5,6 +5,7 @@ namespace Blockbite\Blockbite;
 
 use Blockbite\Blockbite\Controllers\EditorSettings;
 use Blockbite\Blockbite\Controllers\Database as DbController;
+use Blockbite\Blockbite\Frontend as FrontendController;
 
 class Editor
 {
@@ -136,29 +137,6 @@ class Editor
     }
 
 
-    public function registerEditorFrontend()
-    {
-        // Define paths for the CSS file
-        $file_name = get_option('blockbite_css_name', 'style') . '.css';
-        $style_url = BLOCKBITE_PLUGIN_URL . 'public/' . $file_name;
-        $style_path = BLOCKBITE_PLUGIN_DIR . 'public/' . $file_name;
-
-        // Validate the file exists and is not empty
-        if (file_exists($style_path) && filesize($style_path) > 0) {
-            $cache_version = filemtime($style_path); // Cache-busting with file's last modified time
-        } else {
-            $cache_version = time(); // Fallback cache version
-            error_log('Warning: Blockbite style.css is missing or empty.');
-        }
-
-        // Enqueue the editor style
-        if (!is_singular('blockbites')) {
-            wp_enqueue_style('blockbite-editor-frontend-style', $style_url, [], $cache_version);
-        }
-    }
-
-
-
 
     public function registerCssParser()
     {
@@ -173,7 +151,6 @@ class Editor
             $version_css_parser      = $asset_file_css_parser['version'];
         }
 
-
         wp_register_script(
             'blockbite-css-parser',
             plugins_url('build/blockbite-css-parser.js', BLOCKBITE_MAIN_FILE),
@@ -181,7 +158,10 @@ class Editor
             $version_css_parser,
         );
 
+
+
         if (is_admin()) {
+            // enqueue the CSS parser script
             wp_enqueue_script('blockbite-css-parser');
         }
     }

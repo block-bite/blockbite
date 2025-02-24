@@ -30,10 +30,8 @@ class EditorSettings extends Controller
         return [
             'designtokens' => $designTokens,
             'designtokensOptin' => $designTokensOptin,
-            'utils' => self::frontend_matching_utils(),
-            'utilsOrigin' => BitesController::get_utils(),
+            'utils' => BitesController::get_utils(),
             'blockStyles' => BitesController::get_merged_blockstyles(),
-
         ];
     }
 
