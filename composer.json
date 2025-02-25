@@ -20,8 +20,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": ">=7.4",
-    "vlucas/phpdotenv": "^5.6"
+    "php": ">=7.4"
   },
   "require-dev": {
     "automattic/vipwpcs": "^2.3",
@@ -51,5 +50,5 @@
     ],
     "format": "phpcbf"
   },
-  "version": "1.2.3"
+  "version": "1.2.5"
 }
