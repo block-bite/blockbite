@@ -24,6 +24,11 @@ class Editor
 
     public function __construct()
     {
+        // Ensure is_plugin_active function is available
+        if (!function_exists('is_plugin_active')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
         $this->blocks = [
             'main',
             'section',
@@ -37,7 +42,6 @@ class Editor
             'carousel-slide',
             'carousel-header',
             'carousel-footer',
-            'bites-wrap',
             'interaction',
             'dynamic-content',
             'dynamic-display',
@@ -65,6 +69,8 @@ class Editor
             array_push($this->blocknamespaces, 'blockbite/' . $block);
         }
     }
+
+
     public function registerBlockCategory($categories)
     {
         $custom_block = array(
@@ -80,20 +86,174 @@ class Editor
         return $categories_sorted;
     }
 
-    public function registerEditor()
+    public function registerBB()
     {
 
-
         $dependencies = [];
+        $version      = BLOCKBITE_PLUGIN_VERSION;
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-bb.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-bb.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
+            $version      = $asset_file['version'];
+        }
+
+        // register editor script
+        wp_register_script(
+            'blockbite-bb',
+            plugins_url('build/blockbite-bb.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+
+        wp_enqueue_script('blockbite-bb');
+        // global BB dependency object
+        wp_localize_script(
+            'blockbite-bb',
+            'bb',
+            [
+                'apiUrl'   => rest_url('blockbite/v1'),
+                'api' => 'blockbite/v1',
+                'data' => [
+                    'postType' => get_post_type(),
+                    'id' => get_the_ID(),
+                ],
+                'settings' => [
+                    'gsap' => get_option('blockbite_load_gsap', true),
+                    'swiper' => get_option('blockbite_load_swiper', true),
+                    'lottie' => get_option('blockbite_load_lottie', true),
+                    'tw_base' => get_option('blockbite_tw_base', false),
+                    'tw_strategy' => get_option('blockbite_tw_strategy', 'b_'),
+                ],
+                'css' => '',
+                'core' => '',
+                'codex' => '',
+            ]
+        );
+    }
+
+
+    public function registerCore()
+    {
+        $dependencies = ['blockbite-bb'];
         $version      = BLOCKBITE_PLUGIN_VERSION;
 
 
         // Use asset file if it exists
-        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-editor.asset.php')) {
-            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-editor.asset.php';
-            $dependencies = $asset_file['dependencies'];
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-core.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-core.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
             $version      = $asset_file['version'];
         }
+
+        // register core script
+        wp_register_script(
+            'blockbite-core',
+            plugins_url('build/blockbite-core.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+
+        wp_enqueue_script('blockbite-core');
+    }
+
+
+
+    public function registerCssParser()
+    {
+
+        $dependencies = ['blockbite-bb', 'blockbite-core'];
+        $version = BLOCKBITE_PLUGIN_VERSION;
+
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-css-parser.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-css-parser.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
+            $version      = $asset_file['version'];
+        }
+
+        wp_register_script(
+            'blockbite-css-parser',
+            plugins_url('build/blockbite-css-parser.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+
+        wp_enqueue_script('blockbite-css-parser');
+    }
+
+
+
+    public function registerReady()
+    {
+        $dependencies = ['blockbite-bb', 'blockbite-core', 'blockbite-css-parser'];
+        $version      = BLOCKBITE_PLUGIN_VERSION;
+
+
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-core.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-core.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
+            $version      = $asset_file['version'];
+        }
+
+        // register editr script
+        wp_register_script(
+            'blockbite-ready',
+            plugins_url('build/blockbite-ready.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+
+        wp_enqueue_script('blockbite-ready');
+    }
+
+
+
+
+
+    public function registerAce()
+    {
+
+
+        $dependencies = ['blockbite-bb'];
+        $version      = BLOCKBITE_PLUGIN_VERSION;
+
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-ace.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-ace.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
+            $version      = $asset_file['version'];
+        }
+        // register editor script
+        wp_register_script(
+            'blockbite-ace',
+            plugins_url('build/blockbite-ace.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+        wp_enqueue_script('blockbite-ace');
+    }
+
+
+    public function registerEditor()
+    {
+
+
+        $dependencies = ['blockbite-bb', 'blockbite-css-parser', 'blockbite-ace', 'blockbite-core', 'blockbite-ready'];
+        $version      = BLOCKBITE_PLUGIN_VERSION;
+
+        if (is_plugin_active('blockbite-pro/blockbite-pro.php')) {
+            $dependencies[] = "blockbite-pro";
+        }
+
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-editor.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-editor.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
+            $version      = $asset_file['version'];
+        }
+
 
         // register editor script
         wp_register_script(
@@ -109,141 +269,8 @@ class Editor
             [],
             $version
         );
-        // only load in backend
-        if (is_admin()) {
-            wp_enqueue_script('blockbite-editor');
-            wp_enqueue_style('blockbite-editor-style');
-        }
-        // global  api bite
-        wp_localize_script(
-            'blockbite-editor',
-            'blockbite',
-            [
-                'apiUrl'   => rest_url('blockbite/v1'),
-                'api' => 'blockbite/v1',
-                'createTailwindcss' => null,
-                'data' => [
-                    'postType' => get_post_type(),
-                    'id' => get_the_ID(),
-                ],
-                'settings' => [
-                    'gsap' => get_option('blockbite_load_gsap', true),
-                    'swiper' => get_option('blockbite_load_swiper', true),
-                    'lottie' => get_option('blockbite_load_lottie', true),
-                    'tw_base' => get_option('blockbite_load_tw_base', false),
-                ]
-            ]
-        );
-    }
-
-
-
-    public function registerCssParser()
-    {
-
-        $dependencies_css_parser = [];
-        $version_css_parser = BLOCKBITE_PLUGIN_VERSION;
-
-        // Use asset file if it exists
-        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-css-parser.asset.php')) {
-            $asset_file_css_parser   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-css-parser.asset.php';
-            $dependencies_css_parser = $asset_file_css_parser['dependencies'];
-            $version_css_parser      = $asset_file_css_parser['version'];
-        }
-
-        wp_register_script(
-            'blockbite-css-parser',
-            plugins_url('build/blockbite-css-parser.js', BLOCKBITE_MAIN_FILE),
-            $dependencies_css_parser,
-            $version_css_parser,
-        );
-
-
-
-        if (is_admin()) {
-            // enqueue the CSS parser script
-            wp_enqueue_script('blockbite-css-parser');
-        }
-    }
-
-    public function registerTailwind()
-    {
-
-        // Initialize dependencies array for blockbite-tailwind
-        $dependencies_tailwind = ['blockbite-css-parser']; // Add blockbite-css_parser as a dependency by default
-        $version_tailwind = BLOCKBITE_PLUGIN_VERSION;
-
-        // Use asset file if it exists
-        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-tailwind.asset.php')) {
-            $asset_file_tailwind   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-tailwind.asset.php';
-            $dependencies_tailwind = $asset_file_tailwind['dependencies'];
-            $version_tailwind      = $asset_file_tailwind['version'];
-        }
-
-
-        wp_register_script(
-            'blockbite-tailwind',
-            plugins_url('build/blockbite-tailwind.js', BLOCKBITE_MAIN_FILE),
-            $dependencies_tailwind,
-            $version_tailwind,
-        );
-
-        if (is_admin()) {
-            wp_enqueue_script('blockbite-tailwind');
-        }
-    }
-
-
-
-
-    public function registerSwiperCdn()
-    {
-        $load_swiper = get_option('blockbite_load_swiper', true);
-
-        if ($load_swiper) {
-
-            wp_register_script(
-                'swiper-editor',
-                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
-                [],
-                '11.1.4',
-            );
-
-            wp_enqueue_script('swiper-editor');
-        }
-    }
-
-    public function registerGsapCdn()
-    {
-
-        $load_gsap = get_option('blockbite_load_gsap', true);
-        if ($load_gsap) {
-            wp_register_script(
-                'gsap-editor',
-                'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
-                [],
-                '3.12.7',
-            );
-            wp_enqueue_script('gsap-editor');
-        }
-    }
-
-
-    public function registerLottieCdn()
-    {
-        $load_lottie = get_option('blockbite_load_lottie', true);
-        if ($load_lottie) {
-
-
-            wp_register_script(
-                'lottie-player',
-                'https://unpkg.com/@dotlottie/player-component@2.7.10/dist/dotlottie-player.js',
-                [],
-                '2.7.12',
-
-            );
-            wp_enqueue_script('lottie-player');
-        }
+        wp_enqueue_script('blockbite-editor');
+        wp_enqueue_style('blockbite-editor-style');
     }
 
 
@@ -299,7 +326,7 @@ class Editor
     function blockbite_mime_types($mimes)
     {
         $mimes['svg'] = 'image/svg+xml';
-        $mimes['lottie'] = 'application/json';
+        $mimes['json'] = 'text/plain';
         return $mimes;
     }
 }

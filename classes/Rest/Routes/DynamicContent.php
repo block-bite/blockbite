@@ -121,5 +121,20 @@ class DynamicContent extends Api
                 ]
             ],
         ]);
+
+        register_rest_route($this->namespace, '/dynamic-design/(?P<id>\d+)', [
+            [
+                'methods' => 'GET',
+                'callback' => [$dynamicContentController, 'get_dynamic_designs_by_parent'],
+                'permission_callback' => [$dynamicContentController, 'authorize'],
+                'args' => [
+                    'id' => [
+                        'required' => true,
+                        'sanitize_callback' => 'absint',
+                        'type' => 'integer',
+                    ],
+                ]
+            ],
+        ]);
     }
 }

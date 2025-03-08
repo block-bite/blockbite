@@ -23,10 +23,9 @@ class Settings extends Api
         register_rest_route($this->namespace, '/settings', array(
             array(
                 'methods' => 'GET',
-                'callback' => [$settingsController, 'get_option_settings'],
+                'callback' => [$settingsController, 'get_blockbite_settings'],
                 'permission_callback' => [$settingsController, 'authorize'],
             ),
-
         ));
 
 
@@ -60,18 +59,10 @@ class Settings extends Api
                 'callback' => [$settingsController, 'update_option_settings_textfield'],
                 'permission_callback' => [$settingsController, 'authorize'],
                 'args' => array(
-                    'option' => array(
-                        'required' => true,
-                        'validate_callback' => function ($param) {
-                            return is_string($param);
-                        }
-                    ),
-                    'textfield' => array(
-                        'required' => true,
-                        'validate_callback' => function ($param) {
-                            return is_string($param);
-                        }
-                    ),
+                    "data" => [
+                        'required' => false,
+                        'type' => 'json',
+                    ],
                 ),
             )
 
@@ -80,11 +71,6 @@ class Settings extends Api
 
 
         register_rest_route($this->namespace, '/settings/tokens', array(
-            array(
-                'methods' => 'GET',
-                'callback' => [$settingsController, 'get_tokens'],
-                'permission_callback' => [$settingsController, 'authorize'],
-            ),
             array(
                 'methods' => 'POST',
                 'callback' => [$settingsController, 'set_token'],

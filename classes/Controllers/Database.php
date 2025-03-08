@@ -273,6 +273,26 @@ class Database extends Controller
         return $records;
     }
 
+
+    public static function getAllRecordsByHandleQuery($handle, $query)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'blockbite';
+        $where_clauses = [];
+        $where_values = [];
+        foreach ($query as $column => $value) {
+            $where_clauses[] = "$column = %s";
+            $where_values[] = $value;
+        }
+        $where_clause = implode(' AND ', $where_clauses);
+        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE handle = %s AND $where_clause", $handle, ...$where_values);
+        $records = $wpdb->get_results($query);
+        return $records;
+    }
+
+
+
+
     public static function getRecordByQuery($query)
     {
         global $wpdb;
@@ -288,6 +308,10 @@ class Database extends Controller
         $record = $wpdb->get_row($query);
         return $record;
     }
+
+
+
+
 
 
     public static function getRecordsByHandles($handles = [])

@@ -81,6 +81,26 @@ class DynamicContent extends Controller
     }
     */
 
+    public static function get_dynamic_designs_by_parent($request)
+    {
+        $parent = $request->get_param('id');
+        $dynamic_design = DbController::getAllRecordsByHandleQuery('dynamic_design', ['parent' => $parent]);
+
+        if (empty($dynamic_design)) {
+            return [
+                'status' => 200,
+                'result' => 'No dynamic design found',
+                'parent' => $parent,
+            ];
+        }
+
+        return [
+            'status' => 200,
+            'result' => $dynamic_design,
+            'parent' => $parent,
+        ];
+    }
+
 
     /*
         Save multiple records at once
@@ -98,6 +118,7 @@ class DynamicContent extends Controller
             $parent = $block['parent'];
             $content = $block['content'];
             $slug = $block['slug'];
+            $title = $block['title'];
 
             $strip_raw = BitesController::strip_bite($content);
             $parsed_block = parse_blocks($strip_raw);
@@ -109,12 +130,12 @@ class DynamicContent extends Controller
 
             $dynamic_content_saved = DbController::updateOrCreateRecord(
                 [
+                    'title' => $title,
                     'content' => $rendered_block,
                     'slug' => $slug,
                     'handle' => 'dynamic_design',
                     'parent' => $parent,
                 ],
-                // query by parent and fixed slug (slot-a, slot-b, slot-c, slot-d)
                 ['parent' => $parent, 'handle' => 'dynamic_design', 'slug' => $slug],
             );
         }
@@ -235,6 +256,8 @@ class DynamicContent extends Controller
         }
 
         $snippet = $dynamicDesign->content;
+
+
 
         foreach ((array) $content_array['content'] as $row) {
             // Ensure $snippet is a valid string

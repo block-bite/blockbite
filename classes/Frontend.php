@@ -205,28 +205,12 @@ class Frontend
     }
 
 
-    public static function addHeadings($headings)
+    public static function registerBodyClass($classes)
     {
-        wp_register_style('blockbite-headings-css', false);
-        wp_enqueue_style('blockbite-headings-css');
-        if (isset($headings->content)) {
-            wp_add_inline_style('blockbite-headings-css', $headings->content); // Add inline styles
-        }
+        $strategy = get_option('blockbite_tw_strategy', 'b_');
+        $classes[] = $strategy;
+        return $classes;
     }
-
-
-    public static function frontendHeadingEditor()
-    {
-        $headings = DbController::getRecordByHandle('headings-css-be');
-        self::addHeadings($headings);
-    }
-
-    public static function frontendHeadingSite()
-    {
-        $headings = DbController::getRecordByHandle('headings-css-fe');
-        self::addHeadings($headings);
-    }
-
 
 
     public static function getFrontendCss()
@@ -262,6 +246,55 @@ class Frontend
         );
         // Enqueue the frontend CSS
         wp_enqueue_style('blockbite-parsed-frontend');
+    }
+
+
+
+    public function registerSwiperCdn()
+    {
+        $load_swiper = get_option('blockbite_load_swiper', true);
+
+        if ($load_swiper) {
+
+            wp_register_script(
+                'swiper-editor',
+                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
+                [],
+                '11.1.4',
+            );
+
+            wp_enqueue_script('swiper-editor');
+        }
+    }
+
+    public function registerGsapCdn()
+    {
+
+        $load_gsap = get_option('blockbite_load_gsap', true);
+        if ($load_gsap) {
+            wp_register_script(
+                'gsap',
+                'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
+                [],
+                '3.12.7',
+            );
+            wp_enqueue_script('gsap');
+        }
+    }
+
+
+    public function registerLottieCdn()
+    {
+        $load_lottie = get_option('blockbite_load_lottie', false);
+        if ($load_lottie) {
+            wp_register_script(
+                'lottie',
+                'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js',
+                [],
+                '3.12.7',
+            );
+            wp_enqueue_script('lottie');
+        }
     }
 
 

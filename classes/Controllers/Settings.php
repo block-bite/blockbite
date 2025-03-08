@@ -22,18 +22,29 @@ class Settings extends Controller
     /*
        Handle blockbite load Options
     */
-    public static function get_option_settings($rest = true)
+    public static function get_blockbite_settings($rest = true)
     {
         $isSwiperEnabled = get_option('blockbite_load_swiper', true);
         $isGsapEnabled = get_option('blockbite_load_gsap', false);
         $isLottieEnabled = get_option('blockbite_load_lottie', false);
-        $isBaseStyleEnabled = get_option('blockbite_load_tw_base', false);
+        $isBaseStyleEnabled = get_option('blockbite_tw_base', false);
+        $isStrategy = get_option('blockbite_tw_strategy', 'b_');
+        $cssName = get_option('blockbite_css_name', 'style');
+
 
         return rest_ensure_response(array(
-            'blockbite_load_swiper' => (bool) $isSwiperEnabled,
-            'blockbite_load_gsap' => (bool) $isGsapEnabled,
-            'blockbite_load_lottie' => (bool) $isLottieEnabled,
-            'blockbite_load_tw_base' => (bool) $isBaseStyleEnabled,
+            "toggle_options" => [
+                'blockbite_load_swiper' => $isSwiperEnabled,
+                'blockbite_load_gsap' => $isGsapEnabled,
+                'blockbite_load_lottie' => $isLottieEnabled,
+                'blockbite_tw_base' => $isBaseStyleEnabled,
+
+            ],
+            "string_options" => [
+                'blockbite_tw_strategy' => $isStrategy,
+                'blockbite_css_name' => $cssName
+            ],
+            "tokens" => self::get_tokens()
         ));
     }
 
@@ -60,13 +71,15 @@ class Settings extends Controller
 
     public static function update_option_settings_textfield($request)
     {
-        $textfield = $request->get_param('textfield');
-        $option = $request->get_param('option');
 
-        if (get_option($option) === false) {
-            add_option($option, $textfield);
-        } else {
-            update_option($option, $textfield);
+        $data = $request->get_param('data');
+        // loop through the data and update the options
+        foreach ($data as $key => $value) {
+            if (get_option($key) === false) {
+                add_option($key, $value);
+            } else {
+                update_option($key, $value);
+            }
         }
 
         return rest_ensure_response(array('success' => true));
@@ -96,7 +109,7 @@ class Settings extends Controller
                 $decrypted_keys[$key_name] = $decrypted_key;
             }
 
-            return rest_ensure_response($decrypted_keys);
+            return $decrypted_keys;
         } catch (Exception $e) {
             error_log('Exception encountered: ' . $e->getMessage());
             return new WP_Error('exception_occurred', 'An error occurred while retrieving the tokens.', ['status' => 500]);
