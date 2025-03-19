@@ -23,110 +23,35 @@ class Frontend
         $this->css_url = plugins_url('build/blockbite-frontend.css', BLOCKBITE_MAIN_FILE);
     }
 
-    public function biteClassDynamicBlocks($block_content, $block)
+    function biteClassDynamicBlocks($parsed_block, $source)
     {
-        // Check for valid block content and 'biteClass' attribute
-        if (!$block_content || !isset($block['attrs']['biteClass'])) {
-            return $block_content;
-        }
+        static $dynamic_blocks = null;
 
-        // Check if DOMDocument is available
-        if (class_exists('DOMDocument')) {
-            try {
-                // Load block content into DOMDocument safely
-                $dom = new \DOMDocument();
-                libxml_use_internal_errors(true); // Suppress warnings from malformed HTML
-                $dom->loadHTML(htmlspecialchars_decode($block_content), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        // Fetch dynamic blocks once
+        if ($dynamic_blocks === null) {
+            $dynamic_block_result = DbController::getRecordByHandle('dynamic_block_support');
 
-                libxml_clear_errors(); // Clear any libxml errors after loading
-
-                // Get the first element in the block
-                $xpath = new \DOMXPath($dom);
-                $element = $xpath->query('//*')->item(0); // The first element
-
-                if ($element) {
-                    // Handle classes - append injected classes
-                    $this->appendClasses($element, $block['attrs']);
-
-                    // Inject data attributes for interaction
-                    $this->injectDataAttributes($element, $block['attrs']['biteMeta'] ?? []);
-                }
-
-                // Return the updated HTML content
-                return $dom->saveHTML($element);
-            } catch (\Exception $e) {
-                // Log the exception for debugging and fall back to manual processing
-                error_log('DOMDocument processing failed: ' . $e->getMessage());
+            if (isset($dynamic_block_result->data)) {
+                $dynamic_blocks = json_decode($dynamic_block_result->data, true);
+            } else {
+                $dynamic_blocks = [];
             }
         }
-    }
 
-    /**
-     * Fallback: Manually process HTML string to append classes and attributes.
-     */
-    private function fallbackProcessHtml($html, $attrs)
-    {
-        // Parse the HTML string and locate the first tag
-        if (preg_match('/^<(\w+)([^>]*)>/', $html, $matches)) {
-            $tag = $matches[1];
-            $attributes = $matches[2];
 
-            // Add the biteClass attribute to the class list
-            $class = $attrs['biteClass'] ?? '';
-            if ($class) {
-                if (preg_match('/class="([^"]*)"/', $attributes, $classMatch)) {
-                    $attributes = str_replace(
-                        $classMatch[0],
-                        'class="' . $classMatch[1] . ' ' . htmlspecialchars($class) . '"',
-                        $attributes
-                    );
-                } else {
-                    $attributes .= ' class="' . htmlspecialchars($class) . '"';
-                }
+        // Apply only if the block is in our dynamic list
+        if (is_array($dynamic_blocks) && in_array($parsed_block['blockName'], $dynamic_blocks, true)) {
+            if (isset($parsed_block['attrs']['metadata']['biteClass'])) {
+                $parsed_block['attrs']['className'] =
+                    isset($parsed_block['attrs']['className'])
+                    ? $parsed_block['attrs']['className'] . ' ' . esc_attr($parsed_block['attrs']['metadata']['biteClass'])
+                    : esc_attr($parsed_block['attrs']['metadata']['biteClass']);
             }
-
-            // Inject data attributes
-            if (!empty($attrs['biteMeta'])) {
-                foreach ($attrs['biteMeta'] as $key => $value) {
-                    $attributes .= ' data-' . htmlspecialchars($key) . '="' . htmlspecialchars($value) . '"';
-                }
-            }
-
-            // Rebuild the opening tag
-            $newOpeningTag = "<$tag$attributes>";
-
-            // Replace the first opening tag in the HTML
-            $html = preg_replace('/^<\w+[^>]*>/', $newOpeningTag, $html, 1);
         }
 
-        return $html;
+        return $parsed_block;
     }
 
-
-
-
-    // Helper function to append classes
-    private function appendClasses(&$element, $attrs)
-    {
-        $injected_class = esc_attr($attrs['biteClass']);
-        // Append classes to the existing class attribute
-        $existing_classes = $element->getAttribute('class');
-        $element->setAttribute('class', trim($existing_classes . ' ' . $injected_class));
-    }
-
-    // Helper function to inject data attributes
-    private function injectDataAttributes(&$element, $biteMeta)
-    {
-        // Inject 'data-b_action_type' if actionType is set
-        if (isset($biteMeta['interaction']['actionType'])) {
-            $element->setAttribute('data-b_action_type', esc_attr($biteMeta['interaction']['actionType']));
-        }
-
-        // Inject 'data-b_action_ref' if actionRef is set
-        if (isset($biteMeta['interaction']['actionRef'])) {
-            $element->setAttribute('data-b_action_ref', esc_attr($biteMeta['interaction']['actionRef']));
-        }
-    }
 
 
     /**
@@ -250,52 +175,58 @@ class Frontend
 
 
 
-    public function registerSwiperCdn()
+
+    public function registerLibraries()
     {
+
+        $load_gsap = get_option('blockbite_load_gsap', false);
+        $load_lottie = get_option('blockbite_load_lottie', false);
         $load_swiper = get_option('blockbite_load_swiper', true);
+        $load_plyr = get_option('blockbite_load_plyr', false);
 
-        if ($load_swiper) {
 
-            wp_register_script(
-                'swiper-editor',
-                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
-                [],
-                '11.1.4',
-            );
-
-            wp_enqueue_script('swiper-editor');
-        }
-    }
-
-    public function registerGsapCdn()
-    {
-
-        $load_gsap = get_option('blockbite_load_gsap', true);
         if ($load_gsap) {
             wp_register_script(
-                'gsap',
+                'blockbite-gsap',
                 'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
                 [],
                 '3.12.7',
             );
             wp_enqueue_script('gsap');
         }
-    }
-
-
-    public function registerLottieCdn()
-    {
-        $load_lottie = get_option('blockbite_load_lottie', false);
         if ($load_lottie) {
             wp_register_script(
-                'lottie',
+                'blockbite-lottie',
                 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js',
                 [],
                 '3.12.7',
             );
-            wp_enqueue_script('lottie');
+            wp_enqueue_script('blockbite-lottie');
+        }
+        if ($load_swiper) {
+
+            wp_register_script(
+                'blockbite-swiper',
+                'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-element-bundle.min.js',
+                [],
+                '11.1.4',
+            );
+
+            wp_enqueue_script('blockbite-swiper');
+        }
+        if ($load_plyr) {
+            wp_register_script(
+                'blockbite-plyr',
+                'https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.min.js',
+                [],
+                '3.7.8',
+            );
+            wp_enqueue_script('blockbite-plyr');
         }
     }
+
+
+
 
 
 

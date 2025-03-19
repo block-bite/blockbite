@@ -20,7 +20,7 @@ class Editor
     protected $name = '';
     protected $blocks = [];
     protected $blocknamespaces = [];
-
+    private static $instance;
 
     public function __construct()
     {
@@ -28,6 +28,11 @@ class Editor
         if (!function_exists('is_plugin_active')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
+
+        self::$instance = $this;
+        add_filter('upload_mimes', [$this, 'blockbite_mime_types'], 24);
+        add_filter('wp_check_filetype_and_ext', [$this, 'force_json_upload'], 10, 4);
+
 
         $this->blocks = [
             'main',
@@ -61,6 +66,14 @@ class Editor
     protected $defaults = [
         'apiKey' => '',
     ];
+
+
+    public static function remove_svg_json_support()
+    {
+        remove_filter('upload_mimes', [self::$instance, 'blockbite_mime_types'], 24);
+        remove_filter('wp_check_filetype_and_ext', [self::$instance, 'force_json_upload'], 10, 4);
+    }
+
 
     public function initBlocks()
     {
@@ -113,21 +126,25 @@ class Editor
             'bb',
             [
                 'apiUrl'   => rest_url('blockbite/v1'),
+                'publicUrl' => BLOCKBITE_PLUGIN_URL . 'public/',
+                'siteUrl' => get_home_url(),
                 'api' => 'blockbite/v1',
                 'data' => [
                     'postType' => get_post_type(),
                     'id' => get_the_ID(),
                 ],
                 'settings' => [
-                    'gsap' => get_option('blockbite_load_gsap', true),
+                    'gsap' => get_option('blockbite_load_gsap', false),
                     'swiper' => get_option('blockbite_load_swiper', true),
-                    'lottie' => get_option('blockbite_load_lottie', true),
+                    'lottie' => get_option('blockbite_load_lottie', false),
+                    'plyr' => get_option('blockbite_load_plyr', false),
                     'tw_base' => get_option('blockbite_tw_base', false),
                     'tw_strategy' => get_option('blockbite_tw_strategy', 'b_'),
                 ],
                 'css' => '',
                 'core' => '',
                 'codex' => '',
+                'html2canvas' => '',
             ]
         );
     }
@@ -254,7 +271,6 @@ class Editor
             $version      = $asset_file['version'];
         }
 
-
         // register editor script
         wp_register_script(
             'blockbite-editor',
@@ -271,6 +287,29 @@ class Editor
         );
         wp_enqueue_script('blockbite-editor');
         wp_enqueue_style('blockbite-editor-style');
+    }
+
+
+    public function registerHtml2canvas()
+    {
+
+
+        $dependencies = ['blockbite-bb'];
+        $version      = BLOCKBITE_PLUGIN_VERSION;
+        // Use asset file if it exists
+        if (file_exists(BLOCKBITE_PLUGIN_DIR . 'build/blockbite-html2canvas.asset.php')) {
+            $asset_file   = include BLOCKBITE_PLUGIN_DIR . 'build/blockbite-html2canvas.asset.php';
+            $dependencies =  array_merge($dependencies, $asset_file['dependencies']);
+            $version      = $asset_file['version'];
+        }
+        // register editor script
+        wp_register_script(
+            'blockbite-html2canvas',
+            plugins_url('build/blockbite-html2canvas.js', BLOCKBITE_MAIN_FILE),
+            $dependencies,
+            $version,
+        );
+        wp_enqueue_script('blockbite-html2canvas');
     }
 
 
@@ -299,7 +338,14 @@ class Editor
                 'sanitize_callback' => 'rest_sanitize_boolean',
                 'default'           => false,
                 'show_in_rest'      => true,
-            ]
+            ],
+            'blockbite_load_plyr',
+            [
+                'type'              => 'boolean',
+                'sanitize_callback' => 'rest_sanitize_boolean',
+                'default'           => false,
+                'show_in_rest'      => true,
+            ],
         );
     }
 
@@ -326,7 +372,17 @@ class Editor
     function blockbite_mime_types($mimes)
     {
         $mimes['svg'] = 'image/svg+xml';
-        $mimes['json'] = 'text/plain';
+        $mimes['json'] = 'application/json';
         return $mimes;
+    }
+
+    public function force_json_upload($data, $file, $filename, $mimes)
+    {
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if ($ext === 'json') {
+            $data['ext'] = 'json';
+            $data['type'] = 'application/json';
+        }
+        return $data;
     }
 }

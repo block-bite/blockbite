@@ -164,4 +164,33 @@ class Bites extends Controller
 
         return rest_ensure_response($data);
     }
+
+    public static function update_preview_image($request)
+    {
+        // Ensure the directory exists
+        $upload_dir = BLOCKBITE_PLUGIN_DIR . '/public/bite-previews/';
+        if (!file_exists($upload_dir)) {
+            wp_mkdir_p($upload_dir);
+        }
+
+        // Check if a file was uploaded
+        if (empty($_FILES['image'])) {
+            return new WP_REST_Response(['status' => 'error', 'message' => 'No file uploaded'], 400);
+        }
+
+        $file = $_FILES['image'];
+        $file_name = $file['name'];
+        $file_path = $upload_dir . $file_name;
+
+        // Move the uploaded file
+        if (move_uploaded_file($file['tmp_name'], $file_path)) {
+            $public_url = plugins_url('/public/bite-previews/' . $file_name, BLOCKBITE_PLUGIN_DIR);
+            return new WP_REST_Response([
+                'status' => 'success',
+                'url'    => $public_url, // Return public URL for frontend usage
+            ], 200);
+        } else {
+            return new WP_REST_Response(['status' => 'error', 'message' => 'Upload failed'], 500);
+        }
+    }
 }

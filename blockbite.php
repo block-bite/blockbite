@@ -5,7 +5,7 @@
  * Description:       Tailwind Designer [Beta][Developent!]
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version: 1.2.7
+ * Version: 1.2.8
  * Author:            Blockbite
  * Author URI:        https://www.block-bite.com
  * Plugin URI:        https://www.block-bite.com

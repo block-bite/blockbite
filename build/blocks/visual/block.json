@@ -70,6 +70,10 @@
         "direction": {
           "type": "number",
           "default": 0
+        },
+        "parentHover": {
+          "type": "string",
+          "default": ""
         }
       }
     }

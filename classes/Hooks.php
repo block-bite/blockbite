@@ -75,36 +75,29 @@ class Hooks
 			add_action('enqueue_block_assets', [$this->editor, 'registerCssParser'], 8);
 			add_action('enqueue_block_assets', [$this->editor, 'registerReady'], 9);
 			add_action('enqueue_block_assets', [$this->editor, 'registerAce'], 11);
+			add_action('enqueue_block_assets', [$this->editor, 'registerHtml2canvas'], 12);
 			add_action('enqueue_block_editor_assets', [$this->editor, 'registerEditor'], 12);
 			add_filter('block_categories_all', [$this->editor, 'registerBlockCategory'], 13);
 			add_action('admin_init', [$this->editor, 'registerLibrarySettings'], 14);
 		}
 
 		add_action('init', [$this->editor, 'initBlocks'], 15);
-		add_action('enqueue_block_assets', [$this->frontend, 'registerSwiperCdn'], 16);
-		add_action('enqueue_block_assets', [$this->frontend, 'registerGsapCdn'], 17);
-		add_action('enqueue_block_assets', [$this->frontend, 'registerLottieCdn'], 18);
+		add_action('enqueue_block_assets', [$this->frontend, 'registerLibraries'], 16);
+
 		add_action('admin_enqueue_scripts', [$this->settingsNavigation, 'registerAssets'], 18);
 		add_action('admin_init', [$this->frontend, 'registerAssetsBackend'], 19);
 		add_action('enqueue_block_assets', [$this->frontend, 'registerAssetsFrontend'], 20);
 		add_action('enqueue_block_assets', [$this->frontend, 'registerParsedCssFrontend'], 21);
 		add_action('after_setup_theme', [EditorSettings::class, 'add_theme_settings'], 22);
 		add_action('wp_enqueue_scripts', [$this->frontend, 'frontendCodeEditorStyles'], 23);
-		add_filter('upload_mimes', [$this->editor, 'blockbite_mime_types'], 24);
+
+
 		add_filter('block_editor_settings_all', [$this->editor, 'add_global_styles'], 25);
 		add_filter('body_class',  [$this->frontend, 'registerBodyClass'],);
 
-
-		$dynamic_block_result = DbController::getRecordByHandle('dynamic_block_support');
-		if (isset($dynamic_block_result->content)) {
-			$dynamic_blocks = json_decode($dynamic_block_result->content);
-			if (is_array($dynamic_blocks)) {
-				foreach ($dynamic_blocks as $block) {
-					add_filter('render_block_' . $block, [$this->frontend, 'biteClassDynamicBlocks'], 10, 2);
-				}
-			}
-		}
+		add_filter('render_block_data', [$this->frontend, 'biteClassDynamicBlocks'], 10, 2);
 	}
+
 
 
 
@@ -119,10 +112,6 @@ class Hooks
 		remove_action('wp_enqueue_scripts', [$this->frontend, 'registerAssetsFrontend']);
 		remove_action('admin_init', [$this->frontend, 'registerAssetsBackend']);
 		remove_action('admin_init', [$this->editor, 'registerLibrarySettings']);
-		remove_action('enqueue_block_assets', [$this->editor, 'registerTailwindCdn'], 10);
-		remove_action('enqueue_block_assets', [$this->editor, 'registerSwiperCdn'], 12);
-		remove_action('enqueue_block_assets', [$this->editor, 'registerGsapCdn'], 12);
-		remove_action('enqueue_block_assets', [$this->editor, 'registerLottieCdn'], 12);
-		remove_filter('upload_mimes', [$this->editor, 'blockbite_mime_types'], 18);
+		remove_action('enqueue_block_assets', [$this->editor, 'registerLibraries'], 12);
 	}
 }

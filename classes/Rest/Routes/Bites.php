@@ -82,5 +82,16 @@ class Bites extends Api
                 'args' => []
             ],
         ]);
+
+
+        register_rest_route($this->namespace, '/bites/preview-image', [
+
+            [
+                'methods' => 'POST',
+                'callback' => [$bitesController, 'update_preview_image'],
+                'permission_callback' => [$bitesController, 'authorize'],
+                'args' => []
+            ],
+        ]);
     }
 }

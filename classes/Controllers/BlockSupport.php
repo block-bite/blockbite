@@ -14,7 +14,7 @@ class BlockSupport extends Controller
         $blocks = $request->get_param('blocks');
 
         DbController::updateOrCreateHandle(
-            ['content' => json_encode($blocks)],
+            ['data' => json_encode($blocks)],
             'block_support',
         );
 
@@ -104,7 +104,7 @@ class BlockSupport extends Controller
     private static function save_dynamic_blocks($dynamic_blocks)
     {
         return DbController::updateOrCreateHandle(
-            ['content' => json_encode($dynamic_blocks)],
+            ['data' => json_encode($dynamic_blocks)],
             'dynamic_block_support'
         );
     }
